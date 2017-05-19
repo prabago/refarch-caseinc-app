@@ -1,0 +1,10 @@
+<h2>Items</h2>
+<ul class="items">
+<li *ngFor="let item of items"
+   [class.selected]="item === selectedItem" (click)="onSelect(item)">
+   <span class="badge">{{item.id}}</span>
+   <span>{{item.name}}</span>
+   <button class="delete"
+      (click)="delete(Item); $event.stopPropagation()">x</button>
+</li>
+</ul>

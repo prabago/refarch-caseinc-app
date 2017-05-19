@@ -1,0 +1,10 @@
+applications:
+- path: .
+  name: refarch-caseinc-app
+  host: caseincapp
+  instances: 1
+  domain: mybluemix.net
+  memory: 256M
+  disk_quota: 1024M
+  services:
+    - ITSupportConversation

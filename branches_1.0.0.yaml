@@ -1,0 +1,72 @@
+swagger: '2.0'
+info:
+  x-ibm-name: warehouse
+  title: Warehouses
+  version: 1.0.0
+schemes:
+  - https
+host: $(catalog.host)
+basePath: /warehouses
+consumes:
+  - application/json
+produces:
+  - application/json
+securityDefinitions:
+  clientIdHeader:
+    type: apiKey
+    in: header
+    name: X-IBM-Client-Id
+security:
+  - clientIdHeader: []
+x-ibm-configuration:
+  testable: true
+  enforced: true
+  cors:
+    enabled: true
+  assembly:
+    execute:
+      - invoke:
+          target-url: $(target-url)$(request.path)
+          description: Invoke an api to get the warehouse status
+          secure-gateway: false
+    catch: []
+paths:
+  /details:
+    get:
+      responses:
+        '200':
+          description: 200 OK
+          schema:
+            $ref: '#/definitions/warehouse'
+      summary: Get details for the warehouses
+definitions:
+  warehouse:
+    properties:
+      id:
+        type: string
+        description: Unique identifier for the warehouse
+      type:
+        type: string
+        description: 'Type of warehouse: T1,T2,T3'
+      address:
+        $ref: '#/definitions/address'
+        description: The address of the warehouse
+    additionalProperties: false
+  address:
+    properties:
+      zipcode:
+        type: string
+      state:
+        type: string
+      city:
+        type: string
+      street2:
+        type: string
+        description: The second line of the address
+      street1:
+        type: string
+        description: The first line of the address
+        example: 3009 la jolla avenue
+    additionalProperties: true
+    description: The format definition of the address object
+tags: []
