@@ -31,7 +31,8 @@ router.get('/items2', function(req,res){
 router.get('/items', function(req,res){
   console.log("In inventory get all the items from the exposed api")
   request.get(
-      {url:'http://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/items',
+      {//url:'http://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/items',
+      url:'https://172.16.254.89:443/csplab/sb/sample-inventory-api/items',
       headers: {
         'x-ibm-client-id': '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
         'accept': 'application/json',
@@ -43,6 +44,7 @@ router.get('/items', function(req,res){
               console.log(body)
               res.status(200).send(response.body);
           }
+          // error report empty array
       }
      );
 

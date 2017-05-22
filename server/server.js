@@ -22,7 +22,7 @@ const path = require('path');
 const cfenv = require('cfenv');
 const bodyParser = require('body-parser');
 const inventory = require('./routes/features/inventory');
-
+const conversation = require('./routes/features/conversation')
 const Debug=true;
 
 const app = express();
@@ -40,6 +40,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // Set our api routes
 app.use('/api', api);
 app.use('/api/i',inventory);
+app.use('/api/c',conversation);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {

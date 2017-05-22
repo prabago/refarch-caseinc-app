@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ConversationService {
-  private convUrl ='/api/conversation/';
+  private convUrl ='/api/c/conversation/';
 
   constructor(private http: Http) {
   };

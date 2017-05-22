@@ -1,0 +1,14 @@
+{
+    "conversation" :{
+      "version":"2017-02-03",
+      "username":"",
+      "password":"",
+      "workspaceId":"",
+      "conversationId":""
+    },
+    "bpmoc" :{
+      "servername":"",
+      "processname":"",
+      "basicAuth":""
+    }
+}
