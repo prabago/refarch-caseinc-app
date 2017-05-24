@@ -13,9 +13,7 @@ export class InventoryService {
   };
 
   getItems(): Observable<any>{
-    let headers = new Headers({ 'Accept': 'application/json' });
-    let options = new RequestOptions({ headers: headers })
-    return this.http.get(this.invUrl+'/items',options)
+    return this.http.get(this.invUrl+'/items')
          .map((res:Response) => res.json())
   }
 }
