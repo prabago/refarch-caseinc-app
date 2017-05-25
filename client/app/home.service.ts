@@ -4,16 +4,19 @@ import 'rxjs/add/operator/toPromise';
 import {Observable} from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
-
+/**
+General control service to control the features to expose
+*/
 @Injectable()
-export class InventoryService {
-  private invUrl ='/api/i';
+export class HomeService {
+  private invUrl ='/api';
 
   constructor(private http: Http) {
   };
 
-  getItems(): Observable<any>{
-    return this.http.get(this.invUrl+'/items')
+  // this method is used to control the user interface feature.  
+  getMode(): Observable<any>{
+    return this.http.get(this.invUrl+'/mode')
          .map((res:Response) => res.json())
   }
 }

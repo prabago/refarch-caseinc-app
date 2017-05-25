@@ -21,18 +21,19 @@ export class InventoryComponent {
   }
 
   getItems() {
-    if (this.items.length === 0)
-    this.invService.getItems().subscribe(
-      data => {
-        this.items=data;
-        this.loading=false;
-      },
-      error => {
-        this.message="Error to get the data from backend";
-        this.items=error;
-        console.log(error);
-        }
-    )
+    if (this.items.length === 0) {
+      this.invService.getItems().subscribe(
+        data => {
+          this.items=data;
+          this.loading=false;
+        },
+        error => {
+          this.message="Error to get the data from backend";
+          this.items=error;
+          console.log(error);
+          }
+      )
+    }
   }
 
   edit(index): void {

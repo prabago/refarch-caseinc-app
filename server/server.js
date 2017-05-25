@@ -24,6 +24,9 @@ const bodyParser = require('body-parser');
 const inventory = require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation')
 const Debug=true;
+// The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('server/routes/env.json','utf8'));
 
 const app = express();
 
@@ -40,7 +43,10 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // Set our api routes
 app.use('/api', api);
 app.use('/api/i',inventory);
-app.use('/api/c',conversation);
+if (config.mode == 'orange') {
+  app.use('/api/c',conversation);
+}
+
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
@@ -57,6 +63,6 @@ const port =appEnv.port || '3000';
 // start server on the specified port and binding host
 var server=app.listen(port, '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("Server v0.0.1 starting on " + appEnv.url);
+  console.log("Server v0.0.2 starting on " + appEnv.url);
 });
 module.exports = server;

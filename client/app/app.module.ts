@@ -25,7 +25,7 @@ import { ConversationComponent} from './conv/conversation.component';
 import { ConversationService }  from './conv/conversation.service';
 import { InventoryComponent} from './inventory/inventory.component';
 import { InventoryService }  from './inventory/inventory.service';
-
+import { HomeService }  from './home.service';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -48,7 +48,7 @@ const routes: Routes = [
     HttpModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [ConversationService,InventoryService],
+  providers: [ConversationService,InventoryService,HomeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

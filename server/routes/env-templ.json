@@ -6,9 +6,10 @@
       "workspaceId":"",
       "conversationId":""
     },
-    "bpmoc" :{
+    "bpmoc" : {
       "servername":"",
       "processname":"",
       "basicAuth":""
-    }
+    },
+    "mode" : "brown"
 }

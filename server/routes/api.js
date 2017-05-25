@@ -21,13 +21,18 @@
 
 const express = require('express');
 const router = express.Router();
-
+var fs = require('fs');
+var config = JSON.parse(fs.readFileSync('server/routes/env.json','utf8'));
 
 /* GET api listing. */
 router.get('/', (req, res) => {
   res.send('API supported: GET /api/i/items ');
 });
 
+router.get('/mode',(req,res) => {
+  res.send({"mode":config.mode});
+
+});
 
 
 module.exports = router;

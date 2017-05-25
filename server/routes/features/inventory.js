@@ -19,20 +19,12 @@ const router = express.Router();
 var request = require('request');
 
 
-router.get('/items2', function(req,res){
-    data=[{"id":"123"},{"id":"124"}];
-  	res.status(200).send(data);
-});
-
-
-
 // cap-sg-prd-5.integration.ibmcloud.com
 
 router.get('/items', function(req,res){
   console.log("In inventory get all the items from the exposed api");
   request.get(
       {url:'https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/items',
-      //url:'https://172.16.254.89:443/csplab/sb/sample-inventory-api/items',
       timeout: 10000,
       headers: {
         'x-ibm-client-id': '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',

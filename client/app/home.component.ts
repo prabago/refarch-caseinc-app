@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import { Router }   from '@angular/router';
+import { HomeService }  from './home.service';
 /*
 Main page component to display access to the different demo features.
 */
@@ -11,7 +12,13 @@ Main page component to display access to the different demo features.
   })
 
   export class HomeComponent {
-    constructor(private router: Router) {
+    mode:string='orange';
+
+    constructor(private router: Router,private homeService : HomeService) {
+      this.homeService.getMode().subscribe(
+        data => {this.mode=data.mode;},
+        error => {console.log(error);}
+      )
     }
 
     inventory(){

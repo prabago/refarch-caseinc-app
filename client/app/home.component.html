@@ -5,7 +5,8 @@
         <p>Manage product inventory and suppliers</p>
         <p><button (click)="inventory()" class="btn">Inventory Plus</button></p>
   </div>
-  <div class="col-md-4 roundRect">
+  <!-- Following is visible for specific compute model -->
+  <div class="col-md-4 roundRect" *ngIf="mode == 'orange'">
         <h2>Help@Case</h2>
         <p>Get support to your IT question</p>
         <p><button (click)="itSupport()" class="btn">Ask me</button></p>
