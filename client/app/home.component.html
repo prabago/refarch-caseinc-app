@@ -1,12 +1,12 @@
 <div class="row">
   <h3>Welcome to the Case Inc Portal</h3>
-  <div class="col-md-4 roundRect">
+  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 5px #8c4507; border-color: #8c4507;">
         <h2>Inventory Plus</h2>
         <p>Manage product inventory and suppliers</p>
         <p><button (click)="inventory()" class="btn">Inventory Plus</button></p>
   </div>
   <!-- Following is visible for specific compute model -->
-  <div class="col-md-4 roundRect" *ngIf="mode == 'orange'">
+  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 5px #10d1d1; border-color: #10d1d1;" *ngIf="mode == 'cyan'">
         <h2>Help@Case</h2>
         <p>Get support to your IT question</p>
         <p><button (click)="itSupport()" class="btn">Ask me</button></p>
