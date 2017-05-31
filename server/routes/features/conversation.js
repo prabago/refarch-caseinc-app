@@ -14,71 +14,32 @@
  * limitations under the License.
  */
 var config = require('../env.json');
-var watson = require('watson-developer-cloud');
-var vcapServices = require('vcap_services');
-var extend = require('extend');
 const express = require('express');
 const router = express.Router();
+var request = require('request');
 
 /**
-
+Conversation delegates to the Conversation Broker Micro Service.
 */
 router.post('/conversation',function(req,res){
-    if(!req.body){
-      res.status(400).send({error:'no post body'});
-    } else {
-      if (req.body.context !== undefined) {
-          if (req.body.context.action === "getVar") {
-            req.body.context[req.body.context.varname] = req.body.text;
-        }
-      }
-      console.log(">>> "+JSON.stringify(req.body,null,2));
-      submit(req.body,function(response) {
-        console.log("<<< "+JSON.stringify(response,null,2));
-        var rep="";
-        if (response.context.url != undefined) {
-            if (response.context.action === "click") {
-                rep={"text":response.output.text[0] + "<a class=\"btn btn-primary\" href=\""+response.context.url+"\">Here</a>","context":response.context}
-            }
-        } else if (response.context.action === "trigger"
-               && response.context.actionName === "supplierOnBoardingProcess") {
-              bpmoc.callBPMSupplierProcess(response.context.customerName,response.context.productName);
-              rep={"text":response.output.text[0],"context":response.context}
-          } else {
-             rep={"text":response.output.text[0],"context":response.context}
-        }
-        // TODO add logic to manage Conversation response
-        res.status(200).send(rep);
-        });
+  console.log(config.conversationBroker.url);
+  request({
+    method: 'POST',
+    url: config.conversationBroker.url,
+      timeout: 10000,
+    json: true,
+    body: req.body
+  }, function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+        console.log(body);
+        res.status(200).send(body);
     }
+    if (error) {
+      console.log(error);
+      res.status(500).send([{"text":"Error contacting Conversation bor"}]);
+    }
+  });
 });
-
-/**
-Submit the user's response or first query to Watson Conversation.
-*/
-  submit = function(message,next) {
-      console.log(message);
-      var wcconfig = extend(config.conversation, vcapServices.getCredentials('conversation'));
-      var conversation = watson.conversation({
-        username: wcconfig.username,
-        password: wcconfig.password,
-        version: 'v1',
-        version_date: wcconfig.version
-      });
-      if (message.context === undefined) {
-          message.context={"conversation_id":wcconfig.conversationId};
-      }
-      conversation.message({
-          workspace_id: wcconfig.workspaceId,
-          input: {'text': message.text},
-          context: message.context
-        },  function(err, response) {
-            if (err)
-              console.log('error:', err);
-            else
-              next(response);
-        });
-}
 
 
 module.exports = router;

@@ -1,15 +1,6 @@
 {
-    "conversation" :{
-      "version":"2017-02-03",
-      "username":"",
-      "password":"",
-      "workspaceId":"",
-      "conversationId":""
-    },
-    "bpmoc" : {
-      "servername":"",
-      "processname":"",
-      "basicAuth":""
-    },
-    "mode" : "brown"
+  "conversationBroker" :{
+    "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
+  },
+  "mode" : "cyan"
 }
