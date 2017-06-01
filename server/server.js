@@ -19,10 +19,11 @@ const path = require('path');
 
 // cfenv provides access to your Cloud Foundry environment
 // for more info, see: https://www.npmjs.com/package/cfenv
-const cfenv = require('cfenv');
-const bodyParser = require('body-parser');
-const inventory = require('./routes/features/inventory');
-const conversation = require('./routes/features/conversation')
+const cfenv =        require('cfenv');
+const bodyParser =   require('body-parser');
+const inventory =    require('./routes/features/inventory');
+const conversation = require('./routes/features/conversation');
+const userlogin =    require('./routes/features/userlogin');
 const Debug=true;
 // The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
 var fs = require('fs');
@@ -46,6 +47,7 @@ app.use('/api/i',inventory);
 if (config.mode == 'cyan') {
   app.use('/api/c',conversation);
 }
+app.use('/login',userlogin);
 
 
 // Catch all other routes and return the index file

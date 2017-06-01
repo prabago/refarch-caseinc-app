@@ -14,6 +14,7 @@ describe('Inventory', function() {
   afterEach(function () {
     server.close();
   });
+
   it('Load root context' , function(done){
     chai.request(server)
     .get('/')

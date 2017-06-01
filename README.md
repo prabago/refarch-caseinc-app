@@ -86,7 +86,7 @@ router.get('/items', function(req,res){
       {url:'https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/items',
       timeout: 10000,
       headers: {
-        'x-ibm-client-id': '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
+        'x-ibm-client-id': 'xxxx',
         'accept': 'application/json',
         'content-type': 'application/json'
         }
@@ -111,25 +111,16 @@ router.get('/items', function(req,res){
 
 ## Adding other features
 The portal application includes a simple chat bot integration to ask IT support related questions by using Watson Conversation. The approach is detailed in [cognitive compute conversation code](https://github.com/ibm-cloud-architecture/refarch-cognitive-conversation-broker). In the context of this application to enable this capability you need to do the following:
-* Add a new Watson conversation service in your Bluemix space.
-* Modify the Manifest.yml file under this project folder to reference the newly created service with the two lines like:
+* Have you own copy of the Conversation Broker project
+* Add a new Watson conversation service in your Bluemix space and develop the Conversation artifacts.
+* Reference your Bluemix Watson Conversation service into the conversation broker
+* Deploy the broker to bluemix
+* Modify the env.json to reference the broker URL
+
 ```
-  services:
-  - ITSupportConversation
+* Enable the user interface to present the feature access by setting the mode to cyan in env.json
 ```
-* Add the credential for conversation service in the env.json file, something like:
-```
-"conversation" :{
-  "version":"2017-02-03",
-  "username":"291xxxx",
-  "password":"aDFxxx",
-  "workspaceId":"1a3bxxxxx1",
-  "conversationId":"ITSupportConversation"
-},
-```
-* Enable the user interface to present the feature access by seeting the mode to orange in env.json
-```
-    "mode" : "orange"
+    "mode" : "cyan"
 ```
 For the conversation demo script please refers to this [node](https://github.com/ibm-cloud-architecture/refarch-cognitive-conversation-broker/blob/master/doc/demoflow.md)
 

@@ -21,24 +21,31 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent }  from './app.component';
 import { HomeComponent } from './home.component';
+import { LoginComponent }  from './login/login.component';
 import { ConversationComponent} from './conv/conversation.component';
 import { ConversationService }  from './conv/conversation.service';
 import { InventoryComponent} from './inventory/inventory.component';
 import { InventoryService }  from './inventory/inventory.service';
 import { HomeService }  from './home.service';
+import { AuthGuard }         from './login/auth.guard';
+import { AuthenticationService } from "./login/authentication.service";
+import { AlertService }          from "./login/alert.service";
+
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'inventory', component: InventoryComponent},
-  { path: 'itSupport', component: ConversationComponent},
+  { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
+  { path: 'log', component: LoginComponent },
+  { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
+  { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
   // otherwise redirect to home
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: 'home' }
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    LoginComponent,
     ConversationComponent,
     InventoryComponent
   ],
@@ -48,7 +55,13 @@ const routes: Routes = [
     HttpModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [ConversationService,InventoryService,HomeService],
+  providers: [
+    AlertService,
+    AuthenticationService,
+    AuthGuard,
+    ConversationService,
+    InventoryService,
+    HomeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

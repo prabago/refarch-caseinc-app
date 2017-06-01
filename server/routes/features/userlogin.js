@@ -13,40 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+ var request = require('request');
+var config = require('../env.json');
+
+var apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/login";
+
 const express = require('express');
 const router = express.Router();
-const config = require('../env.json');
-const request = require('request');
 
+router.get('/',function(req,res){
+    var builtUrl=apiUrl+"?username="+req.query.username+"&password="+req.query.password;
 
-// cap-sg-prd-5.integration.ibmcloud.com
-const apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/items";
-
-router.get('/items', function(req,res){
-  console.log("In inventory get all the items from the exposed api");
-  request.get(
-      {url:apiUrl,
-      timeout: 10000,
-      headers: {
-        'x-ibm-client-id': '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
-        'accept': 'application/json',
-        'content-type': 'application/json'
-        }
-      },
-      function (error, response, body) {
+    console.log(builtUrl);
+    if(!req.query.username){
+  		res.status(400).send({error:'no user found in post body'});
+  	} else if (!req.query.password) {
+  		res.status(400).send({error:'no password found in post body'});
+  	}
+    request({
+        method: 'GET',
+        url: builtUrl,
+        timeout: 10000,
+        headers: {
+          'x-ibm-client-id': config.apiGateway.xibmclientid,
+          'content-type': 'application/json'
+          }
+      }, function (error, response, body) {
           if (!error && response.statusCode == 200) {
               console.log(body);
               res.status(200).send(body);
           }
           if (error) {
             console.log(error);
-            res.status(500).send([{"id":1,"name":"item1"},{"id":2,"name":"item2"}]);
+            res.status(500).send([{"text":"Error contacting login API"}]);
           }
-
-          // error report empty array
-      }
-     );
-
+    });
 });
+
 
 module.exports = router;

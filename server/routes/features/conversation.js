@@ -1,5 +1,5 @@
 /**
- * Copyright 2016 IBM Corp. All Rights Reserved.
+ * Copyright 2017 IBM Corp. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ var request = require('request');
 Conversation delegates to the Conversation Broker Micro Service.
 */
 router.post('/conversation',function(req,res){
-  console.log(config.conversationBroker.url);
   request({
     method: 'POST',
     url: config.conversationBroker.url,
@@ -31,12 +30,11 @@ router.post('/conversation',function(req,res){
     body: req.body
   }, function (error, response, body) {
     if (!error && response.statusCode == 200) {
-        console.log(body);
         res.status(200).send(body);
     }
     if (error) {
       console.log(error);
-      res.status(500).send([{"text":"Error contacting Conversation bor"}]);
+      res.status(500).send([{"text":"Error contacting Conversation broker"}]);
     }
   });
 });
