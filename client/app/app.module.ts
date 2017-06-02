@@ -35,7 +35,7 @@ import { AlertService }          from "./login/alert.service";
 const routes: Routes = [
   { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
   { path: 'log', component: LoginComponent },
-  { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
+  { path: 'inventory', component: InventoryComponent},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }

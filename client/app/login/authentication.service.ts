@@ -14,24 +14,24 @@ sessions the behaviour could easily be changed by storing user details somewhere
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
+import { User } from "./User";
 
 @Injectable()
 export class AuthenticationService {
     constructor(private http: Http) { }
 
-    login(email: string, password: string) {
-      console.log("login called");
-      //  let user=JSON.stringify({ "username": username, "password": password });
-      let user={ "email": email, "password": password};
-        return this.http.get('/login?username='+email+"&password="+password)
+    login(user:User) {
+      console.log("login called for "+user.email);
+        return this.http.get('/login?username='+user.email+"&password="+user.password)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
-                let user = response.json();
-                if (user && user.token) {
+                let tokenResponse = response.json();
+                if (tokenResponse && tokenResponse.access_token) {
                     // store user details and token in local storage to keep user logged in between page refreshes
-                    console.log('setting currentUser:'+user);
+                    user.token=tokenResponse.access_token;
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    return user;
                 }
             });
     }

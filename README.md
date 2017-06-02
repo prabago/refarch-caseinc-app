@@ -116,8 +116,6 @@ The portal application includes a simple chat bot integration to ask IT support 
 * Reference your Bluemix Watson Conversation service into the conversation broker
 * Deploy the broker to bluemix
 * Modify the env.json to reference the broker URL
-
-```
 * Enable the user interface to present the feature access by setting the mode to cyan in env.json
 ```
     "mode" : "cyan"

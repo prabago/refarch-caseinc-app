@@ -14,13 +14,22 @@
  * limitations under the License.
  */
 
- var request = require('request');
+var request = require('request');
 var config = require('../env.json');
+
 
 var apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/login";
 
+//var apiUrl="https://172.16.254.89/"+config.apiGateway.url+"/login";
 const express = require('express');
 const router = express.Router();
+
+var   ar={
+"token_type": "bearer",
+"access_token": "AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzzL73Ws724q99HlEHfyCcjWxxbkUQqu6tiy-Il77XpwIVhsyvbeKH8ZN-nP3DfQC-kTQsJF2NlOr2_fcUARfdMXtfpOdLajXNhs2jI5DOSZnIVVDMz4XaRVzdtKPuxlNl",
+"expires_in": 3600,
+"scope": "scope1"
+};
 
 router.get('/',function(req,res){
     var builtUrl=apiUrl+"?username="+req.query.username+"&password="+req.query.password;
@@ -31,17 +40,22 @@ router.get('/',function(req,res){
   	} else if (!req.query.password) {
   		res.status(400).send({error:'no password found in post body'});
   	}
+    res.status(200).send(ar);
+    //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request({
         method: 'GET',
         url: builtUrl,
-        timeout: 10000,
         headers: {
-          'x-ibm-client-id': config.apiGateway.xibmclientid,
-          'content-type': 'application/json'
+          'X-IBM-Client-Id': config.apiGateway.xibmclientid,
+          timeout:15000,
+          //'X-IBM-Client-Id': '5d2a6edb-793d-4193-b9b0-0a087ea6c123',
+          'content-type': 'application/json',
+          'User-Agent': 'request'
           }
       }, function (error, response, body) {
+          console.log(response);
           if (!error && response.statusCode == 200) {
-              console.log(body);
+
               res.status(200).send(body);
           }
           if (error) {

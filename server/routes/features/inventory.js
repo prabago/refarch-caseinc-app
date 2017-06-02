@@ -21,14 +21,14 @@ const request = require('request');
 
 // cap-sg-prd-5.integration.ibmcloud.com
 const apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/items";
-
+// '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
 router.get('/items', function(req,res){
-  console.log("In inventory get all the items from the exposed api");
+  console.log("In inventory get all the items from the exposed api "+apiUrl);
   request.get(
       {url:apiUrl,
       timeout: 10000,
       headers: {
-        'x-ibm-client-id': '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
+        'x-ibm-client-id': config.apiGateway.xibmclientid,
         'accept': 'application/json',
         'content-type': 'application/json'
         }
