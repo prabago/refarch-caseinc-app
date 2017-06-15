@@ -30,12 +30,12 @@ import { HomeService }  from './home.service';
 import { AuthGuard }         from './login/auth.guard';
 import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
-
+import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
   { path: 'log', component: LoginComponent },
-  { path: 'inventory', component: InventoryComponent},
+  { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
@@ -53,6 +53,7 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
+      Ng2Bs3ModalModule,
     RouterModule.forRoot(routes)
   ],
   providers: [

@@ -29,9 +29,9 @@ router.get('/', (req, res) => {
   res.send('API supported: GET /api/i/items ');
 });
 
+// ALl APIs declaration
 router.get('/mode',(req,res) => {
   res.send({"mode":config.mode});
-
 });
 
 

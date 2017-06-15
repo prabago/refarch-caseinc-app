@@ -1,6 +1,7 @@
-import {Component} from '@angular/core';
+import {Component,ViewChild} from '@angular/core';
 import { InventoryService }  from './inventory.service';
 import { Item } from "./Item";
+import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
   //  moduleId: module.id,
@@ -15,6 +16,10 @@ export class InventoryComponent {
   loading: boolean= true;
   index: number = -1;
   item: Item;
+  newItem: Item;
+  submitError: string;
+
+  @ViewChild('itemDialog') modal: ModalComponent;
 
   constructor(private invService : InventoryService){
     this.getItems();
@@ -39,7 +44,9 @@ export class InventoryComponent {
   edit(index): void {
     this.item = JSON.parse(JSON.stringify(this.items[index]));
     this.index = index;
-    //this.openModal();
+    this.newItem = this.item;
+    this.submitError = "";
+    this.modal.open();
   }
 
   remove(index): void {
@@ -48,4 +55,25 @@ export class InventoryComponent {
     updatedItems.splice(index, 1);
   }
 
+  add() : void {
+    this.newItem = new Item();
+    this.newItem['quantity']=0;
+    this.modal.open();
+  }
+
+  submitNewItem(newItem) : void {
+    this.invService.saveItem(newItem).subscribe(
+        data => {
+          this.modal.close();
+          this.loading = false;
+          this.items.push(newItem);
+          //this.getItems();
+        },
+        error => {
+          var errorMessage = JSON.parse(error._body).error;
+          this.loading = false;
+          this.submitError = errorMessage;
+        }
+      );
+  }
 }

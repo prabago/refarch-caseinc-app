@@ -49,4 +49,9 @@ router.get('/items', function(req,res){
 
 });
 
+router.post('/items',function(req,res){
+  console.log(req.body);
+  res.status(200).send(req.body);
+});
+
 module.exports = router;

@@ -40,7 +40,7 @@ router.get('/',function(req,res){
   	} else if (!req.query.password) {
   		res.status(400).send({error:'no password found in post body'});
   	}
-    res.status(200).send(ar);
+    //res.status(200).send(ar);
     //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     request({
         method: 'GET',
@@ -48,7 +48,6 @@ router.get('/',function(req,res){
         headers: {
           'X-IBM-Client-Id': config.apiGateway.xibmclientid,
           timeout:15000,
-          //'X-IBM-Client-Id': '5d2a6edb-793d-4193-b9b0-0a087ea6c123',
           'content-type': 'application/json',
           'User-Agent': 'request'
           }

@@ -38,7 +38,8 @@
     "extend": "^3.0.0",
     "request": "^2.72.0",
     "vcap_services": "^0.1.7",
-    "watson-developer-cloud": "^2.x"
+    "watson-developer-cloud": "^2.x",
+    "ng2-bs3-modal": "^0.10.4"
   },
   "devDependencies": {
     "@angular/cli": "latest",
@@ -48,7 +49,7 @@
     "@types/node": "~6.0.60",
     "concurrently": "^3.1.0",
     "typescript": "~2.0.0",
-    "mocha" : "^3.4.1",
+    "mocha": "^3.4.1",
     "chai": "^3.5.0"
   }
 }

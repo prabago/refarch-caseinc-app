@@ -22,6 +22,7 @@ const path = require('path');
 const cfenv =        require('cfenv');
 const bodyParser =   require('body-parser');
 const session = require('express-session');
+//const inventory =    require('./routes/features/inventoryProxy');
 const inventory =    require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation');
 const userlogin =    require('./routes/features/userlogin');
