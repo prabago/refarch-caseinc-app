@@ -11,7 +11,8 @@
     <tr>
       <th>Id</th>
       <th>Name</th>
-      <th>Img</th>
+      <th>ImgAlt</th>
+      <th>Price</th>
       <th>Quantity</th>
       <th style="background-color: white; border-width:0;"></th>
     </tr>
@@ -20,11 +21,13 @@
      <tr *ngFor="let item of items; let i = index; ">
        <td>{{item.id}}</td>
        <td>{{item.name}}</td>
-       <td>{{item.img}}</td>
+       <td>{{item.imgAlt}}</td>
+       <td>{{item.price}}</td>
        <td>{{item.quantity}}</td>
        <td style="background-color: white; border-width:0;">
          <button class="btn glyphicon glyphicon-edit" type="button"  (click)="edit(i)"></button>
          <button class="btn glyphicon glyphicon-trash" type="button" (click)="delete(i)"></button>
+         <button class="btn glyphicon glyphicon-upload" type="button" (click)="upload(i)"></button>
        </td>
      </tr>
   </tbody>
@@ -43,12 +46,20 @@
             </div>
             <div class="form-group">
                 <label for="description">Description</label>
-                <textarea  class="form-control" rows="3" columns="60" [(ngModel)]="newItem.description" name="description" id="description"></textarea>
+                <textarea  class="form-control" rows="5" columns="60" [(ngModel)]="newItem.description" name="description" id="description"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="imgAlt">Image Alternate Name</label>
+                <input  type="text" class="form-control" required [(ngModel)]="newItem.imgAlt" name="imgAlt" id="imgAlt">
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input  type="text" class="form-control" required [(ngModel)]="newItem.price" name="price" id="price">
             </div>
         </modal-body>
         <modal-footer>
-            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="newItem.dismiss()">Cancel</button>
-            <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="submitNewItem(newItem)">Submit<i *ngIf="loading" class="fa fa-refresh fa-spin"></i></button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="itemDialog.dismiss()">Cancel</button>
+            <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="submitNewItem(newItem)">Save<i *ngIf="loading" class="fa fa-refresh fa-spin"></i></button>
             <p *ngIf="submitError"><br>{{submitError}}</p>
         </modal-footer>
     </form>

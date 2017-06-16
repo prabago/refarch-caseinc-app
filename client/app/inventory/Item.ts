@@ -3,5 +3,7 @@ export class Item {
   name : string;
   description : string;
   img: string;
+  imgAlt:string;
+  price: number;
   quantity: number;
 }

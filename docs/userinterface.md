@@ -1,6 +1,8 @@
 # User interface tricks
 As Angular 2 is still recent, this note presents some tricks we have to follow to do some of the user interface controls.
 
+## Code explanation
+
 ## Defining Modal
 To support popup modal we are using the library [ng2-bs3-modal](https://github.com/dougludlow/ng2-bs3-modal), so add the following line in the dependencies in package.json
 `    "ng2-bs3-modal": "^0.10.4",` and do a `npm install`.

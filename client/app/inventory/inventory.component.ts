@@ -42,17 +42,22 @@ export class InventoryComponent {
   }
 
   edit(index): void {
-    this.item = JSON.parse(JSON.stringify(this.items[index]));
     this.index = index;
-    this.newItem = this.item;
+    this.newItem = this.items[index];
     this.submitError = "";
     this.modal.open();
   }
 
   remove(index): void {
     this.loading = true;
-    var updatedItems = this.items.slice();
-    updatedItems.splice(index, 1);
+    this.invService.deleteItem(this.items[index].id).subscribe(
+        data => {
+          var updatedItems = this.items.slice();
+          updatedItems.splice(index, 1);
+        },
+        error =>{}
+    );
+
   }
 
   add() : void {
@@ -70,9 +75,8 @@ export class InventoryComponent {
           //this.getItems();
         },
         error => {
-          var errorMessage = JSON.parse(error._body).error;
+          this.submitError= JSON.parse(error._body).error;
           this.loading = false;
-          this.submitError = errorMessage;
         }
       );
   }

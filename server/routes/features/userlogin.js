@@ -20,10 +20,10 @@ var config = require('../env.json');
 
 var apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/login";
 
-//var apiUrl="https://172.16.254.89/"+config.apiGateway.url+"/login";
 const express = require('express');
 const router = express.Router();
 
+// this is a temporary hack for byapassing login
 var   ar={
 "token_type": "bearer",
 "access_token": "AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzzL73Ws724q99HlEHfyCcjWxxbkUQqu6tiy-Il77XpwIVhsyvbeKH8ZN-nP3DfQC-kTQsJF2NlOr2_fcUARfdMXtfpOdLajXNhs2jI5DOSZnIVVDMz4XaRVzdtKPuxlNl",

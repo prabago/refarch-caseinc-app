@@ -20,4 +20,8 @@ export class InventoryService {
   saveItem(i) : Observable<any> {
     return this.http.post(this.invUrl+'/items',{item:i}).map((res:Response) => res.json());
   }
+
+  deleteItem(idx) : Observable<any> {
+    return this.http.delete(this.invUrl+'/items/'+idx).map((res:Response) => res.json());
+  }
 }

@@ -60,8 +60,10 @@ The application code is under the client folder, and follows the standard best p
 * unique index.html to support single page application
 * use of modules to organize features
 * use of component, html and css per feature page
+* encapsulate calls to back end for front end server via service components
 
-For the inventory the component in client/app/inventory folder use a service to call the nodejs / expressjs REST services.
+For the inventory the component in client/app/inventory folder use a service to call the nodejs / expressjs REST services as illustrated in the code below:  
+
 ```javascript
 export class InventoryService {
   private invUrl ='/api/i';
@@ -76,8 +78,9 @@ export class InventoryService {
 }
 ```
 
+For detailed on the Angular 2 code see [this note](docs/userinterface.md)
 ### Server code
-The application is using nodejs and expressjs standard code structure. The inventory API is defined in the server/routes/feature folder and use request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway.
+The application is using nodejs and expressjs standard code structure. The code is under *server* folder. The inventory API is defined in the server/routes/feature folder and use request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway.
 
 ```javascript
 router.get('/items', function(req,res){
