@@ -16,22 +16,33 @@
 const express = require('express');
 const router = express.Router();
 const config = require('../env.json');
-const request = require('request');
+const request = require('request').defaults({strictSSL: false});
+var fs = require('fs');
+var path = require('path');
+var certFile = path.resolve(__dirname, '../../ssl/sg.crt');
+var ca = fs.readFileSync(certFile);
 
+var token ="AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzMRxpYFUrXX-LNIsu8aBDUxZUQhlcTpldXYgYietFp9HzY2cbzeOL6LPM5IvylTE0UKFYUusbKu_1oZ-W5NzJOrRlokRoWBI0AWapn9xWo2atLzahkDKGuaaHsp2amAfT"
 
 // cap-sg-prd-5.integration.ibmcloud.com
 const apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/items";
 // '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
 router.get('/items', function(req,res){
+  console.log(req.body.user);
   console.log("In inventory get all the items from the exposed api "+apiUrl);
+
+  var h=req.headers;
+  if (h['Authorization'] === undefined) {
+    h['Authorization']='Bearer '+token;
+  }
+  h['x-ibm-client-id']=config.apiGateway.xibmclientid;
   request.get(
       {url:apiUrl,
       timeout: 10000,
-      headers: {
-        'x-ibm-client-id': config.apiGateway.xibmclientid,
-        'accept': 'application/json',
-        'content-type': 'application/json'
-        }
+      agentOptions:{
+        ca: [ca]
+      },
+      headers: h
       },
       function (error, response, body) {
           if (!error && response.statusCode == 200) {

@@ -17,9 +17,6 @@
 const express = require('express');
 const path = require('path');
 
-// cfenv provides access to your Cloud Foundry environment
-// for more info, see: https://www.npmjs.com/package/cfenv
-const cfenv =        require('cfenv');
 const bodyParser =   require('body-parser');
 const session = require('express-session');
 //const inventory =    require('./routes/features/inventoryProxy');
@@ -59,16 +56,15 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-// get the app environment from Cloud Foundry
-var appEnv = cfenv.getAppEnv();
+
 /**
  * Get port from environment and store in Express.
  */
-const port =appEnv.port || '3000';
+const port ='6100';
 
 // start server on the specified port and binding host
 var server=app.listen(port, '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("Server v0.0.2 starting on " + appEnv.url);
+  console.log("Server v0.0.3 06/16/17 starting on " + port);
 });
 module.exports = server;

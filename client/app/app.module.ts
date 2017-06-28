@@ -32,6 +32,8 @@ import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 
+// Define internal URL mapping to component, protect with authentication guard, meaning user
+// needs to be authenticated with a login
 const routes: Routes = [
   { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
   { path: 'log', component: LoginComponent },
@@ -53,7 +55,7 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-      Ng2Bs3ModalModule,
+    Ng2Bs3ModalModule,
     RouterModule.forRoot(routes)
   ],
   providers: [

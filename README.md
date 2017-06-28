@@ -7,29 +7,29 @@ The current top level view of the home page of this application looks like:
 The application is up and running at the following address: [not yet available]()
 
 ## Pre-requisites
-The pre-requisites for the integration solution are defined [here](https://github.com/ibm-cloud-architecture/refarch-integration#prerequisites), so be sure to get them done.
+The common pre-requisites for the integration solution are defined [here](https://github.com/ibm-cloud-architecture/refarch-integration#prerequisites), so be sure to get them done.
 * For this application you need to have [nodejs](https://nodejs.org/en/) installed on your computer with the [npm](https://www.npmjs.com/) installer tool.
 
-* Clone current repository, or if you want to work on the code, fork it in your own github repository and then clone your forked repository on your local computer. If you used the *fork-repos.sh* script of the [Integration solution] you are already set.
+* Clone current repository, or if you want to work on the code, fork it in your own github repository and then clone your forked repository on your local computer. If you used the `fork-repos.sh` script of the [Integration solution] you are already set.
 
 ```
 git clone https://github.com/ibm-cloud-architecture/refarch-caseinc-app
 cd refarch-caseinc-app
 npm install
 ```
-* You need to install Angular 2 command line interface if you do not have it yet: [cli.angular.io](http://cli.angular.io) tool
+* You need to install Angular 2 command line interface if you do not have it yet: see [cli.angular.io](http://cli.angular.io)
 
  ```
  sudo  npm install -g @angular/cli
  ```
- on Mac for example.
-* You need to install [nodemon](https://nodemon.io/) with
+ on Mac, as a global install you need to be root user.
+* You need to install [nodemon](https://nodemon.io/) to support server code change without stopping the server with
 ```
 sudo npm install -g nodemon
 ```
 
 ## Run the application locally
-To avoid sharing Bluemix service credential an env.json file needs to be defined within the folder server/routes. A template is delivered for that. So just renaming the template file 'env-tmpl.json' to env.json will make the app running locally without any other settings.
+To avoid sharing Bluemix service credential an env.json file needs to be defined within the folder server/routes. A template is delivered for that. So just renaming the template file 'env-tmpl.json' to env.json will make the app running locally without any other settings. As Case Inc Portal app demonstrates some of the [Cyan Compute]() integration, you may need to set the credential of the Watson Service used.
 
 To start the application using node monitoring use the command:
 ```
@@ -54,6 +54,7 @@ The demonstration script is described in this [note](docs/demoflow.md)
 Most of the interactions the user is doing on the Browser are supported by [Angular 2](http://angular.io) javascript library, with its Router mechanism and the DOM rendering capabilities via directives and components. When there is a need to access data to the on-premise server for persistence, an AJAX calls is done to the Secure Gateway URL, and  the server will respond asynchronously later on. The components involved are presented in the figure below in a generic way
 
 ![Angular 2 App](docs/ang-node-comp.png)
+To clearly separate codebases for front- and back-ends the client folder defines angular 2 code while server folder includes the REST api for front end implemented with expressjs
 
 ### Angular app
 The application code is under the client folder, and follows the standard best practice for Angular 2 development:
@@ -125,7 +126,7 @@ The portal application includes a simple chat bot integration to ask IT support 
 ```
 For the conversation demo script please refers to this [node](https://github.com/ibm-cloud-architecture/refarch-cognitive-conversation-broker/blob/master/doc/demoflow.md)
 
-## Upload to Bluemix
+## Upload to Bluemix as Cloud Foundry App
 To avoid conflict with existing deployed application you need to modify the Manifest.yml file with a new host name.
 '''
   host: yourcaseincapp
@@ -139,3 +140,14 @@ cf push
 
 This should create a new cloud foundry application in your bluemix space as illustrated by the following screen copy.  
 ![Deployed App](docs/cf-app.png)
+
+## Deploy the CaseInc Portal App in Bluemix Kubernetes Service
+A dockerfile is defined in the root project folder to build a docker image from the node:alpine official image. The docker file is simple and use the port 6100.
+
+```
+FROM node:alpine
+EXPOSE 6100
+CMD node server/server
+```
+
+The gradle build compiles the angular2 and build the image.

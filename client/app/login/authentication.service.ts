@@ -30,14 +30,8 @@ export class AuthenticationService {
                 if (tokenResponse && tokenResponse.access_token) {
                     // store user details and token in local storage to keep user logged in between page refreshes
                     user.token=tokenResponse.access_token;
-                    localStorage.setItem('currentUser', JSON.stringify(user));
                     return user;
                 }
             });
-    }
-
-    logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
     }
 }

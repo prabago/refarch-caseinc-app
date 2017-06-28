@@ -14,7 +14,7 @@ export class HomeService {
   constructor(private http: Http) {
   };
 
-  // this method is used to control the user interface feature.  
+  // this method is used to control the user interface features.  
   getMode(): Observable<any>{
     return this.http.get(this.invUrl+'/mode')
          .map((res:Response) => res.json())

@@ -2,11 +2,13 @@
 # compiled output
 /dist
 /tmp
+/build
 
 server/routes/env.json
 
 # dependencies
 /node_modules
+/.gradle
 
 # IDEs and editors
 /.idea

@@ -1,0 +1,22 @@
+plugins {
+    id 'base'
+    id "com.moowork.node" version "1.2.0"
+}
+
+description = 'Build the Case Inc Portal to demonstrate Brown and Cyan Computes'
+version = '0.1'
+
+
+node {
+  version = '6.9.2'
+  npmVersion = '5.0.4'
+  download = true
+  workDir = file("${project.buildDir}")
+  nodeModulesDir = file("${project.projectDir}")
+}
+
+task build(type: NpmTask) {
+  args = ['run', 'build']
+}
+
+build.dependsOn(npm_install)

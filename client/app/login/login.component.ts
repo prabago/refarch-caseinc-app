@@ -4,6 +4,10 @@ import { AuthenticationService } from "./authentication.service";
 import { AlertService } from "./alert.service";
 import { User } from "./User";
 
+/**
+Supports exposing the login forms and calls the back end service, persist the user in local storage
+and route to the return url.
+*/
 @Component({
   selector: 'login',
   templateUrl: 'login.component.html'
@@ -21,7 +25,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
       // reset login status
-      this.authenticationService.logout();
+      localStorage.removeItem('currentUser');
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
@@ -30,6 +34,7 @@ export class LoginComponent implements OnInit {
           .subscribe(
               data => {
                   this.user=data;
+                  localStorage.setItem('currentUser', JSON.stringify(this.user));
                   this.router.navigate([this.returnUrl]);
               },
               error => {

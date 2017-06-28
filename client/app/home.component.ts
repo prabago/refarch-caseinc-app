@@ -35,4 +35,9 @@ Main page component to display access to the different demo features.
     }
     // ADD Here methods to be called from HTLM button to route to other component
 
+    logout(){
+        localStorage.removeItem('currentUser');
+        this.user=new User();
+        this.router.navigate(['log']);
+    }
   }
