@@ -16,9 +16,17 @@
 // Get dependencies
 const express = require('express');
 const path = require('path');
+// create the app
+const app = express();
+app.disable('x-powered-by');
+
 
 const bodyParser =   require('body-parser');
+// express-session middleware stores session data on the server; it only saves the session ID in the cookie itself, not session data.
 const session = require('express-session');
+app.set('trust proxy',1);
+app.use(session({secret:"casecret",name:'sessionId'}));
+
 //const inventory =    require('./routes/features/inventoryStub');
 const inventory =    require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation');
@@ -28,7 +36,7 @@ const Debug=true;
 var fs = require('fs');
 var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./routes/env.json')));
 
-const app = express();
+
 
 // Get our API routes
 const api = require('./routes/api');
@@ -37,7 +45,7 @@ app.use(require('cookie-parser')());
 // Parsers for POST JSON PAYLOAD
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-//app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
+app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, '../dist')));

@@ -1,0 +1,2 @@
+# Test getting the list of items using Oath token
+curl -k -v -H 'X-IBM-Client-Id:5d2a6edb-793d-4193-b9b0-0a087ea6c123' -H "Authorization : Bearer AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIz_YIFcgGgk5a68C25rFApjRcO42AUjq6nBsRiVq3WFyfG7ceij4nPsWY4MAW8hxD2QyDwKg7Kmedoxjz5saH2CHWnIc3iNKB5pNdpbQ1uKXCFG_deJ-mveRZVWIgAXBsb"  -H "Content-Type: application/json" "https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/item/13403"
