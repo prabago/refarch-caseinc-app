@@ -29,6 +29,8 @@ var builtUrl='https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/samp
 //var builtUrl='https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/login';
 // fail timeout then 500
 var builtUrl='https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/login?username=case%40usibm&password=case01';
+// work!
+var builtUrl='https://172.16.50.8/csplab/sb/sample-inventory-api/login?username=case%40usibm&password=case01';
 
 console.log("Call with url:"+builtUrl);
 request({
@@ -38,16 +40,16 @@ request({
       'X-IBM-Client-Id': '5d2a6edb-793d-4193-b9b0-0a087ea6c123'
     },
    agentOptions:{
-     //ca: caCert
+     ca: caCert
    },
   }, function (error, response, body) {
       console.log(body);
       if (!error && response.statusCode == 200) {
-         console.log( JSON.parse(body.data.toString()));
+         console.log( body.data));
       }
       if (error) {
         console.log("Error "+error);
-        console.log( JSON.parse(error.data.toString()));
+        console.log( error.data));
       }
 });
 
