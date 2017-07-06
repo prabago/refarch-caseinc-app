@@ -1,9 +1,48 @@
 # Login implementation
-The approach is to use a LDAP server running on-premise to authenticate users from a login page within this web application deployed on Bluemix. For that a new url is added to the API Connect inventory product to support login. For the web application this URL is accessed via the IBM Secure Gateway running on Bluemix.
+This article addresses in detail how login is supported in the Case Inc by using different practices for service encapsulation, Oauth, API authorization....
 
-The URL will be in the form of: https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/login?username=<>&password=<>
+## Table of contents
+* [Requirements to support]()
+*
 
-## Server login proxy
+## Requirements
+We want to support the following requirements:
+* The portal application has a login page, then once authenticated the user is routed to a home page where he can access to a set of business function
+* Userid and password are persisted in a LDAP server running on-premise
+* The authentication is supported by adding an API (/login), on the API Connect server running on-premise
+* The returned response from this authentication service is a Oauth access token that will be used as authorization Bearer token to any call to the back end services like the inventory API.
+* A login page is used in the Angular 2 to get username and password.
+* The BFF server exposes API for the user interface that needs to be accessible only if the user was previously authenticated
+
+## API Definition on back end
+A new url path is added to the API Connect inventory product to support login as illustrated below:
+![](api-login-path.png)  
+
+The logic to support this API has to do a call to the LDAP server and do some data transformation using XSLT to deliver a Oauth token:  
+![](api-login-assemble.png)  
+
+For the web application this URL is accessed via the IBM Secure Gateway running on Bluemix. The URL will be in the form of: https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/login?username=<>&password=<>
+
+The returned object is a Json object like below:
+```Json
+{
+"token_type": "bearer",
+"access_token": "AAEkNWuxlNl......",
+"expires_in": 3600,
+"scope": "scope1"
+}
+```
+The access token is used as authorization attribute inside the HTTP header, we will detail that later.
+
+Once the login mechanism is in place all other APIs defined in the `Inventory product` are secured: So the option `Use API security definitions` is checked for each API, like the `/items` one.
+![](api-security.png)  
+
+And the Security definition specifies what to use: oauth, X-IBM-Client-Id, and scope.
+![](api-security-reqs.png)  
+
+
+## BFF Server login proxy
+We are using Passport.js to encapsulate the
 The first component to add to the nodejs server for the web app is a userlogin.js which is using the `request` javascript module to perform the HTTP GET given the user, password. The following function is called when the user interface is access the RESTful URL `/login`, as defined in the server.js (`app.use('/login',userlogin)`).
 
 ```

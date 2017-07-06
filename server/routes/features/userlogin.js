@@ -21,8 +21,7 @@ var config = require('../env.json');
 var querystring = require('querystring');
 var fs = require('fs');
 var path = require('path');
-var certFile = path.resolve(__dirname, '../../ssl/APIConnect.crt');
-var ca = fs.readFileSync(certFile);
+var ca = fs.readFileSync(path.resolve(__dirname, '../../../ssl/sg.pem'));
 
 var apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/login";
 //var apiUrl="https://172.16.50.8/"+config.apiGateway.url+"/login";
@@ -46,7 +45,8 @@ router.get('/',function(req,res){
   		res.status(400).send({error:'no password found in post body'});
   	}
 
-    //res.status(200).send(ar);
+    res.status(200).send(ar);
+
     //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     var user = { username:req.query.username,password:req.query.password}
     var builtUrl=apiUrl+"?"+querystring.stringify(user);
@@ -62,9 +62,13 @@ router.get('/',function(req,res){
         url: builtUrl,
         headers: {
           'X-IBM-Client-Id': config.apiGateway.xibmclientid,
+          "Accept-content": "application/json",
           timeout:4000
 
-          }
+        },
+        agentOptions:{
+          ca: [ca]
+        },
       }, function (error, response, body) {
           console.log(body);
           if (!error && response.statusCode == 200) {

@@ -19,14 +19,14 @@ const path = require('path');
 
 const bodyParser =   require('body-parser');
 const session = require('express-session');
-//const inventory =    require('./routes/features/inventoryProxy');
+//const inventory =    require('./routes/features/inventoryStub');
 const inventory =    require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation');
 const userlogin =    require('./routes/features/userlogin');
 const Debug=true;
 // The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
 var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('server/routes/env.json','utf8'));
+var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./routes/env.json')));
 
 const app = express();
 
@@ -37,7 +37,7 @@ app.use(require('cookie-parser')());
 // Parsers for POST JSON PAYLOAD
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
+//app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, '../dist')));

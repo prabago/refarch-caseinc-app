@@ -19,8 +19,7 @@ const config = require('../env.json');
 const request = require('request').defaults({strictSSL: false});
 var fs = require('fs');
 var path = require('path');
-var certFile = path.resolve(__dirname, '../../ssl/sg.crt');
-var ca = fs.readFileSync(certFile);
+var ca = fs.readFileSync(path.resolve(__dirname, '../../../ssl/sg.pem'));
 
 var token ="AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzMRxpYFUrXX-LNIsu8aBDUxZUQhlcTpldXYgYietFp9HzY2cbzeOL6LPM5IvylTE0UKFYUusbKu_1oZ-W5NzJOrRlokRoWBI0AWapn9xWo2atLzahkDKGuaaHsp2amAfT"
 
@@ -28,7 +27,6 @@ var token ="AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzMRxpYFUrXX-LNIsu
 const apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/items";
 // '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
 router.get('/items', function(req,res){
-  console.log(req.body.user);
   console.log("In inventory get all the items from the exposed api "+apiUrl);
 
   var h=req.headers;
@@ -36,6 +34,7 @@ router.get('/items', function(req,res){
     h['Authorization']='Bearer '+token;
   }
   h['x-ibm-client-id']=config.apiGateway.xibmclientid;
+  h['scope']='scope1';
   request.get(
       {url:apiUrl,
       timeout: 10000,

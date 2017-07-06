@@ -20,13 +20,14 @@ export class InventoryService {
     var req : any = {
       method: 'GET',
       url: this.invUrl+'/items',
-      headers: {
-        'Authorization': 'Bearer ' +  this.token
-      }
+      // headers: {
+      //   'Authorization': 'Bearer ' +  this.token
+      // }
     }
 
     return this.http.get(req)
-         .map((res:Response) => res.json())
+         .map((res:Response) =>
+          res.json())
   }
 
   saveItem(i) : Observable<any> {

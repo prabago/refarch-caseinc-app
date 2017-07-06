@@ -149,5 +149,32 @@ FROM node:alpine
 EXPOSE 6100
 CMD node server/server
 ```
+To build the image the following command should be done
+
+` docker build -t case/caseportal .`
 
 The gradle build compiles the angular2 and build the image.
+
+Then it can be run locally instead of using the `npm run dev` command used during pure developmen, by using the command:
+`docker run -d -p 6100:6100 -t case/caseportal`
+
+Once built, the image is uploaded to the Bluemix private container registry `registry.ng.bluemix.net/<namespace>/<imagename>`. To get the list of namespace defined into your account use:
+```
+bx login -a https://api.ng.bluemix.net
+
+bx cr namespaces
+```
+For example the namespace we are using is `ibm_nls` so we need to tag the image and upload it, using:
+
+```
+docker tag case/caseportal  registry.ng.bluemix.net/ibm_mls/caseportal
+bx cr login
+docker push registry.ng.bluemix.net/ibm_mls/caseportal
+```
+
+Once the image is uploaded it is possible to build a Kubernetes Deployment and deploy the container to the pods. The commands are:
+
+```
+# Create a Deployment and run it on the pods
+$ kubectl run caseportal --image=registry.ng.bluemix.net/ibm_mls/caseportal --port=6100
+```
