@@ -17,14 +17,14 @@
 var request = require('request').defaults({strictSSL: false});
 //var request = require('request');
 var https=require('https');
-var config = require('../env.json');
-var querystring = require('querystring');
 var fs = require('fs');
 var path = require('path');
-var ca = fs.readFileSync(path.resolve(__dirname, '../../../ssl/sg.pem'));
+var config = require('../env.json');
+var querystring = require('querystring');
+var caCerts =fs.readFileSync(path.resolve(__dirname, '../../../ssl/ca.all.crt.pem'));
 
-var apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/login";
-//var apiUrl="https://172.16.50.8/"+config.apiGateway.url+"/login";
+var apiUrl=config.secureGateway.url+config.apiGateway.url+"/login";
+
 const express = require('express');
 const router = express.Router();
 
@@ -45,31 +45,28 @@ router.get('/',function(req,res){
   		res.status(400).send({error:'no password found in post body'});
   	}
 
-    res.status(200).send(ar);
+    // ACK: res.status(200).send(ar);
 
-    //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     var user = { username:req.query.username,password:req.query.password}
     var builtUrl=apiUrl+"?"+querystring.stringify(user);
     console.log('Login call '+req.query.username+ " url "+builtUrl);
-    /*
-    agentOptions:{
-      ca: [ca]
-    },
-      'User-Agent': 'request'
-    */
-    request({
-        method: 'GET',
-        url: builtUrl,
-        headers: {
-          'X-IBM-Client-Id': config.apiGateway.xibmclientid,
-          "Accept-content": "application/json",
-          timeout:4000
 
-        },
-        agentOptions:{
-          ca: [ca]
-        },
-      }, function (error, response, body) {
+    var options={
+      hostname: 'cap-sg-prd-5.integration.ibmcloud.com',
+      port: 16582,
+      path: '/csplab/sb/sample-inventory-api/login?'+querystring.stringify(user),
+      method: 'GET',
+      rejectUnauthorized: true,
+      ca: caCerts,
+      headers: {
+        'X-IBM-Client-Id': config.apiGateway.xibmclientid,
+        'accept': 'application/json',
+        'content-type' : 'application/x-www-form-urlencoded'
+      }
+    }
+
+    https.request(options, function (error, response, body) {
           console.log(body);
           if (!error && response.statusCode == 200) {
             res.status(200).send(body);

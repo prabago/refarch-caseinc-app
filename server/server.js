@@ -52,6 +52,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 
 // Set our api routes
 app.use('/api', api);
+
 app.use('/api/i',inventory);
 if (config.mode == 'cyan') {
   app.use('/api/c',conversation);

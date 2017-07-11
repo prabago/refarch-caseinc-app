@@ -17,14 +17,12 @@ const express = require('express');
 const router = express.Router();
 const config = require('../env.json');
 const request = require('request').defaults({strictSSL: false});
-var fs = require('fs');
-var path = require('path');
-var ca = fs.readFileSync(path.resolve(__dirname, '../../../ssl/sg.pem'));
+
 
 var token ="AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzMRxpYFUrXX-LNIsu8aBDUxZUQhlcTpldXYgYietFp9HzY2cbzeOL6LPM5IvylTE0UKFYUusbKu_1oZ-W5NzJOrRlokRoWBI0AWapn9xWo2atLzahkDKGuaaHsp2amAfT"
 
 // cap-sg-prd-5.integration.ibmcloud.com
-const apiUrl=config.secureGateway.url+"/"+config.apiGateway.url+"/items";
+const apiUrl=config.secureGateway.url+config.apiGateway.url+"/items";
 // '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
 router.get('/items', function(req,res){
   console.log("In inventory get all the items from the exposed api "+apiUrl);
@@ -37,10 +35,7 @@ router.get('/items', function(req,res){
   h['scope']='scope1';
   request.get(
       {url:apiUrl,
-      timeout: 10000,
-      agentOptions:{
-        ca: [ca]
-      },
+      timeout: 5000,
       headers: h
       },
       function (error, response, body) {

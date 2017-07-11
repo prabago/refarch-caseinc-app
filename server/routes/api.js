@@ -22,7 +22,8 @@
 const express = require('express');
 const router = express.Router();
 var fs = require('fs');
-var config = JSON.parse(fs.readFileSync('server/routes/env.json','utf8'));
+var path = require('path');
+var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./env.json')));
 
 /* GET api listing. */
 router.get('/', (req, res) => {
