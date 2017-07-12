@@ -39,6 +39,7 @@ router.get('/items', function(req,res){
       headers: h
       },
       function (error, response, body) {
+        console.log(body);
           if (!error && response.statusCode == 200) {
               console.log(body);
               res.status(200).send(body);

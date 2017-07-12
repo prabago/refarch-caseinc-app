@@ -46,6 +46,7 @@ router.get('/',function(req,res){
   	}
 
     // ACK: res.status(200).send(ar);
+    // return res.status(200).send(ar);
 
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     var user = { username:req.query.username,password:req.query.password}
@@ -61,19 +62,19 @@ router.get('/',function(req,res){
       ca: caCerts,
       headers: {
         'X-IBM-Client-Id': config.apiGateway.xibmclientid,
-        'accept': 'application/json',
-        'content-type' : 'application/x-www-form-urlencoded'
+        'Accept': 'application/json',
+        'Content-Type' : 'application/x-www-form-urlencoded'
       }
     }
 
     https.request(options, function (error, response, body) {
-          console.log(body);
+          console.log(error, response, body);
           if (!error && response.statusCode == 200) {
-            res.status(200).send(body);
+            return res.status(200).send(body);
           }
           if (error) {
             console.log("Error "+error);
-            res.status(500).send([{"text":"Error contacting login API"}]);
+            return res.status(500).send([{"text":"Error contacting login API"}]);
           }
     });
 });

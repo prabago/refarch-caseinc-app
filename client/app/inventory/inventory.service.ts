@@ -25,7 +25,7 @@ export class InventoryService {
       // }
     }
 
-    return this.http.get(req)
+    return this.http.get(this.invUrl+'/items')
          .map((res:Response) =>
           res.json())
   }
