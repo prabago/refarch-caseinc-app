@@ -1,0 +1,25 @@
+Room_Temperature
+Food_Compartment_Temperature
+Freezer_Temperature
+Capacity
+Energy_Use_KWh_per_day
+Symptom
+Failure
+RCFailure
+RRPFailure
+
+create table "APPLIANCES" (
+  "APPLIANCEID"	VARCHAR(20),
+ 	"TYPE"	VARCHAR(35),
+ 	"ROOMTEMPERATURE"	REAL,
+ 	"FOODCOMPTEMP"	REAL,
+ 	"FREEZERTEMP"	REAL,
+ 	"CAPACITY"	REAL,
+ 	"ENERGYUSE"	REAL,
+ 	"SYMPTOM"	VARCHAR(1000),
+ 	"FAILURE"	VARCHAR(6),
+ 	"RFAILURE"	REAL,
+  "RCFAILURE" REAL,
+  "RRPFAILURE" REAL,
+  "EVENTTIME" TIMESTAMP
+)

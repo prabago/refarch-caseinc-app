@@ -31,14 +31,21 @@ import { AuthGuard }         from './login/auth.guard';
 import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
 import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
-
+// added for appliance IoT extends use case
+import { IoTComponent }        from './iot/iot.component';
+import { IoTService }          from './iot/iot.service';
+import { IoTConversation }     from './iot/iotconv.component';
+import { IoTMeasureComponent } from './iot/iotmeasure.component';
 // Define internal URL mapping to component, protect with authentication guard, meaning user
 // needs to be authenticated with a login
 const routes: Routes = [
-  { path: 'home', component: HomeComponent,canActivate: [AuthGuard] },
+  { path: 'home', component: HomeComponent},
   { path: 'log', component: LoginComponent },
   { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
+  { path: 'appliance', component: IoTComponent },
+  { path: 'applianceMeasure', component: IoTMeasureComponent},
+  { path: 'applianceChat',component: IoTConversation},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ]
@@ -49,7 +56,10 @@ const routes: Routes = [
     HomeComponent,
     LoginComponent,
     ConversationComponent,
-    InventoryComponent
+    InventoryComponent,
+    IoTComponent,
+    IoTConversation,
+    IoTMeasureComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +74,8 @@ const routes: Routes = [
     AuthGuard,
     ConversationService,
     InventoryService,
-    HomeService],
+    HomeService,
+    IoTService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

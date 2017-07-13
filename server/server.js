@@ -28,9 +28,11 @@ app.set('trust proxy',1);
 app.use(session({secret:"casecret",name:'sessionId'}));
 
 //const inventory =    require('./routes/features/inventoryStub');
-const inventory =    require('./routes/features/inventory');
+const inventory    = require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation');
-const userlogin =    require('./routes/features/userlogin');
+const userlogin    = require('./routes/features/userlogin');
+const applianceDao = require('./routes/features/applianceDao');
+const applianceConversation = require('./routes/features/applianceConversation');
 const Debug=true;
 // The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
 var fs = require('fs');
@@ -56,6 +58,8 @@ app.use('/api', api);
 app.use('/api/i',inventory);
 if (config.mode == 'cyan') {
   app.use('/api/c',conversation);
+  app.use('/api/a',applianceDao);
+  app.use('/api/ac',applianceConversation);
 }
 app.use('/login',userlogin);
 

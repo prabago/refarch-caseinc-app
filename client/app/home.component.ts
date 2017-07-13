@@ -40,4 +40,8 @@ Main page component to display access to the different demo features.
         this.user=new User();
         this.router.navigate(['log']);
     }
+
+    appliance(){
+        this.router.navigate(['appliance']);
+    }
   }
