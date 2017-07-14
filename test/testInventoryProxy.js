@@ -4,7 +4,7 @@ var chaiHttp = require('chai-http');
 var expect = chai.expect;
 var server = require('../server/server.js');
 chai.use(chaiHttp);
-var token = 'AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIz_YIFcgGgk5a68C25rFApjRcO42AUjq6nBsRiVq3WFyfG7ceij4nPsWY4MAW8hxD2QyDwKg7Kmedoxjz5saH2CHWnIc3iNKB5pNdpbQ1uKXCFG_deJ-mveRZVWIgAXBsb';
+var token = 'AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzBDvp9ipI6duRKseKNk0BqDL-B3rA0qBsst3ZlallF3ElwIorO5E5KTs37Cuz03Wn9kzv5FkruuUZstX0dmDDQZBZOrvCoqeDJlqJkM-Y8htdDDqDDYboh7SP3itmDgzw';
 
 describe('Inventory', function() {
   // Starting and stopping the server for each unit test makes them order-independent
@@ -44,6 +44,7 @@ describe('Inventory', function() {
     this.timeout(15000);
     chai.request(server).get('/api/i/items')
       .set('Authorization','Bearer '+token)
+      .set('X-IBM-Client-Id','5d2a6edb-793d-4193-b9b0-0a087ea6c123')
       .end(function(err, res){
           expect(err).to.be.null;
           expect(res).to.have.status(200);

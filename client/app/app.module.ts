@@ -41,7 +41,8 @@ import { IoTMeasureComponent } from './iot/iotmeasure.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent},
   { path: 'log', component: LoginComponent },
-  { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
+  //canActivate: [AuthGuard]
+  { path: 'inventory', component: InventoryComponent},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
   { path: 'appliance', component: IoTComponent },
   { path: 'applianceMeasure', component: IoTMeasureComponent},

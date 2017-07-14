@@ -59,7 +59,7 @@ router.get('/',function(req,res){
       path: '/csplab/sb/sample-inventory-api/login?'+querystring.stringify(user),
       method: 'GET',
       rejectUnauthorized: true,
-      ca: caCerts,
+      //ca: caCerts,
       headers: {
         'X-IBM-Client-Id': config.apiGateway.xibmclientid,
         'Accept': 'application/json',
@@ -67,17 +67,22 @@ router.get('/',function(req,res){
       }
     }
 
-    https.request(options, function (error, response, body) {
-          console.log(error, response, body);
-          if (!error && response.statusCode == 200) {
-            return res.status(200).send(body);
-          }
-          if (error) {
-            console.log("Error "+error);
-            return res.status(500).send([{"text":"Error contacting login API"}]);
-          }
+    var req = https.request(options, function(resp) {
+        resp.on('data', function(data) {
+            process.stdout.write(data);
+            return res.status(200).send(data);
+        });
+    });
+    req.end();
+    req.on('error', function(e) {
+        console.error(e);
+        res.status(500).send([{"text":"Error contacting login API"}]);
     });
 });
+
+
+
+
 
 
 module.exports = router;

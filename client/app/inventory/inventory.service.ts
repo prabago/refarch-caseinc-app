@@ -16,16 +16,11 @@ export class InventoryService {
     this.token=u.token;
   };
 
-  getItems(): Observable<any>{
-    var req : any = {
-      method: 'GET',
-      url: this.invUrl+'/items',
-      // headers: {
-      //   'Authorization': 'Bearer ' +  this.token
-      // }
-    }
 
-    return this.http.get(this.invUrl+'/items')
+  getItems(): Observable<any>{
+    let headers = new Headers({ 'Authorization': 'Bearer ' +  this.token });
+    let options = new RequestOptions({ headers: headers })
+    return this.http.get(this.invUrl+'/items',options)
          .map((res:Response) =>
           res.json())
   }

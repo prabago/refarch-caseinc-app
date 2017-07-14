@@ -24,13 +24,27 @@ export class IoTConversation {
   // variable used for the input field in html page to get user query
   queryString=""
 
+  isArray(what) {
+      return Object.prototype.toString.call(what) === '[object Array]';
+  }
+
   callConversationBFF(msg:string) {
     this.convService.submitMessage(msg,this.context).subscribe(
       data => {
         this.context=data.context;
         let s:IoTSentence = new IoTSentence();
         s.direction="from-watson";
-        s.text=data.text;
+        if (!this.isArray(data.discdata)) {
+            s.text=data.text;
+        } else {
+          s.text="<table id=\"dataTable\" class=\"table table-striped table-condensed\"><tbody>";
+          for (var i = 0; i < data.discdata.length; i++) {
+            s.text+="<tr><td style=\"color:blue\">"+JSON.stringify(data.discdata[i].Symptom)+"</td>"
+            +"<td>"+JSON.stringify(data.discdata[i].Solution)+"</td></tr>";
+          }
+          s.text+="</tbody></table>"
+        }
+
         this.currentDialog.push(s)
       },
       error => {

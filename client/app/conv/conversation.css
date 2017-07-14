@@ -1,6 +1,6 @@
 .conversation-container {
   border-style: solid;
-  max-width: 700px;
+  max-width: 900px;
   margin: 30px auto;
   border-width : 2px;
   border-radius: 8px;
@@ -10,7 +10,7 @@
 .scrolling-box {
   padding: 0px 5px;
   height: calc(100vh - 200px);
-  max-height: 500px;
+  max-height: 600px;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -44,9 +44,9 @@
 }
 .from-watson-text {
   background: #8bc9ef;
-  color: white;
   padding: 15px 20px;
   border-radius: 20px;
   float: left;
+  color:blue;
   max-width: calc(100% - 60px);
 }
