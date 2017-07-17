@@ -28,13 +28,6 @@ var apiUrl=config.secureGateway.url+config.apiGateway.url+"/login";
 const express = require('express');
 const router = express.Router();
 
-// this is a temporary hack for by passing login
-var   ar={
-"token_type": "bearer",
-"access_token": "AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIzzL73Ws724q99HlEHfyCcjWxxbkUQqu6tiy-Il77XpwIVhsyvbeKH8ZN-nP3DfQC-kTQsJF2NlOr2_fcUARfdMXtfpOdLajXNhs2jI5DOSZnIVVDMz4XaRVzdtKPuxlNl",
-"expires_in": 3600,
-"scope": "scope1"
-};
 
 router.get('/',function(req,res){
     //var builtUrl=apiUrl+"?username="+req.query.username+"&password="+req.query.password;
@@ -45,10 +38,7 @@ router.get('/',function(req,res){
   		res.status(400).send({error:'no password found in post body'});
   	}
 
-    // ACK: res.status(200).send(ar);
-    // return res.status(200).send(ar);
-
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    //process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
     var user = { username:req.query.username,password:req.query.password}
     var builtUrl=apiUrl+"?"+querystring.stringify(user);
     console.log('Login call '+req.query.username+ " url "+builtUrl);
@@ -73,11 +63,11 @@ router.get('/',function(req,res){
             return res.status(200).send(data);
         });
     });
-    req.end();
     req.on('error', function(e) {
         console.error(e);
         res.status(500).send([{"text":"Error contacting login API"}]);
     });
+    req.end();
 });
 
 

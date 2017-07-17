@@ -74,7 +74,6 @@ var callDiscovery=function(query,next){
   discovery.query(params, function(err, response) {
     if (err) {
       console.error("Error "+err);
-
     } else {
       console.log(JSON.stringify(response.results,null,2));
       next(response.results);

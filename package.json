@@ -14,7 +14,9 @@
     "ng": "ng",
     "start": "node server/server",
     "dev": "concurrently \"ng build\" \"nodemon server/server\"",
+    "devui": "concurrently \"npm run build:watch\" \"npm run serve\"",
     "build": "ng build",
+    "build:watch": "tsc -p src/ -w",
     "test": "mocha"
   },
   "private": true,
