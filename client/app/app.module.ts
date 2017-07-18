@@ -39,10 +39,10 @@ import { IoTMeasureComponent } from './iot/iotmeasure.component';
 // Define internal URL mapping to component, protect with authentication guard, meaning user
 // needs to be authenticated with a login
 const routes: Routes = [
-  { path: 'home', component: HomeComponent},
+  { path: 'home', component: HomeComponent,canActivate: [AuthGuard]},
   { path: 'log', component: LoginComponent },
   //canActivate: [AuthGuard]
-  { path: 'inventory', component: InventoryComponent},
+  { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
   { path: 'appliance', component: IoTComponent },
   { path: 'applianceMeasure', component: IoTMeasureComponent},

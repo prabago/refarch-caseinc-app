@@ -23,16 +23,16 @@ app.disable('x-powered-by');
 
 const bodyParser =   require('body-parser');
 // express-session middleware stores session data on the server; it only saves the session ID in the cookie itself, not session data.
-const session = require('express-session');
-app.set('trust proxy',1);
-app.use(session({secret:"casecret",name:'sessionId'}));
+//const session = require('express-session');
+//app.set('trust proxy',1);
+//app.use(session({secret:"casecret",name:'sessionId'}));
 
 //const inventory =    require('./routes/features/inventoryStub');
 const inventory    = require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation');
 const userlogin    = require('./routes/features/userlogin');
 const applianceDao = require('./routes/features/applianceDao');
-const applianceConversation = require('./routes/features/applianceConversation');
+//const applianceConversation = require('./routes/features/applianceConversation');
 const Debug=true;
 // The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
 var fs = require('fs');
@@ -47,7 +47,7 @@ app.use(require('cookie-parser')());
 // Parsers for POST JSON PAYLOAD
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
+//app.use(session({resave: 'true', saveUninitialized: 'true' , secret: 'keyboard cat', cookie:{secure: false}}));
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, '../dist')));
@@ -58,8 +58,8 @@ app.use('/api', api);
 app.use('/api/i',inventory);
 if (config.mode == 'cyan') {
   app.use('/api/c',conversation);
-  app.use('/api/a',applianceDao);
-  app.use('/api/ac',applianceConversation);
+  //app.use('/api/a',applianceDao);
+  //app.use('/api/ac',applianceConversation);
 }
 app.use('/login',userlogin);
 

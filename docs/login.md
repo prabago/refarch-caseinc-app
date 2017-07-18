@@ -1,9 +1,9 @@
 # Login implementation
-This article addresses in detail how login is supported in the Case Inc by using different practices for service encapsulation, Oauth, API authorization....
+This article addresses in detail how login is supported in the Case Inc Portal by using different practices for service encapsulation, Oauth, API authorization....
 
 ## Table of contents
-* [Requirements to support]()
-*
+* [Requirements to support](https://github.com/ibm-cloud-architecture/refarch-caseinc-app/blob/master/docs/login.md#requirements)
+* 
 
 ## Requirements
 We want to support the following requirements:

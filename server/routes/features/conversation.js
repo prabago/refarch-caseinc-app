@@ -29,13 +29,15 @@ router.post('/conversation',function(req,res){
     json: true,
     body: req.body
   }, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        res.status(200).send(body);
-    }
+    console.log("@@ in conversation proxy "+JSON.stringify(response,null,2));
     if (error) {
       console.log(error);
       res.status(500).send([{"text":"Error contacting Conversation broker"}]);
     }
+    if (response.statusCode == 200) {
+        res.status(200).send(body);
+    }
+    res.status(response.statusCode).send(body);
   });
 });
 

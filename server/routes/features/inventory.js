@@ -24,9 +24,9 @@ var caCerts =fs.readFileSync(path.resolve(__dirname, '../../../ssl/ca.all.crt.pe
 
 var token ="AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIz17D7AcpiI7h24nft_1IlvhYMRY3U6cpFVPhcMQYjQXF1-kaCQYvgOhj88KBmiUQk476WmKS925LrAzRGVZEEHxJWwYefcdVyisFrHZtqGh4aR6Xk8ZaPhlqWBTYabhpO";
 
-// cap-sg-prd-5.integration.ibmcloud.com
+
 const apiUrl=config.secureGateway.url+config.apiGateway.url+"/items";
-// '1dc939dd-c8dc-4d7e-af38-04f9afb78f60',
+
 router.get('/items', function(req,res){
   console.log("In inventory get all the items from the exposed api "+apiUrl);
 

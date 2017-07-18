@@ -84,31 +84,26 @@ export class InventoryService {
 
 For detailed on the Angular 2 code see [this note](docs/userinterface.md)
 ### Server code
-The application is using nodejs and expressjs standard code structure. The code is under *server* folder. The inventory API is defined in the server/routes/feature folder and use request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway.
+The application is using nodejs and expressjs standard code structure. The code is under *server* folder. The inventory API is defined in the server/routes/feature folder and uses request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway. The env.json 
 
 ```javascript
+const config = require('../env.json');
+const apiUrl=config.secureGateway.url+config.apiGateway.url+"/items";
+
 router.get('/items', function(req,res){
   console.log("In inventory get all the items from the exposed api");
+  var h = {
+    'X-IBM-Client-Id': config.apiGateway.xibmclientid,
+    'Accept': 'application/json',
+    'Authorization': 'Bearer '+req.headers.token
+  }
   request.get(
-      {url:'https://cap-sg-prd-5.integration.ibmcloud.com:16582/csplab/sb/sample-inventory-api/items',
-      timeout: 10000,
-      headers: {
-        'x-ibm-client-id': 'xxxx',
-        'accept': 'application/json',
-        'content-type': 'application/json'
-        }
+      {url:apiUrl,
+      timeout: 5000,
+      headers: h
       },
       function (error, response, body) {
-          if (!error && response.statusCode == 200) {
-              console.log(body);
-              res.status(200).send(body);
-          }
-          if (error) {
-            console.log(error);
-            res.status(500).send([{"id":1,"name":"item1"},{"id":2,"name":"item2"}]);
-          }
 
-          // error report empty array
       }
      );
 
