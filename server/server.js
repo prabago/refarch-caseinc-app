@@ -60,8 +60,6 @@ app.use('/api', api);
 app.use('/api/i',inventory);
 if (config.mode == 'cyan') {
   app.use('/api/c',conversation);
-  //app.use('/api/a',applianceDao);
-  //app.use('/api/ac',applianceConversation);
 }
 app.use('/login',userlogin);
 

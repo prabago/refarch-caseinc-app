@@ -14,6 +14,7 @@ export class ConversationService {
 
   submitMessage(msg:string,ctx:any): Observable<any>{
     let bodyString = JSON.stringify(  { text:msg,context:ctx });
+
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers })
     return this.http.post(this.convUrl,bodyString,options)

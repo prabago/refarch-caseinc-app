@@ -46,7 +46,7 @@
     "hystrixjs": "0.2.0",
     "querystring": "^0.2.0",
     "request": "^2.72.0",
-    "watson-developer-cloud": "^2.32.1",
+    "watson-developer-cloud": "^2.32.x",
     "webpack": "^2.2.0-rc"
   },
   "devDependencies": {

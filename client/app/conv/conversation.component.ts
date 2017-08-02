@@ -11,7 +11,7 @@ import { Sentence } from "./Sentence";
 
 export class ConversationComponent {
   currentDialog : Sentence[]=[];
-  context:any; // used to keep the Conversation context
+  context:any={"type":"base"}; // used to keep the Conversation context
   message:string;
   /**
   When creating a conversation component call Watson to get a greetings message as defined in the Dialog. This is more user friendly.

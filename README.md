@@ -7,7 +7,7 @@ The current top level view of the home page of this application looks like:
 
 ![home page](docs/homepage.png)  
 
-The application is up and running at the following address: [not yet available]()
+The application is up and running at the following address: http://caseincapp.mybluemix.net/
 
 ## Pre-requisites
 The common pre-requisites for the integration solution are defined [here](https://github.com/ibm-cloud-architecture/refarch-integration#prerequisites), so be sure to get them done.
@@ -84,7 +84,7 @@ export class InventoryService {
 
 For detailed on the Angular 2 code see [this note](docs/userinterface.md)
 ### Server code
-The application is using nodejs and expressjs standard code structure. The code is under *server* folder. The inventory API is defined in the server/routes/feature folder and uses request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway. The env.json 
+The application is using nodejs and expressjs standard code structure. The code is under *server* folder. The inventory API is defined in the server/routes/feature folder and uses request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway. The env.json
 
 ```javascript
 const config = require('../env.json');

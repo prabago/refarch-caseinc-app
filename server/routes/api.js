@@ -24,6 +24,7 @@ const router = express.Router();
 var fs = require('fs');
 var path = require('path');
 var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./env.json')));
+const inventory    = require('./features/inventory');
 
 /* GET api listing. */
 router.get('/', (req, res) => {
