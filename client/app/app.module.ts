@@ -26,11 +26,12 @@ import { ConversationComponent} from './conv/conversation.component';
 import { ConversationService }  from './conv/conversation.service';
 import { InventoryComponent} from './inventory/inventory.component';
 import { InventoryService }  from './inventory/inventory.service';
+import { ItemDetailComponent} from './inventory/item.component';
 import { HomeService }  from './home.service';
 import { AuthGuard }         from './login/auth.guard';
 import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
-import { Ng2Bs3ModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+
 // added for appliance IoT extends use case
 import { IoTComponent }        from './iot/iot.component';
 import { IoTService }          from './iot/iot.service';
@@ -58,6 +59,7 @@ const routes: Routes = [
     LoginComponent,
     ConversationComponent,
     InventoryComponent,
+    ItemDetailComponent,
     IoTComponent,
     IoTConversation,
     IoTMeasureComponent
@@ -66,7 +68,6 @@ const routes: Routes = [
     BrowserModule,
     FormsModule,
     HttpModule,
-    Ng2Bs3ModalModule,
     RouterModule.forRoot(routes)
   ],
   providers: [

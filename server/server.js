@@ -19,7 +19,9 @@ const path = require('path');
 // create the app
 const app = express();
 app.disable('x-powered-by');
-
+// cfenv provides access to your Cloud Foundry environment
+// for more info, see: https://www.npmjs.com/package/cfenv
+var cfenv = require('cfenv');
 
 const bodyParser =   require('body-parser');
 // express-session middleware stores session data on the server; it only saves the session ID in the cookie itself, not session data.
@@ -31,7 +33,7 @@ const bodyParser =   require('body-parser');
 const inventory    = require('./routes/features/inventory');
 const conversation = require('./routes/features/conversation');
 const userlogin    = require('./routes/features/userlogin');
-const applianceDao = require('./routes/features/applianceDao');
+
 //const applianceConversation = require('./routes/features/applianceConversation');
 const Debug=true;
 // The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
@@ -73,11 +75,12 @@ app.get('*', (req, res) => {
 /**
  * Get port from environment and store in Express.
  */
-const port ='6100';
+var appEnv = cfenv.getAppEnv();
+const port = appEnv.port ||'6010';
 
 // start server on the specified port and binding host
 var server=app.listen(port, '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("Server v0.0.3 06/16/17 starting on " + port);
+  console.log("Server v0.0.4 07/31/17 starting on " + port);
 });
 module.exports = server;

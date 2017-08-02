@@ -27,34 +27,37 @@ var token ="AAEkNWQyYTZlZGItNzkzZC00MTkzLWI5YjAtMGEwODdlYTZjMTIz17D7AcpiI7h24nft
 
 const apiUrl=config.secureGateway.url+config.apiGateway.url+"/items";
 
+var buildHeader=function(token){
+  return {
+    'X-IBM-Client-Id': config.apiGateway.xibmclientid,
+    'Accept': 'application/json',
+    'Authorization': 'Bearer '+token
+  }
+}
+
 router.get('/items', function(req,res){
   console.log("In inventory get all the items from the exposed api "+apiUrl);
 
-  var h = {
-    'X-IBM-Client-Id': config.apiGateway.xibmclientid,
-    'Accept': 'application/json',
-    'Authorization': 'Bearer '+req.headers.token
-  }
+  var h = buildHeader(req.headers.token);
+
   request.get(
       {url:apiUrl,
-      timeout: 5000,
+      timeout: 6000,
       headers: h
       },
       function (error, response, body) {
-        console.log(body);
+        console.log(response.statusCode);
           if (!error && response.statusCode == 200) {
-              console.log(body);
               res.status(200).send(body);
           }
           if (error) {
-            console.log(error);
+            console.log("Error: "+error);
             res.status(500).send([{"id":1,"name":"item1"},{"id":2,"name":"item2"}]);
           }
 
           // error report empty array
       }
      );
-
 });
 
 
@@ -63,5 +66,27 @@ router.post('/items',function(req,res){
   res.status(200).send(req.body);
 });
 
-router.get('/items/:id');
+router.get('/items/:id',function(req,res){});
+
+router.delete('/items/:id',function(req,res){
+  var h = buildHeader(req.headers.token);
+  request.delete(
+      {url:apiUrl,
+      timeout: 6000,
+      headers: h
+      },
+      function (error, response, body) {
+        console.log(body);
+          if (!error && response.statusCode == 200) {
+              res.status(200).send(body);
+          }
+          if (error) {
+            console.log("Error: "+error);
+            res.status(500).send({"error":error});
+          }
+
+          // error report empty array
+      }
+     );
+});  // delete
 module.exports = router;

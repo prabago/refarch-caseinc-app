@@ -4,63 +4,34 @@
   </ul>
 </div>
 <h2>Items <i *ngIf="loading" class="fa fa-cog fa-spin fa-3x fa-fw"></i> <span><button class="btn btnbg glyphicon glyphicon-plus" type="button" (click)="add()"></button></span></h2>
-<div class="container">
+<div class="row">
   <p *ngIf="loading">Can take some time to load</p>
-  <table id="dataTable" class="table table-striped table-condensed" style="max-width: 60%;">
-    <thead>
-    <tr>
-      <th>Id</th>
-      <th>Name</th>
-      <th>ImgAlt</th>
-      <th>Price</th>
-      <th>Quantity</th>
-      <th style="background-color: white; border-width:0;"></th>
-    </tr>
-    </thead>
-   <tbody>
-     <tr *ngFor="let item of items; let i = index; ">
-       <td>{{item.id}}</td>
-       <td>{{item.name}}</td>
-       <td>{{item.imgAlt}}</td>
-       <td>{{item.price}}</td>
-       <td>{{item.quantity}}</td>
-       <td style="background-color: white; border-width:0;">
-         <button class="btn glyphicon glyphicon-edit" type="button"  (click)="edit(i)"></button>
-         <button class="btn glyphicon glyphicon-trash" type="button" (click)="delete(i)"></button>
-         <button class="btn glyphicon glyphicon-upload" type="button" (click)="upload(i)"></button>
-       </td>
-     </tr>
-  </tbody>
-   </table>
+  <div class="col-md-8">
+      <table id="dataTable" class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th style="background-color: white; border-width:0;"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="items" *ngFor="let item of items; let i = index; ">
+             <td>{{item.id}}</td>
+             <td>{{item.name}}</td>
+             <td>{{item.price}}</td>
+             <td>{{item.quantity}}</td>
+             <td style="background-color: white; border-width:0;">
+               <button class="btn glyphicon glyphicon-edit" type="button"  (click)="edit(i)"></button>
+               <button class="btn glyphicon glyphicon-trash" type="button" (click)="remove(i)"></button>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+     <div class="col-md-4">
+       <item-detail [item]="selectedItem"></item-detail>
+     </div>
 </div>
-
-<modal #itemDialog>
-    <form #modalForm="ngForm" *ngIf="newItem">
-        <modal-header [show-close]="true">
-            <h4 class="modal-title">Inventory Item</h4>
-        </modal-header>
-        <modal-body>
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input autofocus type="text" class="form-control" required [(ngModel)]="newItem.name" name="name" id="name">
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea  class="form-control" rows="5" columns="60" [(ngModel)]="newItem.description" name="description" id="description"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="imgAlt">Image Alternate Name</label>
-                <input  type="text" class="form-control" required [(ngModel)]="newItem.imgAlt" name="imgAlt" id="imgAlt">
-            </div>
-            <div class="form-group">
-                <label for="price">Price</label>
-                <input  type="text" class="form-control" required [(ngModel)]="newItem.price" name="price" id="price">
-            </div>
-        </modal-body>
-        <modal-footer>
-            <button type="button" class="btn btn-default" data-dismiss="modal" (click)="itemDialog.dismiss()">Cancel</button>
-            <button type="button" class="btn btn-primary" [disabled]="!modalForm.valid" (click)="submitNewItem(newItem)">Save<i *ngIf="loading" class="fa fa-refresh fa-spin"></i></button>
-            <p *ngIf="submitError"><br>{{submitError}}</p>
-        </modal-footer>
-    </form>
-</modal>

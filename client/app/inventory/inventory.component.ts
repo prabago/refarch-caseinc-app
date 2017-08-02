@@ -1,10 +1,8 @@
-import {Component,ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import { InventoryService }  from './inventory.service';
 import { Item } from "./Item";
-import { ModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 
 @Component({
-  //  moduleId: module.id,
     selector: 'inventory',
     styleUrls:['inventory.css'],
     templateUrl:'inventory.html'
@@ -15,11 +13,8 @@ export class InventoryComponent {
   message: string ="";
   loading: boolean= true;
   index: number = -1;
-  item: Item;
-  newItem: Item;
+  selectedItem: Item;
   submitError: string;
-
-  @ViewChild('itemDialog') modal: ModalComponent;
 
   constructor(private invService : InventoryService){
     this.getItems();
@@ -43,9 +38,8 @@ export class InventoryComponent {
 
   edit(index): void {
     this.index = index;
-    this.newItem = this.items[index];
+    this.selectedItem = this.items[index];
     this.submitError = "";
-    this.modal.open();
   }
 
   remove(index): void {
@@ -61,15 +55,13 @@ export class InventoryComponent {
   }
 
   add() : void {
-    this.newItem = new Item();
-    this.newItem['quantity']=0;
-    this.modal.open();
+    this.selectedItem = new Item();
+    this.selectedItem['quantity']=0;
   }
 
   submitNewItem(newItem) : void {
     this.invService.saveItem(newItem).subscribe(
         data => {
-          this.modal.close();
           this.loading = false;
           this.items.push(newItem);
           //this.getItems();
