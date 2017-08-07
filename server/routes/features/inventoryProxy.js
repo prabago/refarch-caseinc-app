@@ -49,23 +49,9 @@ module.exports = {
   getItems : function(req,res){
     var opts = buildOptions(req.headers.token,'GET',config.apiGateway.url+'/items');
     processRequest(res,opts);
-/**
-    request(
-        opts,
-        function (error, response, body) {
-            if (!error) {
-                res.send(body);
-            }
-            if (error) {
-              console.error("Error: "+error);
-              res.status(500).send([{"id":1,"name":"item1"},{"id":2,"name":"item2"}]);
-            }
-        }
-       );
-  */
   },// getItems
   newItem : function(req,res){
-    var opts = buildOptions(req.headers.token,'POST',config.apiGateway.url+'/item');
+    var opts = buildOptions(req.headers.token,'POST',config.apiGateway.url+'/items');
     opts.body=      JSON.stringify(req.body.item);
     processRequest(res,opts);
   }, // new item

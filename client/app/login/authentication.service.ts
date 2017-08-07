@@ -33,5 +33,9 @@ export class AuthenticationService {
                     return user;
                 }
             });
+    } // login
+    logout() {
+        // remove user from local storage to log user out
+        sessionStorage.removeItem('currentUser');
     }
 }

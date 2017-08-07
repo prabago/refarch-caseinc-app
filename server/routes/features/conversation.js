@@ -21,25 +21,24 @@ var request = require('request');
 /**
 Conversation delegates to the Conversation Broker Micro Service.
 */
-router.post('/conversation',function(req,res){
-  request({
-    method: 'POST',
-    url: config.conversationBroker.url,
-      timeout: 10000,
-    json: true,
-    body: req.body
-  }, function (error, response, body) {
-    console.log("@@ in conversation proxy "+JSON.stringify(response,null,2));
-    if (error) {
-      console.log(error);
-      res.status(500).send([{"text":"Error contacting Conversation broker"}]);
-    }
-    if (response.statusCode == 200) {
-        res.status(200).send(body);
-    }
-    res.status(response.statusCode).send(body);
-  });
-});
-
-
-module.exports = router;
+module.exports = {
+  itSupport : function(req,res){
+    request({
+      method: 'POST',
+      url: config.conversationBroker.url,
+        timeout: 10000,
+      json: true,
+      body: req.body
+    }, function (error, response, body) {
+      console.log("@@ in conversation proxy "+JSON.stringify(response,null,2));
+      if (error) {
+        console.log(error);
+        res.status(500).send([{"text":"Error contacting Conversation broker"}]);
+      }
+      if (response.statusCode == 200) {
+          res.status(200).send(body);
+      }
+      res.status(response.statusCode).send(body);
+    });
+  }
+};

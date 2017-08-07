@@ -53,6 +53,6 @@ const port = appEnv.port ||'6010';
 // start server on the specified port and binding host
 var server=app.listen(port, '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("Server v0.0.4 07/31/17 starting on " + port);
+  console.log("Server v0.0.5 08/07/17 starting on " + port);
 });
 module.exports = server;

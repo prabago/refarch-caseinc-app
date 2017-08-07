@@ -34,11 +34,18 @@ export class LoginComponent implements OnInit {
           .subscribe(
               data => {
                   this.user=data;
-                  localStorage.setItem('currentUser', JSON.stringify(this.user));
+                  sessionStorage.setItem('currentUser', JSON.stringify(this.user));
                   this.router.navigate([this.returnUrl]);
               },
               error => {
                   this.alertService.error(error);
+                  this.authenticationService.logout();
+                  this.router.navigate(['/']);
               });
+  }
+
+  logout(){
+      this.authenticationService.logout();
+      this.router.navigate(['/']);
   }
 }

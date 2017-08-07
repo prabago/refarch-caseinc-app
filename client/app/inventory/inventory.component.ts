@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { InventoryService }  from './inventory.service';
 import { Item } from "./Item";
 
@@ -8,19 +8,28 @@ import { Item } from "./Item";
     templateUrl:'inventory.component.html'
   })
 
-export class InventoryComponent {
+export class InventoryComponent implements OnInit {
   items : Item[]=[];
   message: string = "May take some time to load....";
   loading: boolean= true;
   index: number = -1;
   selectedItem: Item;
   submitError: string;
+  newItem : boolean = false;
+
 
   constructor(private invService : InventoryService){
+  }
+
+  // Uses in init to load data and not the constructor.
+  ngOnInit(): void {
     this.getItems();
   }
 
-  getItems() {
+  /**
+  Modify the list of items by loading them from backend service
+  */
+  getItems(): void {
     if (this.items.length === 0) {
       this.invService.getItems().subscribe(
         data => {
@@ -43,18 +52,22 @@ export class InventoryComponent {
   edit(item): void {
     this.selectedItem = item;
     this.submitError = "";
+    this.newItem=false;
   }
 
   remove(i): void {
-    this.loading = true;
     this.index=i;
     this.invService.deleteItem(this.items[i].id).subscribe(
         data => {
           var updatedItems = this.items.slice();
           updatedItems.splice(this.index, 1);
+          this.items=updatedItems;
+          this.message="Remove item successful";
+          this.selectedItem=null;
         },
         error =>{
           this.message="Error in removing item,... the error is reported to administrator.";
+          this.selectedItem=null;
         }
     );
 
@@ -63,19 +76,8 @@ export class InventoryComponent {
   add() : void {
     this.selectedItem = new Item();
     this.selectedItem['quantity']=0;
+    this.submitError = "";
+    this.newItem=true;
   }
 
-  submitNewItem(newItem) : void {
-    this.invService.saveItem(newItem).subscribe(
-        data => {
-          this.loading = false;
-          this.items.push(newItem);
-          //this.getItems();
-        },
-        error => {
-          this.submitError= JSON.parse(error._body).error;
-          this.loading = false;
-        }
-      );
-  }
 }

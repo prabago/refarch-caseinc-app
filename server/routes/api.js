@@ -40,7 +40,7 @@ router.get('/mode',(req,res) => {
 });
 //app.use('/api/i',inventory);
 if (config.mode == 'cyan') {
-  router.post('/c',conversation);
+  router.post('/c/conversation',(req,res) => {conversation.itSupport(req,res)});
 }
 
 // inventory API
@@ -57,6 +57,9 @@ router.delete('/i/items/:id', (req,res) => {
 });
 router.put('/i/items', (req,res) => {
       inventory.saveItem(req,res);
+});
+router.post('/i/items', (req,res) => {
+      inventory.newItem(req,res);
 });
 
 module.exports = router;

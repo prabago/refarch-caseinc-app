@@ -32,11 +32,6 @@ import { AuthGuard }         from './login/auth.guard';
 import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
 
-// added for appliance IoT extends use case
-import { IoTComponent }        from './iot/iot.component';
-import { IoTService }          from './iot/iot.service';
-import { IoTConversation }     from './iot/iotconv.component';
-import { IoTMeasureComponent } from './iot/iotmeasure.component';
 // Define internal URL mapping to component, protect with authentication guard, meaning user
 // needs to be authenticated with a login
 const routes: Routes = [
@@ -45,9 +40,6 @@ const routes: Routes = [
   //canActivate: [AuthGuard]
   { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
-  { path: 'appliance', component: IoTComponent },
-  { path: 'applianceMeasure', component: IoTMeasureComponent},
-  { path: 'applianceChat',component: IoTConversation},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ]
@@ -59,10 +51,7 @@ const routes: Routes = [
     LoginComponent,
     ConversationComponent,
     InventoryComponent,
-    ItemDetailComponent,
-    IoTComponent,
-    IoTConversation,
-    IoTMeasureComponent
+    ItemDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -76,8 +65,7 @@ const routes: Routes = [
     AuthGuard,
     ConversationService,
     InventoryService,
-    HomeService,
-    IoTService],
+    HomeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -14,7 +14,7 @@ export class InventoryService {
 
   };
   buildOptions() : RequestOptions {
-    let u: User =JSON.parse(localStorage.getItem('currentUser'));
+    let u: User =JSON.parse(sessionStorage.getItem('currentUser'));
     let headers = new Headers({ 'token': u.token });
     let options = new RequestOptions({ headers: headers })
     return options;
