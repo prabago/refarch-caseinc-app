@@ -19,9 +19,9 @@ var request = require('request').defaults({strictSSL: false});
 var https=require('https');
 var fs = require('fs');
 var path = require('path');
-var config = require('../env.json');
+var config = require('./env.json');
 var querystring = require('querystring');
-var caCerts =fs.readFileSync(path.resolve(__dirname, '../../../ssl/ca.all.crt.pem'));
+var caCerts =fs.readFileSync(path.resolve(__dirname, '../../ssl/ca.all.crt.pem'));
 
 var apiUrl=config.secureGateway.url+config.apiGateway.url+"/login";
 

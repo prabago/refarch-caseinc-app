@@ -5,8 +5,8 @@
 </div>
 <h2>Items <i *ngIf="loading" class="fa fa-cog fa-spin fa-3x fa-fw"></i> <span><button class="btn btnbg glyphicon glyphicon-plus" type="button" (click)="add()"></button></span></h2>
 <div class="row">
-  <p *ngIf="loading">Can take some time to load</p>
-  <div class="col-md-8">
+  <p>{{message}}</p>
+  <div class="col-md-8" *ngIf="!loading">
       <table id="dataTable" class="table table-striped table-condensed">
         <thead>
           <tr>
@@ -18,20 +18,20 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="items" *ngFor="let item of items; let i = index; ">
+          <tr class="items" *ngFor="let item of items;let i = index">
              <td>{{item.id}}</td>
              <td>{{item.name}}</td>
              <td>{{item.price}}</td>
              <td>{{item.quantity}}</td>
              <td style="background-color: white; border-width:0;">
-               <button class="btn glyphicon glyphicon-edit" type="button"  (click)="edit(i)"></button>
+               <button class="btn glyphicon glyphicon-edit" type="button"  (click)="edit(item)"></button>
                <button class="btn glyphicon glyphicon-trash" type="button" (click)="remove(i)"></button>
              </td>
            </tr>
          </tbody>
        </table>
      </div>
-     <div class="col-md-4">
+     <div class="col-md-4" *ngIf="selectedItem">
        <item-detail [item]="selectedItem"></item-detail>
      </div>
 </div>

@@ -13,22 +13,34 @@ export class InventoryService {
   constructor(private http: Http) {
 
   };
-
-
-  getItems(): Observable<any>{
+  buildOptions() : RequestOptions {
     let u: User =JSON.parse(localStorage.getItem('currentUser'));
     let headers = new Headers({ 'token': u.token });
     let options = new RequestOptions({ headers: headers })
+    return options;
+  }
+
+  getItems(): Observable<any>{
+    let options = this.buildOptions();
     return this.http.get(this.invUrl+'/items',options)
          .map((res:Response) =>
           res.json())
   }
 
   saveItem(i) : Observable<any> {
-    return this.http.post(this.invUrl+'/items',{item:i}).map((res:Response) => res.json());
+    let options = this.buildOptions();
+    return this.http.post(this.invUrl+'/items',{item:i},options).map((res:Response) => res.json());
+  }
+
+  updateItem(i) : Observable<any> {
+    let options = this.buildOptions();
+    return this.http.put(this.invUrl+'/items',{item:i},options).map((res:Response) => res.json());
   }
 
   deleteItem(idx) : Observable<any> {
-    return this.http.delete(this.invUrl+'/items/'+idx).map((res:Response) => res.json());
+    let options = this.buildOptions();
+    return this.http.delete(this.invUrl+'/items/'+idx,options)
+    .map((res:Response) =>
+       res.json());
   }
 }

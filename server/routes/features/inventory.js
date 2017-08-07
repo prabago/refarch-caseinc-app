@@ -71,7 +71,7 @@ router.get('/items/:id',function(req,res){});
 router.delete('/items/:id',function(req,res){
   var h = buildHeader(req.headers.token);
   request.delete(
-      {url:apiUrl,
+      {url:apiUrl+"/"+req.params.id,
       timeout: 6000,
       headers: h
       },

@@ -1,8 +1,5 @@
-FROM mhart/alpine-node
-MAINTAINER https://github.com/jbcodeforce/ - IBM
-RUN mkdir -p /caseincportal
-COPY . /caseincportal
-
+FROM node:alpine
+MAINTAINER https://github.com/ibm-cloud-architecture - IBM
 WORKDIR /caseincportal
 RUN cd /caseincportal
 RUN npm install

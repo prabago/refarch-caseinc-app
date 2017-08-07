@@ -21,10 +21,13 @@
 
 const express = require('express');
 const router = express.Router();
+// The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
 var fs = require('fs');
 var path = require('path');
 var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./env.json')));
-const inventory    = require('./features/inventory');
+
+const inventory    = require('./features/inventoryProxy');
+const conversation = require('./features/conversation');
 
 /* GET api listing. */
 router.get('/', (req, res) => {
@@ -35,6 +38,25 @@ router.get('/', (req, res) => {
 router.get('/mode',(req,res) => {
   res.send({"mode":config.mode});
 });
+//app.use('/api/i',inventory);
+if (config.mode == 'cyan') {
+  router.post('/c',conversation);
+}
 
+// inventory API
+router.get('/i/items', (req,res) => {
+  inventory.getItems(req,res);
+  /*
+      inventory.getItems(req.headers.token,function(data){
+          res.send(data);
+        });
+  */
+});
+router.delete('/i/items/:id', (req,res) => {
+      inventory.deleteItem(req,res);
+});
+router.put('/i/items', (req,res) => {
+      inventory.saveItem(req,res);
+});
 
 module.exports = router;

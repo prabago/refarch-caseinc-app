@@ -1,5 +1,6 @@
 <div *ngIf="item" class="row">
   <h2>{{item.name}} details!</h2>
+  <p>{{message}}</p>
   <div><label>id: </label>{{item.id}}</div>
   <div class="form-group">
       <label for="name">Name</label>
@@ -16,6 +17,10 @@
   <div class="form-group">
       <label for="price">Price</label>
       <input  type="text" class="form-control" required [(ngModel)]="item.price" name="price" id="price">
+  </div>
+  <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input  type="text" class="form-control" required [(ngModel)]="item.quantity" name="quantity" id="quantity">
   </div>
   <div>
       <button class="btn btn-primary" type="button" (click)="save()">Save</button>

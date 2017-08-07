@@ -24,26 +24,7 @@ app.disable('x-powered-by');
 var cfenv = require('cfenv');
 
 const bodyParser =   require('body-parser');
-// express-session middleware stores session data on the server; it only saves the session ID in the cookie itself, not session data.
-//const session = require('express-session');
-//app.set('trust proxy',1);
-//app.use(session({secret:"casecret",name:'sessionId'}));
 
-//const inventory =    require('./routes/features/inventoryStub');
-const inventory    = require('./routes/features/inventory');
-const conversation = require('./routes/features/conversation');
-const userlogin    = require('./routes/features/userlogin');
-
-//const applianceConversation = require('./routes/features/applianceConversation');
-const Debug=true;
-// The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
-var fs = require('fs');
-var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./routes/env.json')));
-
-
-
-// Get our API routes
-const api = require('./routes/api');
 
 app.use(require('cookie-parser')());
 // Parsers for POST JSON PAYLOAD
@@ -53,16 +34,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Point static path to dist
 app.use(express.static(path.join(__dirname, '../dist')));
-
 // Set our api routes
-app.use('/api', api);
-
-app.use('/api/i',inventory);
-if (config.mode == 'cyan') {
-  app.use('/api/c',conversation);
-}
-app.use('/login',userlogin);
-
+app.use('/api', require('./routes/api'));
+app.use('/login',require('./routes/userlogin'));
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
