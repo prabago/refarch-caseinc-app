@@ -26,19 +26,19 @@ describe('Inventory', function() {
     });
   });
 
-  // it('login a user' , function(done){
-  //   chai.request(server)
-  //     .get('/login?username=case@csplab.local&password=case01')
-  //     .set('X-IBM-Client-Id','5d2a6edb-793d-4193-b9b0-0a087ea6c123')
-  //     .end(function(err, res) {
-  //         expect(err).to.be.null;
-  //         expect(res).to.have.status(200);
-  //         console.log(res.body);
-  //         expect(res.body.token_type).to.be.a("bearer");
-  //         token=res.body.access_token;
-  //         done();
-  //   });
-  // });
+  it('login a user' , function(done){
+    chai.request(server)
+      .get('/login?username=boyerje&password=case01')
+      .set('X-IBM-Client-Id','5d2a6edb-793d-4193-b9b0-0a087ea6c123')
+      .end(function(err, res) {
+          expect(err).to.be.null;
+          expect(res).to.have.status(200);
+          console.log(res.body);
+          expect(res.body.token_type).to.be("bearer");
+          token=res.body.access_token;
+          done();
+    });
+  });
 
   it('should list ALL items on /api/i/items GET', function(done) {
     this.timeout(15000);

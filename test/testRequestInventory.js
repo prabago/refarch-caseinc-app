@@ -1,5 +1,5 @@
 /*
-* Test discovery
+* Test get one inventory
 */
 
 // https://github.com/request/request  is a simplified wrapper to do HTTP call
