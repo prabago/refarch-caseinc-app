@@ -12,9 +12,10 @@ sessions the behaviour could easily be changed by storing user details somewhere
  service.
 */
 import { Injectable } from '@angular/core';
-import { Headers, Http,Response,RequestOptions} from '@angular/http';
+import { Headers, Http,Response,RequestOptions, RequestOptionsArgs} from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
 import { User } from "./User";
 
 @Injectable()
@@ -23,7 +24,8 @@ export class AuthenticationService {
 
     login(user:User) {
       console.log("login called for "+user.email);
-        return this.http.get('/login?username='+user.email+"&password="+user.password)
+        const body = {username: user.email, password: user.password}
+        return this.http.post('/login', body)
             .map((response: Response) => {
                 // login successful if there's a jwt token in the response
                 let tokenResponse = response.json();
@@ -32,10 +34,17 @@ export class AuthenticationService {
                     user.token=tokenResponse.access_token;
                     return user;
                 }
-            });
+            })
+            .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
     } // login
     logout() {
         // remove user from local storage to log user out
+        console.log('logout called');
+        this.http.get('/logout').subscribe();
         sessionStorage.removeItem('currentUser');
+    }
+    authenticated() {
+      return this.http.get('/api/authenticated', <RequestOptionsArgs>{ withCredentials: true })
+        .map((res: Response) => res.json())
     }
 }

@@ -16,6 +16,12 @@
 // Get dependencies
 const express = require('express');
 const path = require('path');
+// const api = require('./routes/api');
+const passport = require('passport');
+// const login = require('./routes/userlogin')
+const session = require('express-session');
+const MemoryStore = require('session-memory-store')(session);
+
 // create the app
 const app = express();
 app.disable('x-powered-by');
@@ -25,6 +31,17 @@ var cfenv = require('cfenv');
 
 const bodyParser =   require('body-parser');
 
+require('./routes/passport')(passport)
+
+app.use(session({ 
+	name: 'JSESSION',
+	secret: '321sessionverysecretsecret123',
+	resave: false,
+  saveUninitialized: false,
+	store: new MemoryStore()
+}));
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
 
 app.use(require('cookie-parser')());
 // Parsers for POST JSON PAYLOAD
@@ -35,8 +52,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Point static path to dist
 app.use(express.static(path.join(__dirname, '../dist')));
 // Set our api routes
-app.use('/api', require('./routes/api'));
-app.use('/login',require('./routes/userlogin'));
+require('./routes/userlogin')(app, passport);
+require('./routes/api')(app)
+// require('./routes/userlogin')(app)
+// app.use('/api', api);
+// app.use('/login', login);
+
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {

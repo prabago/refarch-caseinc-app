@@ -29,17 +29,15 @@ var buildOptions=function(token,met,apath){
 }
 
 var processRequest = function(res,opts) {
-  console.log(opts);
+  // console.log(opts);
+  console.log('processing request to url:', opts.url)
   request(opts,
       function (error, response, body) {
-          if (!error) {
-              console.log("Process Request no error: "+JSON.stringify(body,null,2));
-              res.send(body);
-          }
-          if (error) {
-            console.error("Process Request Error: "+error);
-            res.status(500).send({error:error});
-          }
+        if (error) {
+          console.error("Process Request Error: "+error);
+          return res.status(500).send({error:error});
+        }
+        res.send(body);
       }
      );
 }
@@ -47,21 +45,25 @@ var processRequest = function(res,opts) {
 
 module.exports = {
   getItems : function(req,res){
-    var opts = buildOptions(req.headers.token,'GET',config.apiGateway.url+'/items');
+    var user = JSON.parse(req.user)
+    var opts = buildOptions(user.access_token,'GET',config.apiGateway.url+'/items');
     processRequest(res,opts);
   },// getItems
   newItem : function(req,res){
-    var opts = buildOptions(req.headers.token,'POST',config.apiGateway.url+'/items');
+    var user = JSON.parse(req.user)
+    var opts = buildOptions(user.access_token,'POST',config.apiGateway.url+'/items');
     opts.body=      JSON.stringify(req.body.item);
     processRequest(res,opts);
   }, // new item
   saveItem: function(req,res){
-    var opts = buildOptions(req.headers.token,'PUT',config.apiGateway.url+'/item/'+req.params.id);
+    var user = JSON.parse(req.user)
+    var opts = buildOptions(user.access_token,'PUT',config.apiGateway.url+'/item/'+req.params.id);
     opts.body=      JSON.stringify(req.body.item);
     processRequest(res,opts);
   }, // save item
   deleteItem : function(req,res){
-    var opts = buildOptions(req.headers.token,'DELETE',config.apiGateway.url+'/item/'+req.params.id);
+    var user = JSON.parse(req.user)
+    var opts = buildOptions(user.access_token,'DELETE',config.apiGateway.url+'/item/'+req.params.id);
     opts.headers['Content-Type']='multipart/form-data';
     processRequest(res,opts);
   } // delete item

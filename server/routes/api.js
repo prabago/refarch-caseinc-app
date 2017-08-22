@@ -30,36 +30,73 @@ const inventory    = require('./features/inventoryProxy');
 const conversation = require('./features/conversation');
 
 /* GET api listing. */
-router.get('/', (req, res) => {
-  res.send('API supported: GET /api/i/items ');
-});
-
+// router.get('/', (req, res) => {
+//   res.send('API supported: GET /api/i/items ');
+// });
+// 
 // ALl APIs declaration
-router.get('/mode',(req,res) => {
-  res.send({"mode":config.mode});
-});
-//app.use('/api/i',inventory);
-if (config.mode == 'cyan') {
-  router.post('/c/conversation',(req,res) => {conversation.itSupport(req,res)});
+// router.get('/mode',(req,res) => {
+//   res.send({"mode":config.mode});
+// });
+// //app.use('/api/i',inventory);
+// if (config.mode == 'cyan') {
+//   router.post('/c/conversation',(req,res) => {conversation.itSupport(req,res)});
+// }
+// 
+// // inventory API
+// router.get('/i/items', (req,res) => {
+//   inventory.getItems(req,res);
+//   /*
+//       inventory.getItems(req.headers.token,function(data){
+//           res.send(data);
+//         });
+//   */
+// });
+// router.delete('/i/items/:id', (req,res) => {
+//       inventory.deleteItem(req,res);
+// });
+// router.put('/i/items', (req,res) => {
+//       inventory.saveItem(req,res);
+// });
+// router.post('/i/items', (req,res) => {
+//       inventory.newItem(req,res);
+// });
+// 
+// module.exports = router;
+
+module.exports = function(app){
+  app.get('/api', function(req, res){
+    res.send('API supported: GET /api/i/items ');
+  })
+  app.get('/api/authenticated', isLoggedIn, function(req, res){
+    var response = {
+        authenticated: true,
+    }
+    res.status(200).json(response);
+  })
+  app.get('/api/mode', isLoggedIn, (req,res) => {
+    res.send({"mode":config.mode});
+  })
+  if (config.mode == 'cyan') {
+    app.post('/api/c/conversation',(req,res) => {conversation.itSupport(req,res)});
+  }
+  app.get('/api/i/items', isLoggedIn, (req,res) => {
+    inventory.getItems(req,res);
+  })
+  app.delete('/api/i/items/:id', isLoggedIn, (req,res) => {
+    inventory.deleteItem(req,res);
+  })
+  app.put('/api/i/items', isLoggedIn, (req,res) => {
+    inventory.saveItem(req,res);
+  })
+  app.post('/api/i/items', isLoggedIn, (req,res) => {
+    inventory.newItem(req,res);
+  })
 }
 
-// inventory API
-router.get('/i/items', (req,res) => {
-  inventory.getItems(req,res);
-  /*
-      inventory.getItems(req.headers.token,function(data){
-          res.send(data);
-        });
-  */
-});
-router.delete('/i/items/:id', (req,res) => {
-      inventory.deleteItem(req,res);
-});
-router.put('/i/items', (req,res) => {
-      inventory.saveItem(req,res);
-});
-router.post('/i/items', (req,res) => {
-      inventory.newItem(req,res);
-});
-
-module.exports = router;
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()){
+      return next();
+    }  
+    res.status(401).send('unauthenticated');
+}
