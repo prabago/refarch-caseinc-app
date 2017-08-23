@@ -32,6 +32,6 @@
        </table>
      </div>
      <div class="col-md-4" *ngIf="selectedItem">
-       <item-detail [item]="selectedItem" [newItem]="newItem"></item-detail>
+       <item-detail [item]="selectedItem" [newItem]="newItem" (onComplete)="itemUpdateComplete($event)"></item-detail>
      </div>
 </div>

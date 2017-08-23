@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import { InventoryService }  from './inventory.service';
 import { Item } from "./Item";
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'inventory',
@@ -18,7 +19,7 @@ export class InventoryComponent implements OnInit {
   newItem : boolean = false;
 
 
-  constructor(private invService : InventoryService){
+  constructor(private router: Router, private invService : InventoryService){
   }
 
   // Uses in init to load data and not the constructor.
@@ -50,7 +51,7 @@ export class InventoryComponent implements OnInit {
   Edit the item use the item-detail directive so just set the selectedItem
   */
   edit(item): void {
-    this.selectedItem = item;
+    this.selectedItem = JSON.parse(JSON.stringify(item));
     this.submitError = "";
     this.newItem=false;
   }
@@ -66,8 +67,13 @@ export class InventoryComponent implements OnInit {
           this.selectedItem=null;
         },
         error =>{
+          console.error('Error in removing item...', error)
+          alert(`${error.status}: ${error.statusText}`);
           this.message="Error in removing item,... the error is reported to administrator.";
           this.selectedItem=null;
+          if(error.status == 401){
+            this.router.navigate(['log'], { queryParams: { returnUrl: '/inventory' } });
+          }
         }
     );
 
@@ -78,6 +84,32 @@ export class InventoryComponent implements OnInit {
     this.selectedItem['quantity']=0;
     this.submitError = "";
     this.newItem=true;
+  }
+  
+  itemUpdateComplete(response: any){
+    console.log('Item Save Success:', response.success, response.item)
+    if(response.success){
+      var itemUpdated = false;
+      for(var i = 0; i < this.items.length; i++){
+        if(this.items[i].id == response.item.id){
+          this.items[i] = response.item
+          itemUpdated = true;
+          console.log('item updated!');
+          break;
+        }
+      }
+      if(!itemUpdated){
+        this.items.push(response.item);
+        console.log('new item added!', response.item)
+      }
+      this.selectedItem = null;
+    } else {
+      console.error('ERROR SAVING ITEM', response.error);
+      alert(`Error Saving Item: (${response.error.status}) ${response.error.statusText}`);
+      if(response.error.status == 401){
+        this.router.navigate(['log'], { queryParams: { returnUrl: '/inventory' } });
+      }
+    }
   }
 
 }

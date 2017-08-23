@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { InventoryService }  from './inventory.service';
 import { Item } from './Item';
 
@@ -9,6 +9,7 @@ import { Item } from './Item';
 export class ItemDetailComponent {
   @Input() item: Item;
   @Input() newItem : boolean;
+  @Output() onComplete = new EventEmitter<any>();
   message : string ="";
 
   constructor(private invService : InventoryService){
@@ -18,25 +19,29 @@ export class ItemDetailComponent {
     if (this.newItem) {
       this.invService.saveItem(this.item).subscribe(
           data => {
+            console.log('data from saveItem',data)
             this.item=data;
+            this.item.id = data[0].id;
             this.message="Success";
-            // TODO need to notify parent, so selectedItem can be set to null and table updated
+            this.onComplete.emit({success: true, item: this.item});
           },
           error => {
-            console.log("Error on save operation:"+JSON.parse(error._body).error);
+            console.error("Error on save operation:"+error);
             this.message="Error on save";
+            this.onComplete.emit({success: false, item: this.item, error: error});
           }
         );
     } else {
       this.invService.updateItem(this.item).subscribe(
           data => {
-            this.item=data;
+            // this.item=data;
             this.message="Success";
-            // TODO need to notify parent, so selectedItem can be set to null and table updated
+            this.onComplete.emit({success: true, item: this.item});
           },
           error => {
-            console.log("Error on save operation:"+JSON.parse(error._body).error);
+            console.error("Error on save operation:"+error);
             this.message="Error on save";
+            this.onComplete.emit({success: false, item: this.item, error: error});
           }
         );
     }

@@ -29,8 +29,7 @@ var buildOptions=function(token,met,apath){
 }
 
 var processRequest = function(res,opts) {
-  // console.log(opts);
-  console.log('processing request to url:', opts.url)
+  console.log(`processing request to url [${opts.method}]:`, opts.url)
   request(opts,
       function (error, response, body) {
         if (error) {
