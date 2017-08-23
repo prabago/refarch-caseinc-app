@@ -35,10 +35,7 @@ module.exports = {
         console.log(error);
         res.status(500).send([{"text":"Error contacting Conversation broker"}]);
       }
-      if (response.statusCode == 200) {
-          res.status(200).send(body);
-      }
-      res.status(response.statusCode).send(body);
+      res.send(body);
     });
   }
 };

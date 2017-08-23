@@ -33,7 +33,7 @@ const conversation = require('./features/conversation');
 // router.get('/', (req, res) => {
 //   res.send('API supported: GET /api/i/items ');
 // });
-// 
+//
 // ALl APIs declaration
 // router.get('/mode',(req,res) => {
 //   res.send({"mode":config.mode});
@@ -42,7 +42,7 @@ const conversation = require('./features/conversation');
 // if (config.mode == 'cyan') {
 //   router.post('/c/conversation',(req,res) => {conversation.itSupport(req,res)});
 // }
-// 
+//
 // // inventory API
 // router.get('/i/items', (req,res) => {
 //   inventory.getItems(req,res);
@@ -61,7 +61,7 @@ const conversation = require('./features/conversation');
 // router.post('/i/items', (req,res) => {
 //       inventory.newItem(req,res);
 // });
-// 
+//
 // module.exports = router;
 
 module.exports = function(app){
@@ -78,7 +78,9 @@ module.exports = function(app){
     res.send({"mode":config.mode});
   })
   if (config.mode == 'cyan') {
-    app.post('/api/c/conversation',(req,res) => {conversation.itSupport(req,res)});
+    app.post('/api/c/conversation',isLoggedIn,(req,res) => {
+      conversation.itSupport(req,res)
+    });
   }
   app.get('/api/i/items', isLoggedIn, (req,res) => {
     inventory.getItems(req,res);
@@ -97,6 +99,6 @@ module.exports = function(app){
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()){
       return next();
-    }  
+    }
     res.status(401).send('unauthenticated');
 }

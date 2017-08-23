@@ -9,7 +9,7 @@ version = '0.1'
 
 node {
   version = '6.9.2'
-  npmVersion = '5.0.4'
+  npmVersion = '5.2.0'
   download = true
   workDir = file("${project.buildDir}")
   nodeModulesDir = file("${project.projectDir}")
