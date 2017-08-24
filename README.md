@@ -1,18 +1,35 @@
 # Case Inc Portal App
-This project is part of the 'IBM Integration Reference Architecture' suite, available at [https://github.com/ibm-cloud-architecture/refarch-integration](https://github.com/ibm-cloud-architecture/refarch-integration) and implements the 'cloud native' web application developed with Nodejs and Expressjs to access on-premise inventory database. It should be considered as an internal portal application for CASE Inc internal staff.
 
-This application illustrates how to plug and play different Angular 4 components with different back ends of IBM Cloud reference architecture.
-For example to demonstrate only the hybrid solution as presented in the [architecture center hybrid](https://www.ibm.com/devops/method/content/architecture/hybridArchitecture) the portal application uses the 'Inventory Plus' feature set, for Cognitive architecture, and specially the [Watson Conversation](https://www.ibm.com/devops/method/content/architecture/cognitiveConversationDomain2#1_1) integration, the Portal offers a IT support chat bot.
+Do you want to understand how to build, a 'production' like nodejs app with Angular 4 for front end, accessing back end services running on-premise and Watson Conversation running on Bluemix Public cloud?
+
+*This project is part of the 'IBM Integration Reference Architecture' suite, available at [https://github.com/ibm-cloud-architecture/refarch-integration](https://github.com/ibm-cloud-architecture/refarch-integration) and implements the 'cloud native' web application developed. It should be considered as an internal portal application for CASE Inc internal staff.*
+
+## Table of Contents
+* [Introduction](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#introduction)
+* [Pre Requisites](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#pre-requisites)
+* [Run](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run)
+* [Code explanation]((https://github.com/ibm-cloud-architecture/refarch-caseinc-app#code-explanation))
+
+# Introduction
+This application illustrates how to plug and play different Angular 4 components with different back ends of IBM Cloud reference architecture, and specifically addresses the inventory management feature to demonstrate hybrid integration as presented in the [architecture center hybrid](https://www.ibm.com/devops/method/content/architecture/hybridArchitecture).   
+The application presents:
+* how to support login with a LDAP server running on-premise and exposed via IBM API connect
+* how to develop with Angular 4 a simple user interface, with master-detail pattern for Item and Inventory.
+* how to use passport middleware to control user authentication and authorization
+* how to integrate with back end, on-premise services using secure gateway
+* how to proxy  [Watson Conversation](https://www.ibm.com/devops/method/content/architecture/cognitiveConversationDomain2#1_1)
+* how to deploy the app as Cloud Foundry on Bluemix, docker container on Bluemix Container or Helm charts on IBM Private Cloud
+* how to use Jenkins for continuous integration
+
 The current top level view of the home page of this application looks like:   
 
 ![home page](docs/homepage.png)  
 
 The application is up and running at the following address: http://caseincapp.mybluemix.net/
 
-## Pre-requisites
+# Pre-requisites
 The common pre-requisites for the integration solution are defined [here](https://github.com/ibm-cloud-architecture/refarch-integration#prerequisites), so be sure to get them done.
 * For this application you need to have [nodejs](https://nodejs.org/en/) installed on your computer with the [npm](https://www.npmjs.com/) installer tool.
-
 * Clone current repository, or if you want to work on the code, fork it in your own github repository and then clone your forked repository on your local computer. If you used the `fork-repos.sh` script of the [Integration solution] you are already set.
 
 ```
@@ -25,14 +42,34 @@ npm install
  ```
  sudo  npm install -g @angular/cli
  ```
- on Mac, as a global install you need to be root user.
-* You need to install [nodemon](https://nodemon.io/) to support server code change without stopping the server with
+ on Mac, as a global install you need to be root user or a sudoer
+* If you want to tune the server code, you need to install [nodemon](https://nodemon.io/) to support server code change without stopping the server with
 ```
 sudo npm install -g nodemon
 ```
 
+# Build
+When developing the following command is building the angular components:
+```
+$ ng build
+or
+$ npm run build
+```
+When involving a continuous integration using Jenkins the gradlew is used
+```
+./gradlew build
+```
+# Run
+We are proposing multiple deployment and execution environments:
+* run locally using **node**
+* run on IBM Bluemix as cloud foundry application
+* run the application in Kubernetes - minikub VM
+* run the application in Bluemix Container service
+* run the application in IBM Cloud Private
+
+The application is accessing some public Bluemix services, therefore to avoid sharing Bluemix service credentials, an `env.json` file is used within the folder server/routes. A template `env-tmpl.json` is delivered for that. So just renaming the template file to `env.json` will make the app running locally without any other settings. As Case Inc Portal app demonstrates some of the [Cognitive](https://github.com/ibm-cloud-architecture/refarch-cognitive) integration, you may need to set the credential of the Watson Service used.
+
 ## Run the application locally
-To avoid sharing Bluemix service credential an env.json file needs to be defined within the folder server/routes. A template is delivered for that. So just renaming the template file 'env-tmpl.json' to env.json will make the app running locally without any other settings. As Case Inc Portal app demonstrates some of the [Cyan Compute]() integration, you may need to set the credential of the Watson Service used.
 
 To start the application using node monitoring use the command:
 ```
@@ -53,13 +90,73 @@ Point your web browser to the url: [http://localhost:6004](http://localhost:6004
 
 The demonstration script is described in this [note](docs/demoflow.md)
 
-## Code explanation
-Most of the interactions the user is doing on the Browser are supported by [Angular 2](http://angular.io) javascript library, with its Router mechanism and the DOM rendering capabilities via directives and components. When there is a need to access data to the on-premise server for persistence, an AJAX calls is done to the Secure Gateway URL, and  the server will respond asynchronously later on. The components involved are presented in the figure below in a generic way
+## Run on Bluemix as cloud foundry
+To avoid conflict with existing deployed application you need to modify the Manifest.yml file with a new host name.
+```yaml
+  host: yourcaseincapp
+```
+
+Use the set of Bluemix CLI commands to upload the application:
+```
+cf login api.ng.bluemix.net
+cf push
+```
+
+This should create a new cloud foundry application in your bluemix space as illustrated by the following screen copy.  
+![Deployed App](docs/cf-app.png)
+
+## Deploy on Kubernetes and minikube VM
+See the note [here](docs/run-minikube.md)
+
+## Deploy the CaseInc Portal App in Bluemix Kubernetes Service
+A dockerfile is defined in the root project folder to build a docker image from the node:alpine official image. The docker file is simple and use the port 6100.
+
+```
+FROM node:alpine
+EXPOSE 6100
+CMD node server/server
+```
+To build the image the following command should be done
+
+` docker build -t case/caseportal .`
+
+The gradle build compiles the angular2 and build the image.
+
+Then it can be run locally instead of using the `npm run dev` command used during pure developmen, by using the command:
+`docker run -d -p 6100:6100 -t case/caseportal`
+
+Once built, the image is uploaded to the Bluemix private container registry `registry.ng.bluemix.net/<namespace>/<imagename>`. To get the list of namespace defined into your account use:
+```
+bx login -a https://api.ng.bluemix.net
+
+bx cr namespaces
+```
+For example the namespace we are using is `ibm_nls` so we need to tag the image and upload it, using:
+
+```
+docker tag case/caseportal  registry.ng.bluemix.net/ibm_mls/caseportal
+bx cr login
+docker push registry.ng.bluemix.net/ibm_mls/caseportal
+```
+
+Once the image is uploaded it is possible to build a Kubernetes Deployment and deploy the container to the pods. The commands are:
+
+```
+# Create a Deployment and run it on the pods
+$ kubectl run caseportal --image=registry.ng.bluemix.net/ibm_mls/caseportal --port=6100
+```
+
+## Run on IBM Cloud Private
+
+see [this note](docs/run-icp.md)
+
+# Code explanation
+Most of the interactions the user is doing on the Browser are supported by [Angular 2](http://angular.io) javascript library, with its Router mechanism and the DOM rendering capabilities via directives and components. When there is a need to access data to the on-premise server for persistence, an AJAX call is done to server, and  the server will respond asynchronously later on. The components involved are presented in the figure below in a generic way
 
 ![Angular 2 App](docs/ang-node-comp.png)
 To clearly separate codebases for front- and back-ends the client folder defines angular 2 code while server folder includes the REST api for front end implemented with expressjs
 
-### Angular app
+## Angular app
 The application code is under the client folder, and follows the standard best practice for Angular 2 development:
 * unique index.html to support single page application
 * use of modules to organize features
@@ -81,9 +178,25 @@ export class InventoryService {
   }
 }
 ```
+The http component is injected at service creation, and the promise returned object is map so the response can be processed as json document.
+
+An example of code using those service is the inventory.component.ts, which loads the inventory during component initialization phase.
+
+```javascript
+export class InventoryComponent implements OnInit {
+
+  constructor(private router: Router, private invService : InventoryService){
+  }
+
+  // Uses in init to load data and not the constructor.
+  ngOnInit(): void {
+    this.getItems();
+  }
+}
+```
 
 For detailed on the Angular 2 code see [this note](docs/userinterface.md)
-### Server code
+## Server code
 The application is using nodejs and expressjs standard code structure. The code is under *server* folder. The inventory API is defined in the server/routes/feature folder and uses request library to perform the call to the Secure Gateway public API combined with the Inventory API secure gateway. The env.json
 
 ```javascript
@@ -123,56 +236,3 @@ The portal application includes a simple chat bot integration to ask IT support 
     "mode" : "cyan"
 ```
 For the conversation demo script please refers to this [node](https://github.com/ibm-cloud-architecture/refarch-cognitive-conversation-broker/blob/master/doc/demoflow.md)
-
-## Upload to Bluemix as Cloud Foundry App
-To avoid conflict with existing deployed application you need to modify the Manifest.yml file with a new host name.
-'''
-  host: yourcaseincapp
-'''
-
-Use the set of Bluemix CLI command to upload the application:
-```
-cf login api.ng.bluemix.net
-cf push
-```
-
-This should create a new cloud foundry application in your bluemix space as illustrated by the following screen copy.  
-![Deployed App](docs/cf-app.png)
-
-## Deploy the CaseInc Portal App in Bluemix Kubernetes Service
-A dockerfile is defined in the root project folder to build a docker image from the node:alpine official image. The docker file is simple and use the port 6100.
-
-```
-FROM node:alpine
-EXPOSE 6100
-CMD node server/server
-```
-To build the image the following command should be done
-
-` docker build -t case/caseportal .`
-
-The gradle build compiles the angular2 and build the image.
-
-Then it can be run locally instead of using the `npm run dev` command used during pure developmen, by using the command:
-`docker run -d -p 6100:6100 -t case/caseportal`
-
-Once built, the image is uploaded to the Bluemix private container registry `registry.ng.bluemix.net/<namespace>/<imagename>`. To get the list of namespace defined into your account use:
-```
-bx login -a https://api.ng.bluemix.net
-
-bx cr namespaces
-```
-For example the namespace we are using is `ibm_nls` so we need to tag the image and upload it, using:
-
-```
-docker tag case/caseportal  registry.ng.bluemix.net/ibm_mls/caseportal
-bx cr login
-docker push registry.ng.bluemix.net/ibm_mls/caseportal
-```
-
-Once the image is uploaded it is possible to build a Kubernetes Deployment and deploy the container to the pods. The commands are:
-
-```
-# Create a Deployment and run it on the pods
-$ kubectl run caseportal --image=registry.ng.bluemix.net/ibm_mls/caseportal --port=6100
-```

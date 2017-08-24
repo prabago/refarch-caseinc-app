@@ -7,11 +7,14 @@ import { Item } from './Item';
   templateUrl:'item.component.html'
 })
 export class ItemDetailComponent {
+  // Item is injected by the parent inventory component. As new item or from an existing one
   @Input() item: Item;
   @Input() newItem : boolean;
+  // specify to the parent we are done with editing -> saving
   @Output() onComplete = new EventEmitter<any>();
   message : string ="";
 
+  // delegate the call to BFF via local service
   constructor(private invService : InventoryService){
   }
 
