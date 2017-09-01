@@ -19,16 +19,16 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AppComponent }  from './app.component';
-import { HomeComponent } from './home.component';
-import { LoginComponent }  from './login/login.component';
-import { ConversationComponent} from './conv/conversation.component';
-import { ConversationService }  from './conv/conversation.service';
-import { InventoryComponent} from './inventory/inventory.component';
-import { InventoryService }  from './inventory/inventory.service';
-import { ItemDetailComponent} from './inventory/item.component';
-import { HomeService }  from './home.service';
-import { AuthGuard }         from './login/auth.guard';
+import { AppComponent }          from './app.component';
+import { HomeComponent }         from './home.component';
+import { LoginComponent }        from './login/login.component';
+import { ConversationComponent}  from './conv/conversation.component';
+import { ConversationService }   from './conv/conversation.service';
+import { InventoryComponent}     from './inventory/inventory.component';
+import { InventoryService }      from './inventory/inventory.service';
+import { ItemDetailComponent}    from './inventory/item.component';
+import { HomeService }           from './home.service';
+import { AuthGuard }             from './login/auth.guard';
 import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
 

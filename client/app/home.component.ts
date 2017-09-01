@@ -41,7 +41,11 @@ Main page component to display access to the different demo features.
         this.router.navigate(['log']);
     }
 
-    appliance(){
-        this.router.navigate(['appliance']);
+    dcm(){
+        this.router.navigate(['dcm']);
+    }
+
+    hcAdvise(){
+      this.router.navigate(['hcAdvise']);
     }
   }

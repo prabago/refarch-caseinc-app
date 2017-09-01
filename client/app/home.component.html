@@ -3,22 +3,26 @@
 </ol>
 <div class="row">
   <h3 *ngIf="user">Welcome {{user.email}} to the Case Inc Portal</h3>
-  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 5px #8c4507; border-color: #8c4507;">
+  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 3px #8c4507; border-color: #8c4507;">
         <h2>Inventory Plus</h2>
         <p>Manage product inventory and suppliers</p>
         <p><button (click)="inventory()" class="btn">Inventory Plus</button></p>
   </div>
+  <!-- Following is a IoT example -->
+  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 3px #8c4507; border-color: #8c4507;" *ngIf="mode == 'cyan'">
+        <h2>Intelligent Data Center Monitoring</h2>
+        <p>Data center monitoring</p>
+        <p><button (click)="dcm()" class="btn">Go</button></p>
+  </div>
   <!-- Following is visible for specific compute model -->
-  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 5px #10d1d1; border-color: #10d1d1;" *ngIf="mode == 'cyan'">
+  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 3px #10d1d1; border-color: #10d1d1;" *ngIf="mode == 'cyan'">
         <h2>Help@Case</h2>
         <p>Get support to your IT question with Watson Conversation</p>
         <p><button (click)="itSupport()" class="btn">Ask me</button></p>
   </div>
-  <!-- Following is a IoT example
-  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 5px #10d1d1; border-color: #10d1d1;" *ngIf="mode == 'cyan'">
-        <h2>Cognitive Appliance Advisor</h2>
-        <p>Appliance monitoring</p>
-        <p><button (click)="appliance()" class="btn">Go</button></p>
+  <div class="col-md-4 roundRect" style="box-shadow: 10px 10px 3px #10d1d1; border-color: #10d1d1;" *ngIf="mode == 'cyan'">
+        <h2>Advise@Case</h2>
+        <p>Get help to move to hybrid cloud</p>
+        <p><button (click)="hcAdvise()" class="btn">Ask me</button></p>
   </div>
-  -->
 </div>
