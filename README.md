@@ -112,34 +112,74 @@ See the note [here](docs/run-minikube.md)
 A dockerfile is defined in the root project folder to build a docker image from the node:alpine official image. The docker file is simple and use the port 6100.
 
 ```
-FROM node:alpine
-EXPOSE 6100
-CMD node server/server
+MAINTAINER https://github.com/ibm-cloud-architecture - IBM
+WORKDIR /caseincportal
+COPY . /caseincportal
+RUN cd /caseincportal
+RUN npm install
+EXPOSE 6001
+CMD node server/server.js
 ```
-To build the image the following command should be done
 
-` docker build -t case/caseportal .`
-
-The gradle build compiles the angular2 and build the image.
-
-Then it can be run locally instead of using the `npm run dev` command used during pure developmen, by using the command:
-`docker run -d -p 6100:6100 -t case/caseportal`
-
-Once built, the image is uploaded to the Bluemix private container registry `registry.ng.bluemix.net/<namespace>/<imagename>`. To get the list of namespace defined into your account use:
+* You first need to be sure the Angular UI Typescript files are compiled. We have developed a simple gradle file for that:
 ```
-bx login -a https://api.ng.bluemix.net
-
-bx cr namespaces
+./gradlew build
 ```
+
+** To build the docker image use the following command: The . represents the current project folder where.
+
+```
+$ docker build -t case/webportal .
+# the image case/webportal should be visible
+$ docker images
+```
+
+Optionally you may want to run it locally: instead of using the `npm run dev` command used during pure development phase, use the command:
+```
+docker run -d -p 6100:6100 -t case/webportal
+````
+
+* push the image to bluemix private registry:
+Once built, the image is uploaded to the Bluemix private container registry `registry.ng.bluemix.net/<namespace>/<imagename>`.
+
+To get the list of namespace defined into your account use:
+```
+$ bx cr login
+$ bx cr info                                    
+```
+
 For example the namespace we are using is `ibm_nls` so we need to tag the image and upload it, using:
-
 ```
-docker tag case/caseportal  registry.ng.bluemix.net/ibm_mls/caseportal
-bx cr login
-docker push registry.ng.bluemix.net/ibm_mls/caseportal
+docker tag case/webportal  registry.ng.bluemix.net/ibm_mls/casewebportal
+
+docker push registry.ng.bluemix.net/ibm_mls/casewebportal
 ```
 
-Once the image is uploaded it is possible to build a Kubernetes Deployment and deploy the container to the pods. The commands are:
+Once the image is uploaded it is possible to build a Kubernetes Deployment
+```
+$ bx login -a https://api.ng.bluemix.net
+# initialize your access to the cluster
+$  bx cs init
+# Get the list of cluster: you should have one per region.
+$ bx cs clusters
+>OK
+Name            ID                     State    Created                    Workers   Datacenter   
+brown-cluster   664c66d603e            normal   2017-07-18T14:59:40+0000   1         hou02
+```
+Set the cluster as the context for your interaction session
+```
+$  bx cs cluster-config brown-cluster
+
+> export KUBECONFIG=/Users/jeromeboyer/.bluemix/plugins/container-service/clusters/brown-cluster/kube-config-hou02-brown-cluster.yml
+```
+
+To be able to use the kubernetes command line interface `kubectl` you need to execute the export
+```
+$ export KUBECONFIG=/Users/jeromeboyer/.bluemix/plugins/container-service/clusters/brown-cluster/kube-config-hou02-brown-cluster.yml
+```
+
+
+ and deploy the container to the pods. The commands are:
 
 ```
 # Create a Deployment and run it on the pods

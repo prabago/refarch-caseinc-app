@@ -1,6 +1,6 @@
 # Run on Minikube
 
-We are presenting a short summary on how to run this application on minikube.
+We are presenting here a short summary on how to run this application on [minikube](https://github.com/kubernetes/minikube).
 
 ## Pre-requisites
 * minikube is installed and running on your computer
