@@ -7,6 +7,7 @@ Do you want to understand how to build, a 'production' like nodejs app with Angu
 ## Table of Contents
 * [Introduction](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#introduction)
 * [Pre Requisites](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#pre-requisites)
+* [Build](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#build)
 * [Run](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run)
 * [Code explanation]((https://github.com/ibm-cloud-architecture/refarch-caseinc-app#code-explanation))
 
@@ -59,6 +60,8 @@ When involving a continuous integration using Jenkins the gradlew is used
 ```
 ./gradlew build
 ```
+When compiling the angular typescripts the javascript code is under dist folder. It will be packaged when a docker image is built.
+
 # Run
 We are proposing multiple deployment and execution environments:
 * run locally using **node**
@@ -68,6 +71,14 @@ We are proposing multiple deployment and execution environments:
 * run the application in IBM Cloud Private
 
 The application is accessing some public Bluemix services, therefore to avoid sharing Bluemix service credentials, an `env.json` file is used within the folder server/routes. A template `env-tmpl.json` is delivered for that. So just renaming the template file to `env.json` will make the app running locally without any other settings. As Case Inc Portal app demonstrates some of the [Cognitive](https://github.com/ibm-cloud-architecture/refarch-cognitive) integration, you may need to set the credential of the Watson Service used.
+
+## env.json
+The file contains some application settings. When deploying on Bluemix the *environment* should be set to 'public'. The access to the backend will be done via secure gateway.
+When deployed on IBM Cloud private this *environment* variable should be set to 'private', and the hostUrl for API Connect Gateway should be set to the API address or server hostname of your environment. As of 09/2017, API Connect gateway server is running on-premise with a static address.
+
+The *xibmclientid* is coming from the API Connect inventory API definition.
+
+The *secureGateway* URL is set to the Bluemix secure gateway URL.
 
 ## Run the application locally
 
@@ -113,9 +124,9 @@ A dockerfile is defined in the root project folder to build a docker image from 
 
 ```
 MAINTAINER https://github.com/ibm-cloud-architecture - IBM
-WORKDIR /caseincportal
-COPY . /caseincportal
-RUN cd /caseincportal
+WORKDIR /caseportal
+COPY . /caseportal
+RUN cd /caseportal
 RUN npm install
 EXPOSE 6001
 CMD node server/server.js
@@ -130,7 +141,7 @@ CMD node server/server.js
 
 ```
 $ docker build -t case/webportal .
-# the image case/webportal should be visible
+# the image case/webportal should be visible in you local repository
 $ docker images
 ```
 

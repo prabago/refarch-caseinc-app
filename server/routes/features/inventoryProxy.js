@@ -11,10 +11,12 @@ Build the HTTP header to be used to call back end services using TLS
 */
 
 var buildOptions=function(token,met,apath){
+  localUrl= config.secureGateway.url+apath;
+  if (config.environment === "private") {
+    localUrl= config.apiGateway.hostUrl+apath;
+  }
   return {
-  //  host: config.secureGateway.host,
-  //  port: config.secureGateway.port,
-    url: config.secureGateway.url+apath,
+    url: localUrl,
   //  path:apath,
     method: met,
     rejectUnauthorized: true,
