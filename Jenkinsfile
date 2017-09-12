@@ -4,13 +4,14 @@ pipeline {
         stage('build') {
             steps {
                 sh './gradlew build'
-                docker build -t case/caseincportal .
+                docker build -t case/webportal .
             }
         }
         stage('deploy') {
             steps {
              timeout(time: 3, unit: 'MINUTES') {
-                docker push 
+                sh './publishToICPpwd
+                .sh' 
               }
             }
         }
