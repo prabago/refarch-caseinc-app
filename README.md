@@ -9,10 +9,10 @@ Do you want to understand how to build, a 'production' like nodejs app with Angu
 * [Pre Requisites](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#pre-requisites)
 * [Build](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#build)
 * [Run](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run)
- * [Locally](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-the-application-locally)
- * [Bluemix as cloud foundry](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-bluemix-as-cloud-foundry)
-  * [Bluemix container service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service)
- * [IBM Cloud Private](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-ibm-cloud-private)
+   * [Locally](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-the-application-locally)
+   * [Bluemix as cloud foundry](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-bluemix-as-cloud-foundry)
+    * [Bluemix container service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service)
+    * [IBM Cloud Private](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-ibm-cloud-private)
 * [Code explanation](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#code-explanation)
 
 # Introduction
