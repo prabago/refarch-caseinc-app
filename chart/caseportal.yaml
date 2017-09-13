@@ -2,8 +2,11 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: casewebportal
+  namespace: default
+  labels:
+    app: casewebportal
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
@@ -11,7 +14,15 @@ spec:
     spec:
       containers:
       - name: casewebportal
-        image: case/webportal:v0.0.1
+        image: mycluster:8500/default/casewebportal:v0.0.1
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 6100
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      imagePullSecrets:
+        - name: admin.registrykey
+        - name: default-token-45n44
+      schedulerName: default-scheduler

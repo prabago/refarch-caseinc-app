@@ -3,14 +3,14 @@
 # Declare variables to be passed into your templates.
 replicaCount: 3
 image:
-  repository: local-charts
-  tag: stable
+  repository: mycluster:8500/default/casewebportal
+  tag: v0.0.1
   pullPolicy: IfNotPresent
 service:
   name: casewebportal
   type: ClusterIP
   externalPort: 80
-  internalPort: 80
+  internalPort: 6100
 ingress:
   enabled: false
   # Used to create Ingress record (should used with service.type: ClusterIP).

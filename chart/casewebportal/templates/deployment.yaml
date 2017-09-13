@@ -25,5 +25,12 @@ spec:
           httpGet:
             path: /
             port: {{ .Values.service.internalPort }}
-        resources:
-{{ toYaml .Values.resources | indent 10 }}
+        resources: {{ toYaml .Values.resources | indent 10 }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      imagePullSecrets:
+        - name: admin.registrykey
+        - name: default-token-45n44
+      schedulerName: default-scheduler
