@@ -24,47 +24,11 @@ const router = express.Router();
 // The application can be the front end to two different color compute model: Brown for integration focus and Orange for integration and cognitive. The mode attribute in the env.json set this
 var fs = require('fs');
 var path = require('path');
-var config = JSON.parse(fs.readFileSync(path.resolve(__dirname,'./env.json')));
-
 const inventory    = require('./features/inventoryProxy');
 const conversation = require('./features/conversation');
 
-/* GET api listing. */
-// router.get('/', (req, res) => {
-//   res.send('API supported: GET /api/i/items ');
-// });
-//
-// ALl APIs declaration
-// router.get('/mode',(req,res) => {
-//   res.send({"mode":config.mode});
-// });
-// //app.use('/api/i',inventory);
-// if (config.mode == 'cyan') {
-//   router.post('/c/conversation',(req,res) => {conversation.itSupport(req,res)});
-// }
-//
-// // inventory API
-// router.get('/i/items', (req,res) => {
-//   inventory.getItems(req,res);
-//   /*
-//       inventory.getItems(req.headers.token,function(data){
-//           res.send(data);
-//         });
-//   */
-// });
-// router.delete('/i/items/:id', (req,res) => {
-//       inventory.deleteItem(req,res);
-// });
-// router.put('/i/items', (req,res) => {
-//       inventory.saveItem(req,res);
-// });
-// router.post('/i/items', (req,res) => {
-//       inventory.newItem(req,res);
-// });
-//
-// module.exports = router;
 
-module.exports = function(app){
+module.exports = function(app,config){
   app.get('/api', function(req, res){
     res.send('API supported: GET /api/i/items ');
   })
@@ -75,24 +39,24 @@ module.exports = function(app){
     res.status(200).json(response);
   })
   app.get('/api/mode', isLoggedIn, (req,res) => {
-    res.send({"mode":config.mode});
+    res.send({"mode":config.getMode()});
   })
-  if (config.mode == 'cyan') {
+  if (config.getMode() == 'cyan') {
     app.post('/api/c/conversation',isLoggedIn,(req,res) => {
-      conversation.itSupport(req,res)
+      conversation.itSupport(config,req,res)
     });
   }
   app.get('/api/i/items', isLoggedIn, (req,res) => {
-    inventory.getItems(req,res);
+    inventory.getItems(config,req,res);
   })
   app.delete('/api/i/items/:id', isLoggedIn, (req,res) => {
-    inventory.deleteItem(req,res);
+    inventory.deleteItem(config,req,res);
   })
   app.put('/api/i/items', isLoggedIn, (req,res) => {
-    inventory.saveItem(req,res);
+    inventory.saveItem(config,req,res);
   })
   app.post('/api/i/items', isLoggedIn, (req,res) => {
-    inventory.newItem(req,res);
+    inventory.newItem(config,req,res);
   })
 }
 

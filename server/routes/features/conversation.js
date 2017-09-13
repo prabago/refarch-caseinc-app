@@ -22,10 +22,10 @@ var request = require('request');
 Conversation delegates to the Conversation Broker Micro Service.
 */
 module.exports = {
-  itSupport : function(req,res){
+  itSupport : function(config,req,res){
     request({
       method: 'POST',
-      url: config.conversationBroker.url,
+      url: config.getConversationBrokerUrl(),
         timeout: 10000,
       json: true,
       body: req.body

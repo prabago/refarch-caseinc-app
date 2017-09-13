@@ -16,22 +16,19 @@
 // Get dependencies
 const express = require('express');
 const path = require('path');
-// const api = require('./routes/api');
+
 const passport = require('passport');
-// const login = require('./routes/userlogin')
+
 const session = require('express-session');
 const MemoryStore = require('session-memory-store')(session);
 
 // create the app
 const app = express();
 app.disable('x-powered-by');
-// cfenv provides access to your Cloud Foundry environment
-// for more info, see: https://www.npmjs.com/package/cfenv
-var cfenv = require('cfenv');
 
 const bodyParser =   require('body-parser');
-
-require('./routes/passport')(passport)
+var config = require('./config');
+require('./routes/passport')(passport,config)
 
 app.use(session({
 	name: 'JSESSION',
@@ -53,27 +50,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../dist')));
 // Set our api routes
 require('./routes/userlogin')(app, passport);
-require('./routes/api')(app)
-// require('./routes/userlogin')(app)
-// app.use('/api', api);
-// app.use('/login', login);
-
+require('./routes/api')(app,config);
 
 // Catch all other routes and return the index file
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-
-/**
- * Get port from environment and store in Express.
- */
-var appEnv = cfenv.getAppEnv();
-const port = appEnv.port ||'6100';
+const port = '6100';
 
 // start server on the specified port and binding host
 var server=app.listen(port, '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("Server v0.0.5 08/23/17 starting on " + port);
+  console.log("Server v0.0.7 09/13/17 starting on " + port);
 });
 module.exports = server;

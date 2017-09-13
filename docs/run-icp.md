@@ -12,7 +12,7 @@ docker tag case/webportal master.cfc:8500/default/casewebportal:v0.0.1
 ```
 ## Push image
 
-If you have copied the certificate / public key to the /etc/docker/certs.d/<hostname>:<portnumber> folder you should be able to login to  remote docker engine. Use a user known by ICP.
+If you have copied the certificate / public key to the /etc/docker/certs.d/<hostname>:<portnumber> folder you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository)) Use a user known by ICP.
 ```
 docker login master.cfc:8500
 User: admin
@@ -23,9 +23,9 @@ docker push master.cfc:8500/default/casewebportal:v0.0.1
 ```
 
 ## Build the helm package
-Helm is a package manager to deploy application and service to Kubernetes cluster. Package definitions are charts, yaml files to be shareable.
+Helm is a package manager to deploy application and service to Kubernetes cluster. Package definitions are charts which are yaml files to be shareable between teams.
 
-To build a chart for the web app we need to select a name (caswwebportal) and then use the command:
+The first time you need to build a chart for the web app.  Select a chart name (casewebportal) and then use the command:
 ```
 cd chart
 helm init casewebportal
@@ -38,6 +38,8 @@ The deployment.yaml defines the kubernetes deployment
 *The template files need to be modified to tune your deployment*
 
 ### Chart.yaml
-Set the version and name it will be use in deployment.yaml.
+Set the version and name it will be use in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the char.yaml are used in the templates.
+
+### 
 
 ## Deploy the helm package

@@ -1,0 +1,18 @@
+{
+    "secureGateway" :{
+      "url":"https://cap-sg-prd-5.integration.ibmcloud.com:16582",
+      "host":"cap-sg-prd-5.integration.ibmcloud.com",
+      "port":16582
+    },
+    "apiGateway" :{
+      "hostUrl": "https://172.16.50.8",
+      "url": "/csplab/sb/iib-inventory-api",
+      "xibmclientid": "69b5d2ac-95d5-4aab-9884-4350759e72f3",
+      "xibmclientid0": "5d2a6edb-793d-4193-b9b0-0a087ea6c123"
+    },
+    "conversationBroker" :{
+      "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
+    },
+    "mode" : "cyan",
+    "environment" : "private"
+}

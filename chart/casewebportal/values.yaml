@@ -4,12 +4,12 @@
 replicaCount: 3
 image:
   repository: mycluster:8500/default/casewebportal
-  tag: v0.0.1
+  tag: v0.0.7
   pullPolicy: IfNotPresent
 service:
   name: casewebportal
   type: ClusterIP
-  externalPort: 80
+  externalPort: 6100
   internalPort: 6100
 ingress:
   enabled: false

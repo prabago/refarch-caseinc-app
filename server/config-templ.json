@@ -5,7 +5,8 @@
   "apiGateway" :{
     "hostUrl": "https://172.16.50.8",
     "url": "csplab/sb/sample-inventory-api",
-    "xibmclientid": "5d2a6edb-793d-4193-b9b0-0a087ea6c123"
+    "xibmclientid": "8fdba02b-0251-457d-ab86-ea809459c5b8",
+    "xibmclientid0": "5d2a6edb-793d-4193-b9b0-0a087ea6c123"
   },
   "conversationBroker" :{
     "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
