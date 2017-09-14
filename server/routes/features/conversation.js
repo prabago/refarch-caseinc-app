@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var config = require('../env.json');
 const express = require('express');
 const router = express.Router();
 var request = require('request');

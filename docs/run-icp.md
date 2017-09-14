@@ -40,7 +40,14 @@ This creates yaml files and simple set of folders. Those files play a role to de
 
 The deployment.yaml defines the kubernetes deployment
 
-*The template files need to be modified to tune your deployment*
+*The template files may need to be modified to tune for your deployment* For example the following was added for out case.
+```
+dnsPolicy: ClusterFirst
+securityContext: {}
+imagePullSecrets:
+  - name: admin.registrykey
+  - name: default-token-45n44
+```
 
 ### Chart.yaml
 Set the version and name it will be use in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the char.yaml are used in the templates.
@@ -66,17 +73,33 @@ $ helm package casewebportal
 These commands should create a zip file with the content of the casewebportal folder.
 
 ## Deploy the helm package
-There are multiple ways to upload the app to ICP using helm. We can use a HTTP server to upload the
+There are multiple ways to upload the app to ICP using helm. We can use a HTTP server to upload the package file and then use the repository synchronization in ICP:
+* 9.19.34.117 is a HTTP server running in our data center
 ```
 scp casewebportal-0.0.1.tgz boyerje@9.19.34.117:/storage/CASE/refarch-privatecloud
+```
+* If you want to have you helm Update the index file to describe your own applications to be listed in the ICP Application Center:
+```
 wget http://172.16.0.5/storage/CASE/local-charts/index.yaml
 helm repo index --merge index.yaml --url http://9.19.34.117:/storage/CASE/refarch-privatecloud ./
 scp index.yaml boyerje@172.16.0.5/storage/CASE/local-charts
 ```
 
+* Use helm install
+The following command install a chart archive
+```
+$ helm install casewebportal-0.0.7.tgz
+```
+
+![](helm-install-out.png)
+From the above we can see that a deployment was created in kubernetes, the testapi got scaled to two pods and a service got created to expose the deployment on the cluster IP on port 80. And the NOTES.txt file tells us how to access the pod.
+
+You can login to ICP console and look at the Workload > applications
+![](app-deployed.png)
+
 ### Use helm upgrade
-```
-```
+
+
 ### Verify the app is deployed
 ```
 helm ls --all default-casewebportal
