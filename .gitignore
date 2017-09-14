@@ -3,7 +3,6 @@
 /dist
 /tmp
 /build
-/ssl
 
 server/routes/env.json
 

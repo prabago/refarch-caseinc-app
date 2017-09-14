@@ -4,5 +4,7 @@ WORKDIR /caseportal
 COPY . /caseportal
 RUN cd /caseportal
 RUN npm install
+RUN npm install angular-cli
+RUN ng build
 EXPOSE 6100
 CMD node server/server.js
