@@ -3,7 +3,7 @@ var https=require('https');
 const request = require('request').defaults({strictSSL: false});
 var fs = require('fs');
 var path = require('path');
-var caCerts =fs.readFileSync(path.resolve(__dirname, '../../../ssl/ca.all.crt.pem'));
+//var caCerts =fs.readFileSync(path.resolve(__dirname, '../../../ssl/ca.all.crt.pem'));
 
 
 /**
@@ -16,7 +16,7 @@ var buildOptions=function(token,met,aPath,config){
   //  path:apath,
     method: met,
     rejectUnauthorized: true,
-    ca: caCerts,
+    //ca: caCerts,
     headers: {
       'X-IBM-Client-Id': config.getAPICClientId(),
       accept: 'application/json',

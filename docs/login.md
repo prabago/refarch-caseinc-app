@@ -3,7 +3,7 @@ This article addresses in detail how login is supported in the Case Inc Portal b
 
 ## Table of contents
 * [Requirements to support](https://github.com/ibm-cloud-architecture/refarch-caseinc-app/blob/master/docs/login.md#requirements)
-* 
+*
 
 ## Requirements
 We want to support the following requirements:
@@ -97,4 +97,4 @@ The auth guard is used to prevent unauthenticated users from accessing restricte
 
 
 ## SSL Certificate
-The communication between the nodejs web server, IBM secure gateway and then API Connect on premise is using SSL. As it is little bit complex we have create a separate notes to explain what was performed to make this communication working. So see the detail [here](ssl.md)
+The communication between the nodejs web server, IBM secure gateway and then API Connect on premise is using SSL. As it is little bit complex we have create a separate note to explain what was performed to make this communication working. So see the detail [here](ssl.md)

@@ -12,7 +12,7 @@ Do you want to understand how to build, a 'production' like nodejs app with Angu
    * [Locally](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-the-application-locally)
    * [Bluemix as cloud foundry](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-bluemix-as-cloud-foundry)
     * [Bluemix container service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service)
-    * [IBM Cloud Private](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-ibm-cloud-private)
+    * [IBM Cloud Private](https://github.com/ibm-cloud-architecture/refarch-caseinc-app/blob/master/docs/run-icp.md)
 * [Code explanation](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#code-explanation)
 
 # Introduction
@@ -76,13 +76,29 @@ We are proposing multiple deployment and execution environments:
 
 The application is accessing some public Bluemix services, therefore to avoid sharing Bluemix service credentials, an `env.json` file is used within the folder server/routes. A template `env-tmpl.json` is delivered for that. So just renaming the template file to `env.json` will make the app running locally without any other settings. As Case Inc Portal app demonstrates some of the [Cognitive](https://github.com/ibm-cloud-architecture/refarch-cognitive) integration, you may need to set the credential of the Watson Service used.
 
-## env.json
-The file contains some application settings. When deploying on Bluemix the *environment* should be set to 'public'. The access to the backend will be done via secure gateway.
-When deployed on IBM Cloud private this *environment* variable should be set to 'private', and the hostUrl for API Connect Gateway should be set to the API address or server hostname of your environment. As of 09/2017, API Connect gateway server is running on-premise with a static address.
+## config.json
+The file contains some application settings. When deploying on Bluemix the *environment* should be set to 'public', when deploying to ICP use 'private'.
+### Access via public cloud
+* Change the environment to **public**
+* Change the secureGateway.url to point to the URL of your secure gateway deployment. See [this note](https://github.com/ibm-cloud-architecture/refarch-integration-utilities/blob/master/docs/ConfigureSecureGateway.md) to understand how to configure secure gateway.
 
-The *xibmclientid* is coming from the API Connect inventory API definition.
+The access to the backend will be done via secure gateway.
+### Access via private cloud
+So when deploying to IBM Cloud Private the connection between the web application and the API Connect could be direct without secure gateway. So you need to
+* Change the environment to **private**
+* specify the hostUrl for API Connect Gateway
 
-The *secureGateway* URL is set to the Bluemix secure gateway URL.
+### API Connect Specifics
+The *xibmclientid* is coming from the application you defined in APIC Connect portal. So connect to the API Connect developer portal, a URL built from the organization settings, like http://172.16.254.90/csplab/sb, create a user account and define an Application. The Client ID string is accessed via the show check box:
+![](./docs/apic-portal-app.png)
+Copy this string in
+```
+"apiGateway" :{
+  "hostUrl": "https://172.16.50.8",
+  "url": "/csplab/sb/iib-inventory-api",
+  "xibmclientid": "59a3 xxx  e9eedb"
+```
+The url is coming from the organization settings and the product name (iib-inventory-api).
 
 ## Run the application locally
 
