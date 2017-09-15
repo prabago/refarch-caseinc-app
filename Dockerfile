@@ -1,10 +1,12 @@
 FROM node:alpine
 MAINTAINER https://github.com/ibm-cloud-architecture - IBM - Jerome Boyer
-WORKDIR /caseportal
+
 COPY . /caseportal
-RUN cd /caseportal
-RUN npm install
-RUN npm install angular-cli
-RUN ng build
+WORKDIR /caseportal
+RUN npm install && \
+    npm install -g @angular/cli && \
+    npm run build
+
 EXPOSE 6100
+
 CMD node server/server.js
