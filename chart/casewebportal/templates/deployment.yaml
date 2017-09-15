@@ -25,8 +25,18 @@ spec:
           httpGet:
             path: /
             port: {{ .Values.service.internalPort }}
+        volumeMounts:
+        - name: config
+          mountPath: /caseportal/server/config.json
+          subPath: config.json
+
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+      volumes:
+      - name: config
+        configMap:
+          name:  {{ template "fullname" . }}
+
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

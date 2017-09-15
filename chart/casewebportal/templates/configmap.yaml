@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+data:
+  config.json: |+
+    {
+        "secureGateway" :{
+          "url":"{{ .Values.config.secureGateway.url }}"
+        },
+        "apiGateway" :{
+          "hostUrl": "{{ .Values.config.apiGateway.hostUrl }}",
+          "url": "{{ .Values.config.apiGateway.url }}",
+          "xibmclientid": "{{ .Values.config.apiGateway.clientid }}"
+        },
+        "conversationBroker" :{
+          "url":"{{ .Values.config.conversationBroker.url }}"
+        },
+        "mode" : "{{ .Values.config.mode }}",
+        "environment" : "{{ .Values.config.environment }}"
+    }
