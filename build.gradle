@@ -4,7 +4,7 @@ plugins {
 }
 
 description = 'Build the Case Inc Portal to demonstrate Brown and Cyan Computes'
-version = '0.1'
+version = '0.0.7'
 
 
 node {

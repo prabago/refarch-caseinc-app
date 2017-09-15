@@ -14,7 +14,7 @@ Then tag your local image with the name of the remote server where the docker re
 $ docker tag case/webportal master.cfc:8500/default/casewebportal:v0.0.1
 $ docker images
 ```
-## Push docker image to ICP private repository
+## Push docker image to ICP private docker repository
 
 If you have copied the ICP master host certificate / public key to the /etc/docker/certs.d/<hostname>:<portnumber> folder on you local computer, you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository)) Use a user known by ICP.
 ```
@@ -73,32 +73,41 @@ $ helm package casewebportal
 These commands should create a zip file with the content of the casewebportal folder.
 
 ## Deploy the helm package
-There are multiple ways to upload the app to ICP using helm. We can use a HTTP server to upload the package file and then use the repository synchronization in ICP:
-* 9.19.34.117 is a HTTP server running in our data center
+There are multiple ways to upload the app to ICP using helm. We can use a private repository, which is a HTTP server, to upload the package file and then use the repository synchronization in ICP to get the chart visible in Application Center.
+### Use helm repository
+The steps look like:
+* copy the tfgz file to the repository. (9.19.34.117 is a HTTP server running in our data center)
 ```
-scp casewebportal-0.0.1.tgz boyerje@9.19.34.117:/storage/CASE/refarch-privatecloud
+$ scp casewebportal-0.0.1.tgz boyerje@9.19.34.117:/storage/CASE/refarch-privatecloud
 ```
-* If you want to have you helm Update the index file to describe your own applications to be listed in the ICP Application Center:
+* If you want to have you to update your private catalog, you need to modify the index.yaml file.  The index file describe how your applications is listed in the ICP Application Center:
 ```
-wget http://172.16.0.5/storage/CASE/local-charts/index.yaml
-helm repo index --merge index.yaml --url http://9.19.34.117:/storage/CASE/refarch-privatecloud ./
-scp index.yaml boyerje@172.16.0.5/storage/CASE/local-charts
+$ wget http://172.16.0.5/storage/CASE/local-charts/index.yaml
+$ helm repo index --merge index.yaml --url http://9.19.34.117:/storage/CASE/refarch-privatecloud ./
+$ scp index.yaml boyerje@172.16.0.5/storage/CASE/local-charts
 ```
+The 172.16.0.5 is a HTTP server which hosts the local-charts repository. You can see its references in the System menu
+![](charts-server-info.png)
 
-* Use helm install
-The following command install a chart archive
+Once the repository are synchronized your helm chart should be in the catalog:
+![](helm-in-app-center.png)
+
+### Use helm commmand
+* Use helm install command to install a chart archive directly to kubernetes cluster
 ```
 $ helm install casewebportal-0.0.7.tgz
 ```
 
 ![](helm-install-out.png)
-From the above we can see that a deployment was created in kubernetes, the testapi got scaled to two pods and a service got created to expose the deployment on the cluster IP on port 80. And the NOTES.txt file tells us how to access the pod.
+From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod.
 
 You can login to ICP console and look at the Workload > applications
 ![](app-deployed.png)
 
 ### Use helm upgrade
-
+```
+helm upgrade casewebportal
+```
 
 ### Verify the app is deployed
 ```

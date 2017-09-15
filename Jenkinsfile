@@ -10,8 +10,7 @@ pipeline {
         stage('deploy') {
             steps {
              timeout(time: 3, unit: 'MINUTES') {
-                sh './publishToICPpwd
-                .sh' 
+                sh './publishToICPpwd.sh' 
               }
             }
         }
