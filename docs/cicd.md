@@ -1,6 +1,6 @@
 # Continuous Integration And Deployment
 
-The nodejs application is using angular 2, so to build the interface the command `ng build` needs to be done. But we have pacakged the build script as [Gradle](https://gradle.org/) file.
+The nodejs application is using angular 4, so to build the interface the command `ng build` needs to be performes. But we have packaged the build script as [Gradle](https://gradle.org/) file.
 
 ## Setup gradle
 The following steps were perform to build the CI:

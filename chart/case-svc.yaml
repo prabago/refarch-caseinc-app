@@ -7,7 +7,7 @@ metadata:
 spec:
   type: NodePort
   ports:
-  - port: 6001
+  - port: 6100
     protocol: TCP
   selector:
-    app: casewebportal 
+    app: casewebportal
