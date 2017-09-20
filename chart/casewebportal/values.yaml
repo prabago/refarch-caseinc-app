@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: mycluster:8500/default/casewebportal
+  repository: master.cfc:8500/default/casewebportal
   tag: v0.0.7
   pullPolicy: IfNotPresent
 service:
