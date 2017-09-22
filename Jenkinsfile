@@ -10,11 +10,5 @@ pipeline {
                 sh 'cd chart; helm package casewebportal'
             }
         }
-        stage('deploy') {
-            steps {
-
-              }
-            }
-        }
     }
 }
