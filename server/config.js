@@ -19,7 +19,7 @@ module.exports = {
   },
   getConversationBrokerUrl : function(){
     return config.conversationBroker.url;
-  }
+  },
   getPort : function(){
     return config.port;
   }

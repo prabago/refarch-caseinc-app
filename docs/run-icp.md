@@ -66,8 +66,8 @@ Set the version and name it will be use in deployment.yaml. Each time you deploy
 Specify in this file the docker image name and tag
 ```yaml
 image:
-  repository: mycluster:8500/default/casewebportal
-  tag: v0.0.7
+  repository: mycluster:8500/brown/casewebportal
+  tag: v0.0.1
   pullPolicy: IfNotPresent
 ```
 
@@ -83,7 +83,20 @@ $ helm package casewebportal
 These commands should create a zip file with the content of the casewebportal folder.
 
 ## Deploy the helm package
-There are multiple ways to upload the app to ICP using helm. We can use a private repository, which is a HTTP server, to upload the package file and then use the repository synchronization in ICP to get the chart visible in Application Center.
+There are multiple ways to upload the app to ICP using helm. We can use a private repository, which is a HTTP server, to upload the package file and then use the repository synchronization in ICP to get the chart visible in Application Center, or we can use the `helm install` command:
+
+### Use helm commmand
+* Use helm install command to install a chart archive directly to kubernetes cluster
+```
+$ helm install casewebportal
+```
+
+![](helm-install-out.png)
+From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod.
+
+You can login to ICP console and look at the Workload > applications
+![](app-deployed.png)
+
 ### Use helm repository
 The steps look like:
 * copy the tfgz file to the repository. (9.19.34.117 is a HTTP server running in our data center)
@@ -102,17 +115,6 @@ The 172.16.0.5 is a HTTP server which hosts the local-charts repository. You can
 Once the repository are synchronized your helm chart should be in the catalog:
 ![](helm-in-app-center.png)
 
-### Use helm commmand
-* Use helm install command to install a chart archive directly to kubernetes cluster
-```
-$ helm install casewebportal-0.0.7.tgz
-```
-
-![](helm-install-out.png)
-From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod.
-
-You can login to ICP console and look at the Workload > applications
-![](app-deployed.png)
 
 ### Use helm upgrade
 ```
