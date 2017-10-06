@@ -1,29 +1,39 @@
 # Run Case Web Portal on IBM Cloud Private
 We propose to package the code as a docker image, build a helm chart and then publish it to an ICP instance.
 
+## Pre-requisites
+* A conceptual understanding of how [Kubernetes](https://kubernetes.io/docs/concepts/) works.
+
+* A high-level understanding of [Helm and Kubernetes package management](https://docs.helm.sh/architecture/).
+
+* A basic understanding of [IBM Cloud Private cluster architecture](https://www.ibm.com/support/knowledgecenter/SSBS6K_2.1.0/getting_started/architecture.html).
+
+* Add a **brown** namespace using ICP admin console, under System menu
+
+
 ## Build
 As seen in the section [Deploy the CaseInc Portal App in Bluemix Kubernetes Service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service), this project includes a docker file to build a docker image. You can build the image to your local repository using the command:
 ```
 # first build the App
-$ gradlew build
+$ npm run build
 $ docker build -t case/webportal .
 $ docker images
 ```
-Then tag your local image with the name of the remote server where the docker registry resides, and the namespace to use. (*master.cfc:8500* is the remote server and *default* is the namespace)
+Then tag your local image with the name of the remote ICP server where the docker registry resides, and the namespace to use. (*mycluster:8500* is the remote server and *brown* is the namespace)
 ```
-$ docker tag case/webportal master.cfc:8500/default/casewebportal:v0.0.1
+$ docker tag case/webportal mycluster:8500/brown/casewebportal:v0.0.1
 $ docker images
 ```
 ## Push docker image to ICP private docker repository
 
 If you have copied the ICP master host certificate / public key to the /etc/docker/certs.d/<hostname>:<portnumber> folder on you local computer, you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository)) Use a user known by ICP.
 ```
-docker login master.cfc:8500
+docker login mycluster:8500
 User: admin
 ```
 Push the image
 ```
-docker push master.cfc:8500/default/casewebportal:v0.0.1
+docker push mycluster:8500/brown/casewebportal:v0.0.1
 ```
 More informations could be found [here](https://www.ibm.com/developerworks/community/blogs/fe25b4ef-ea6a-4d86-a629-6f87ccf4649e/entry/Working_with_the_local_docker_registry_from_Spectrum_Conductor_for_Containers?lang=en)
 
