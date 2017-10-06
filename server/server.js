@@ -57,11 +57,10 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
-const port = '6100';
 
 // start server on the specified port and binding host
-var server=app.listen(port, '0.0.0.0', function() {
+var server=app.listen(config.getPort(), '0.0.0.0', function() {
   // print a message when the server starts listening
-  console.log("Server v0.0.7 09/13/17 starting on " + port);
+  console.log("Server v0.0.7 09/13/17 starting on " + config.getPort());
 });
 module.exports = server;

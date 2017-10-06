@@ -12,5 +12,6 @@
       "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
     },
     "mode" : "cyan",
-    "environment" : "private"
+    "environment" : "private",
+    "port" : 6100
 }

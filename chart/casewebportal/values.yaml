@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: master.cfc:8500/default/casewebportal
-  tag: latest
+  tag: v0.0.1
   pullPolicy: IfNotPresent
 service:
   name: casewebportal
