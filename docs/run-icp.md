@@ -1,5 +1,5 @@
 # Run Case Web Portal on IBM Cloud Private
-We propose to package the code as a docker image, build a helm chart and then publish it to an ICP instance.
+We propose to package this nodejs webapp as a docker image, build a helm chart and then publish it to an ICP instance.
 
 ## Pre-requisites
 * A conceptual understanding of how [Kubernetes](https://kubernetes.io/docs/concepts/) works.
@@ -117,8 +117,17 @@ Once the repository are synchronized your helm chart should be in the catalog:
 
 
 ### Use helm upgrade
+Get the helm release list
+
 ```
-helm upgrade casewebportal
+helm list
+> NAME           	REVISION	UPDATED                 	STATUS  	CHART              	NAMESPACE
+default-iib    	1       	Sat Sep  9 08:41:55 2017	DEPLOYED	iib-0.1.2          	default  
+joyous-dragon  	1       	Thu Sep 14 13:17:39 2017	DEPLOYED	casewebportal-0.0.1	default  
+ungaged-ladybug	1       	Fri Oct  6 16:07:58 2017	DEPLOYED	casewebportal-0.0.2	default  
+
+# upgrade a release with a new version
+helm upgrade ungaged-ladybug	 ./casewebportal
 ```
 
 ### Verify the app is deployed
