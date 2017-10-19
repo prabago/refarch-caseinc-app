@@ -13,5 +13,6 @@
     },
     "mode" : "cyan",
     "environment" : "private",
-    "port" : 6100
+    "port" : 6100,
+    "version": "v0.0.7"
 }

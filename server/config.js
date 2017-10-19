@@ -22,5 +22,8 @@ module.exports = {
   },
   getPort : function(){
     return config.port;
+  },
+  getVersion : function(){
+    return config.version;
   }
 }

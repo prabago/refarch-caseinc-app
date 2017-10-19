@@ -19,5 +19,7 @@ data:
           "url":"{{ .Values.config.conversationBroker.url }}"
         },
         "mode" : "{{ .Values.config.mode }}",
-        "environment" : "{{ .Values.config.environment }}"
+        "environment" : "{{ .Values.config.environment }}",
+        "port": "{{ .Values.config.port }}",
+        "version": "{{ .Values.config.version }}"
     }

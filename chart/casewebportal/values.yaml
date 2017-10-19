@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: mycluster:8500/brown/casewebportal
+  repository: mycluster.icp:8500/brown/casewebportal
   tag: v0.0.1
   pullPolicy: IfNotPresent
 service:
@@ -36,6 +36,8 @@ config:
     url: https://refarch-wcs-broker.mybluemix.net/api/conversation
   mode: cyan
   environment: private
+  port: 6100
+  version: 0.0.7
 
 resources:
   limits:

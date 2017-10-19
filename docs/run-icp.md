@@ -1,15 +1,12 @@
-# Run Case Web Portal on IBM Cloud Private
+# Run 'Case Web Portal' on IBM Cloud Private
 We propose to package this nodejs webapp as a docker image, build a helm chart and then publish it to an ICP instance.
 
-## Pre-requisites
-* A conceptual understanding of how [Kubernetes](https://kubernetes.io/docs/concepts/) works.
+Updated 10/18/2107
 
-* A high-level understanding of [Helm and Kubernetes package management](https://docs.helm.sh/architecture/).
+## Prerequisites
+See this general [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/icp-deploy.md#prerequisites)
 
-* A basic understanding of [IBM Cloud Private cluster architecture](https://www.ibm.com/support/knowledgecenter/SSBS6K_2.1.0/getting_started/architecture.html).
-
-* Add a **brown** namespace using ICP admin console, under System menu
-
+We assume in the following commands that the cluster name is: **mycluster.icp** and a namespace was created with the name **brown**.
 
 ## Build
 As seen in the section [Deploy the CaseInc Portal App in Bluemix Kubernetes Service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service), this project includes a docker file to build a docker image. You can build the image to your local repository using the command:
@@ -19,21 +16,24 @@ $ npm run build
 $ docker build -t case/webportal .
 $ docker images
 ```
-Then tag your local image with the name of the remote ICP server where the docker registry resides, and the namespace to use. (*mycluster:8500* is the remote server and *brown* is the namespace)
+Then tag your local image with the name of the remote ICP server where the docker registry resides, and the namespace to use. (*mycluster.icp:8500* is the remote server and *brown* is the namespace)
 ```
-$ docker tag case/webportal mycluster:8500/brown/casewebportal:v0.0.1
+$ docker tag case/webportal mycluster.icp:8500/brown/casewebportal:v0.0.1
 $ docker images
 ```
+An image with the scope namespace is only accessible from within the namespace that it was pushed to.
+
 ## Push docker image to ICP private docker repository
 
 If you have copied the ICP master host certificate / public key to the /etc/docker/certs.d/<hostname>:<portnumber> folder on you local computer, you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository)) Use a user known by ICP.
 ```
-docker login mycluster:8500
+docker login mycluster.icp:8500
 User: admin
+Password:
 ```
 Push the image
 ```
-docker push mycluster:8500/brown/casewebportal:v0.0.1
+docker push mycluster.icp:8500/brown/casewebportal:v0.0.1
 ```
 More informations could be found [here](https://www.ibm.com/developerworks/community/blogs/fe25b4ef-ea6a-4d86-a629-6f87ccf4649e/entry/Working_with_the_local_docker_registry_from_Spectrum_Conductor_for_Containers?lang=en)
 
@@ -50,7 +50,7 @@ This creates yaml files and simple set of folders. Those files play a role to de
 
 The deployment.yaml defines the kubernetes deployment
 
-*The template files may need to be modified to tune for your deployment* For example the following was added for out case.
+* The template files may need to be modified to tune for your deployment* For example the following was added for out case.
 ```
 dnsPolicy: ClusterFirst
 securityContext: {}
@@ -66,7 +66,7 @@ Set the version and name it will be use in deployment.yaml. Each time you deploy
 Specify in this file the docker image name and tag
 ```yaml
 image:
-  repository: mycluster:8500/brown/casewebportal
+  repository: mycluster.icp:8500/brown/casewebportal
   tag: v0.0.1
   pullPolicy: IfNotPresent
 ```
@@ -89,13 +89,37 @@ There are multiple ways to upload the app to ICP using helm. We can use a privat
 * Use helm install command to install a chart archive directly to kubernetes cluster
 ```
 $ helm install casewebportal
+
+NAME:   dealing-parrot
+LAST DEPLOYED: Wed Oct 18 16:08:24 2017
+NAMESPACE: default
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/ConfigMap
+NAME                          DATA  AGE
+dealing-parrot-casewebportal  1     1s
+
+==> v1/Service
+NAME                          CLUSTER-IP  EXTERNAL-IP  PORT(S)   AGE
+dealing-parrot-casewebportal  10.0.0.83   <none>       6100/TCP  1s
+
+==> v1beta1/Deployment
+NAME                          DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
+dealing-parrot-casewebportal  1        1        1           0          1s
+
+
+NOTES:
+1. Get the application URL by running these commands:
+  export POD_NAME=$(kubectl get pods --namespace default -l "app=dealing-parrot-casewebportal" -o jsonpath="{.items[0].metadata.name}")
+  echo "Visit http://127.0.0.1:8080 to use your application"
+  kubectl port-forward $POD_NAME 8080:6100
 ```
 
-![](helm-install-out.png)
-From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod.
+From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod from our local machine.
 
-You can login to ICP console and look at the Workload > applications
-![](app-deployed.png)
+You can login to ICP console and look at the Workloads > Helm Releases
+![](helm-deployed.png)
 
 ### Use helm repository
 The steps look like:
