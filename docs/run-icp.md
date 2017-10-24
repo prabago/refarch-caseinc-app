@@ -1,12 +1,16 @@
 # Run 'Case Web Portal' on IBM Cloud Private
 We propose to package this nodejs webapp as a docker image, build a helm chart and then publish it to an ICP instance.
 
-Updated 10/18/2107
+Updated 10/21/2107
+## Table of contents
+* [Prerequisites](#prerequisites)
+* [Build](#build)
+* [Deploy to ICP](#push-docker-image-to-icp-private-docker-repository)
 
 ## Prerequisites
-See this general [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/icp-deploy.md#prerequisites)
+See this [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/icp-deploy.md#prerequisites) for ICP prerequisites.
 
-We assume in the following commands that the cluster name is: **mycluster.icp** and a namespace was created with the name **brown**.
+We assume the cluster name is: **mycluster.icp** and a namespace was created with the name **brown**.
 
 ## Build
 As seen in the section [Deploy the CaseInc Portal App in Bluemix Kubernetes Service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service), this project includes a docker file to build a docker image. You can build the image to your local repository using the command:
@@ -16,7 +20,7 @@ $ npm run build
 $ docker build -t case/webportal .
 $ docker images
 ```
-Then tag your local image with the name of the remote ICP server where the docker registry resides, and the namespace to use. (*mycluster.icp:8500* is the remote server and *brown* is the namespace)
+Then tag your local image with the name of the remote ICP server where the docker registry resides. (*mycluster.icp:8500* is the remote server)
 ```
 $ docker tag case/webportal mycluster.icp:8500/brown/casewebportal:v0.0.1
 $ docker images
@@ -60,7 +64,56 @@ imagePullSecrets:
 ```
 
 ### Chart.yaml
-Set the version and name it will be use in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the char.yaml are used in the templates.
+Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the char.yaml are used in the templates.
+
+### Add configMap templates
+The config.json is a file that can be used when deploying on bluemix or locally, but when running on container within kubernetes it is good practice to externalize application configuration in config map. To do so we need to create a new template **templates/configmap.yaml**. This file uses the same structure as the config.json file but externalizes to get the parameter values from the values.yaml so developer can changes only one file to control the configuration.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "fullname" . }}
+  labels:
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+data:
+  config.json: |+
+    {
+        "secureGateway" :{
+          "url":"{{ .Values.config.secureGateway.url }}"
+        },
+        "apiGateway" :{
+          "hostUrl": "{{ .Values.config.apiGateway.hostUrl }}",
+          "url": "{{ .Values.config.apiGateway.url }}",
+          "xibmclientid": "{{ .Values.config.apiGateway.clientid }}"
+        },
+        "conversationBroker" :{
+          "url":"{{ .Values.config.conversationBroker.url }}"
+        },
+        "mode" : "{{ .Values.config.mode }}",
+        "environment" : "{{ .Values.config.environment }}",
+        "port": "{{ .Values.config.port }}",
+        "version": "{{ .Values.config.version }}"
+    }
+
+```
+
+### Modify deployment.yaml
+The configuration file can be overloaded by using the create content from the k8s config map. To do so we need to define a Volume to mount to the config.json file in the deployment.yaml as the following:
+```yaml
+volumeMounts:
+- name: config
+  mountPath: /caseportal/server/config.json
+  subPath: config.json
+```
+the path */caseportal* comes from the dockerfile, working directory declaration. The volume name (config) is arbitrary but needs to match a volume declared in the deployment.yaml. For example the volume is declared as **config** and use a configMap named using the template name of the helm package. See the paragraph above for the configmap.
+
+```yaml      
+volumes:
+      - name: config
+        configMap:
+          name:  {{ template "fullname" . }}
+```
 
 ### values.yaml
 Specify in this file the docker image name and tag
@@ -80,7 +133,7 @@ $ helm lint casewebportal
 # if you do not have issue ...
 $ helm package casewebportal
 ```
-These commands should create a zip file with the content of the casewebportal folder.
+These commands should create a zip file with the content of the casewebportal folder. You will use the zip file if you want to get the package visible inside the Catalog.
 
 ## Deploy the helm package
 There are multiple ways to upload the app to ICP using helm. We can use a private repository, which is a HTTP server, to upload the package file and then use the repository synchronization in ICP to get the chart visible in Application Center, or we can use the `helm install` command:
@@ -88,9 +141,9 @@ There are multiple ways to upload the app to ICP using helm. We can use a privat
 ### Use helm commmand
 * Use helm install command to install a chart archive directly to kubernetes cluster
 ```
-$ helm install casewebportal
+$ helm install casewebportal --name casewebportal --namespace brown
 
-NAME:   dealing-parrot
+NAME:   casewebportal
 LAST DEPLOYED: Wed Oct 18 16:08:24 2017
 NAMESPACE: default
 STATUS: DEPLOYED
@@ -98,22 +151,22 @@ STATUS: DEPLOYED
 RESOURCES:
 ==> v1/ConfigMap
 NAME                          DATA  AGE
-dealing-parrot-casewebportal  1     1s
+casewebportal-casewebportal  1     1s
 
 ==> v1/Service
 NAME                          CLUSTER-IP  EXTERNAL-IP  PORT(S)   AGE
-dealing-parrot-casewebportal  10.0.0.83   <none>       6100/TCP  1s
+casewebportal-casewebportal  10.0.0.83   <none>       6100/TCP  1s
 
 ==> v1beta1/Deployment
 NAME                          DESIRED  CURRENT  UP-TO-DATE  AVAILABLE  AGE
-dealing-parrot-casewebportal  1        1        1           0          1s
+casewebportal-casewebportal  1        1        1           1          1s
 
 
 NOTES:
 1. Get the application URL by running these commands:
-  export POD_NAME=$(kubectl get pods --namespace default -l "app=dealing-parrot-casewebportal" -o jsonpath="{.items[0].metadata.name}")
+  export POD_NAME=$(kubectl get pods --namespace brown -l "app=casewebportal-casewebportal" -o jsonpath="{.items[0].metadata.name}")
   echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl port-forward $POD_NAME 8080:6100
+  kubectl port-forward $POD_NAME 8080:6100 --namespace brown
 ```
 
 From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod from our local machine.
@@ -121,37 +174,19 @@ From the above we can see that a deployment was created in kubernetes, the casew
 You can login to ICP console and look at the Workloads > Helm Releases
 ![](helm-deployed.png)
 
-### Use helm repository
-The steps look like:
-* copy the tfgz file to the repository. (9.19.34.117 is a HTTP server running in our data center)
-```
-$ scp casewebportal-0.0.1.tgz boyerje@9.19.34.117:/storage/CASE/refarch-privatecloud
-```
-* If you want to have you to update your private catalog, you need to modify the index.yaml file.  The index file describe how your applications is listed in the ICP Application Center:
-```
-$ wget http://172.16.0.5/storage/CASE/local-charts/index.yaml
-$ helm repo index --merge index.yaml --url http://9.19.34.117:/storage/CASE/refarch-privatecloud ./
-$ scp index.yaml boyerje@172.16.0.5/storage/CASE/local-charts
-```
-The 172.16.0.5 is a HTTP server which hosts the local-charts repository. You can see its references in the System menu
-![](charts-server-info.png)
-
-Once the repository are synchronized your helm chart should be in the catalog:
-![](helm-in-app-center.png)
-
-
 ### Use helm upgrade
-Get the helm release list
+We can upgrade an existing running application. You can use the ICP admin console to get the name of the deployed helm release. or use the helm CLI.
 
 ```
-helm list
+$ helm list
 > NAME           	REVISION	UPDATED                 	STATUS  	CHART              	NAMESPACE
 default-iib    	1       	Sat Sep  9 08:41:55 2017	DEPLOYED	iib-0.1.2          	default  
-joyous-dragon  	1       	Thu Sep 14 13:17:39 2017	DEPLOYED	casewebportal-0.0.1	default  
-ungaged-ladybug	1       	Fri Oct  6 16:07:58 2017	DEPLOYED	casewebportal-0.0.2	default  
+casewebportal  	1       	Thu Sep 14 13:17:39 2017	DEPLOYED	casewebportal-0.0.1	default  
 
-# upgrade a release with a new version
-helm upgrade ungaged-ladybug	 ./casewebportal
+* build a new docker image, tag it with a new version
+
+* upgrade a release with a new version
+helm upgrade casewebportal	 ./casewebportal
 ```
 
 ### Verify the app is deployed

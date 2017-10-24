@@ -1,3 +1,18 @@
+/**
+ * Copyright 2017 IBM Corp. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 var https=require('https');
 
 const request = require('request').defaults({strictSSL: false});
@@ -7,9 +22,9 @@ var caCerts =fs.readFileSync(path.resolve(__dirname, '../../../ssl/ca.all.crt.pe
 
 
 /**
-Build the HTTP header to be used to call back end services using TLS
+Build the HTTP header to be used to call back end services using TLS. It ingects the
+JWT token in authorization. The token was part of the login response
 */
-
 var buildOptions=function(token,met,aPath,config){
   return {
     url: config.getGatewayUrl()+aPath,
@@ -26,6 +41,7 @@ var buildOptions=function(token,met,aPath,config){
   }
 }
 
+
 var processRequest = function(res,opts) {
   console.log(`processing request to url [${opts.method}]:`, JSON.stringify(opts))
   request(opts,
@@ -41,6 +57,7 @@ var processRequest = function(res,opts) {
 
 
 module.exports = {
+  // Load all items. Need to be modified to get items from id
   getItems : function(config,req,res){
     var user = JSON.parse(req.user)
     var opts = buildOptions(user.access_token,'GET','/items',config);
@@ -57,7 +74,7 @@ module.exports = {
     var opts = buildOptions(user.access_token,'PUT','/item/'+req.params.id,config);
     opts.body=      JSON.stringify(req.body.item);
     processRequest(res,opts);
-  }, // save item
+  }, // update item
   deleteItem : function(config,req,res){
     var user = JSON.parse(req.user)
     var opts = buildOptions(user.access_token,'DELETE','/item/'+req.params.id,config);
