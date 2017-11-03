@@ -14,6 +14,7 @@ Do you want to understand how to build, a 'production' like nodejs app with Angu
     * [Bluemix container service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service)
     * [IBM Cloud Private](https://github.com/ibm-cloud-architecture/refarch-caseinc-app/blob/master/docs/run-icp.md)
 * [Code explanation](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#code-explanation)
+* [Security](./docs/login.md)
 
 # Introduction
 This application illustrates how to plug and play different Angular 4 components with different back ends of IBM Cloud reference architecture, and specifically addresses the inventory management feature to demonstrate hybrid integration as presented in the [architecture center hybrid](https://www.ibm.com/devops/method/content/architecture/hybridArchitecture).   

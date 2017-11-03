@@ -13,33 +13,24 @@ export class InventoryService {
   constructor(private http: Http) {
 
   };
-  buildOptions() : RequestOptions {
-    let u: User =JSON.parse(sessionStorage.getItem('currentUser'));
-    let headers = new Headers({ 'token': u.token });
-    let options = new RequestOptions({ headers: headers })
-    return options;
-  }
 
   getItems(): Observable<any>{
-    let options = this.buildOptions();
-    return this.http.get(this.invUrl+'/items',options)
+    return this.http.get(this.invUrl+'/items')
          .map((res:Response) =>
           res.json())
   }
 
   saveItem(i) : Observable<any> {
-    let options = this.buildOptions();
-    return this.http.post(this.invUrl+'/items',{item:i},options).map((res:Response) => res.json());
+
+    return this.http.post(this.invUrl+'/items',{item:i}).map((res:Response) => res.json());
   }
 
   updateItem(i) : Observable<any> {
-    let options = this.buildOptions();
-    return this.http.put(this.invUrl+'/items',{item:i},options).map((res:Response) => res.json());
+    return this.http.put(this.invUrl+'/items',{item:i}).map((res:Response) => res.json());
   }
 
   deleteItem(idx) : Observable<any> {
-    let options = this.buildOptions();
-    return this.http.delete(this.invUrl+'/items/'+idx,options)
+    return this.http.delete(this.invUrl+'/items/'+idx)
     .map((res:Response) =>
        res.json());
   }
