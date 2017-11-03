@@ -46,6 +46,6 @@ Main page component to display access to the different demo features.
     }
 
     hcAdvise(){
-      this.router.navigate(['hcAdvise']);
+      this.router.navigate(['advisor']);
     }
   }

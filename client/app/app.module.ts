@@ -31,6 +31,8 @@ import { HomeService }           from './home.service';
 import { AuthGuard }             from './login/auth.guard';
 import { AuthenticationService } from "./login/authentication.service";
 import { AlertService }          from "./login/alert.service";
+import { AdvisorComponent}  from './advisor/advisor.component';
+import { AdvisorService }   from './advisor/advisor.service';
 
 // Define internal URL mapping to component, protect with authentication guard, meaning user
 // needs to be authenticated with a login
@@ -39,6 +41,7 @@ const routes: Routes = [
   { path: 'log', component: LoginComponent },
   //canActivate: [AuthGuard]
   { path: 'inventory', component: InventoryComponent,canActivate: [AuthGuard]},
+  { path: 'advisor', component: AdvisorComponent,canActivate: [AuthGuard]},
   { path: 'itSupport', component: ConversationComponent,canActivate: [AuthGuard]},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
@@ -51,7 +54,8 @@ const routes: Routes = [
     LoginComponent,
     ConversationComponent,
     InventoryComponent,
-    ItemDetailComponent
+    ItemDetailComponent,
+    AdvisorComponent
   ],
   imports: [
     BrowserModule,
@@ -65,6 +69,7 @@ const routes: Routes = [
     AuthGuard,
     ConversationService,
     InventoryService,
+    AdvisorService,
     HomeService],
   bootstrap: [AppComponent]
 })

@@ -5,5 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  version:string ="v0.0.7 09/13/2017";
+  version:string ="v0.0.8 11/01/2017";
 }

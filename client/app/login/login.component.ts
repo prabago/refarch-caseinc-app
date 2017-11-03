@@ -25,7 +25,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
       // reset login status
-      
       console.log('logging out user - login component')
       this.authenticationService.logout()
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -35,7 +34,6 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.user)
           .subscribe(
               data => {
-                console.log(data);
                   this.user=data;
                   sessionStorage.setItem('currentUser', JSON.stringify(this.user));
                   this.router.navigate([this.returnUrl]);
@@ -48,7 +46,6 @@ export class LoginComponent implements OnInit {
   }
 
   logout(){
-      this.authenticationService.logout()
-        
+    this.authenticationService.logout()
   }
 }

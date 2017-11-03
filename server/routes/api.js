@@ -26,7 +26,7 @@ var fs = require('fs');
 var path = require('path');
 const inventory    = require('./features/inventoryProxy');
 const conversation = require('./features/conversation');
-
+const advisor = require('./features/advisor');
 
 module.exports = function(app,config){
   app.get('/api', function(req, res){
@@ -44,6 +44,11 @@ module.exports = function(app,config){
   if (config.getMode() == 'cyan') {
     app.post('/api/c/conversation',isLoggedIn,(req,res) => {
       conversation.itSupport(config,req,res)
+    });
+  }
+  if (config.getMode() == 'cyan') {
+    app.post('/api/advisor',isLoggedIn,(req,res) => {
+      advisor.advise(config,req,res)
     });
   }
   app.get('/api/i/items', isLoggedIn, (req,res) => {

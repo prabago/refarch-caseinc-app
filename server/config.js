@@ -25,5 +25,8 @@ module.exports = {
   },
   getVersion : function(){
     return config.version;
-  }
+  },
+  getAdvisorBrokerUrl : function(){
+    return config.advisorBroker.url;
+  },
 }

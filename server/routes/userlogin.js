@@ -24,7 +24,7 @@ module.exports = function(app, passport){
         res.status(200).send({loggedOut: true});
     });
   })
-  app.post('/login', passport.authenticate('local'), function(req, res){
+  app.post('/login', passport.authenticate('local', { failureFlash: 'Invalid username or password.' }), function(req, res){
     console.log('User Authenticated Successfully:', req.user)
     res.status(200).send(req.user);
   })

@@ -11,6 +11,9 @@
     "conversationBroker" :{
       "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
     },
+    "advisorBroker":{
+        "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
+    },
     "mode" : "cyan",
     "environment" : "private",
     "port" : 6100,
