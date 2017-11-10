@@ -1,6 +1,6 @@
 {
   "secureGateway" :{
-    "url":"https://cap-sg-prd-5.integration.ibmcloud.com:16582"
+    "url":"https://<>ibmcloud.com:16582"
   },
   "apiGateway" :{
     "hostUrl": "https://172.16.50.8",
@@ -11,6 +11,11 @@
   "conversationBroker" :{
     "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
   },
+  "advisorBroker":{
+      "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
+  },
   "mode" : "cyan",
-  "environment" : "public"
+  "environment" : "public",
+  "port" : 6100,
+  "version": "v0.0.7"
 }

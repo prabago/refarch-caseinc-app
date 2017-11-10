@@ -12,7 +12,7 @@
       "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
     },
     "advisorBroker":{
-        "url":"https://refarch-wcs-broker.mybluemix.net/api/conversation"
+        "url":"https://refarch-wcs-broker.mybluemix.net/api/advisor"
     },
     "mode" : "cyan",
     "environment" : "private",

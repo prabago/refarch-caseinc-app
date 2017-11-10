@@ -4,7 +4,9 @@
 /tmp
 /build
 
-server/routes/env.json
+server/config.json
+chart/case-configmap.yaml
+chart/casewebportal/values.yaml
 
 # dependencies
 /node_modules

@@ -20,7 +20,7 @@ $ npm run build
 $ docker build -t case/webportal .
 $ docker images
 ```
-Then tag your local image with the name of the remote ICP server where the docker registry resides. (*mycluster.icp:8500* is the remote server)
+Then tag your local image with the name of the remote ICP server where the docker registry resides. (`mycluster.icp:8500` is the remote server)
 ```
 $ docker tag case/webportal mycluster.icp:8500/brown/casewebportal:v0.0.1
 $ docker images
@@ -64,7 +64,7 @@ imagePullSecrets:
 ```
 
 ### Chart.yaml
-Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the char.yaml are used in the templates.
+Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the chart.yaml are used in the templates.
 
 ### Add configMap templates
 The config.json is a file that can be used when deploying on bluemix or locally, but when running on container within kubernetes it is good practice to externalize application configuration in config map. To do so we need to create a new template **templates/configmap.yaml**. This file uses the same structure as the config.json file but externalizes to get the parameter values from the values.yaml so developer can changes only one file to control the configuration.
@@ -169,7 +169,7 @@ NOTES:
   kubectl port-forward $POD_NAME 8080:6100 --namespace brown
 ```
 
-From the above we can see that a deployment was created in kubernetes, the casewebportal runs on one pod and a service got created to expose the deployment on the cluster IP on port 6100. And the NOTES section tells us how to access the pod from our local machine.
+From the above we can see that a deployment was created in kubernetes, the `casewebportal` container runs on one pod and a service got created to expose the deployment on the node at the cluster IP and port 6100. And the NOTES section tells us how to access the pod from our local machine from port 8080. Connection made on the localhost port 8080 are forwarded to port 6100 of the pod. This is one way to test the application.
 
 You can login to ICP console and look at the Workloads > Helm Releases
 ![](helm-deployed.png)
@@ -191,8 +191,8 @@ helm upgrade casewebportal	 ./casewebportal
 
 ### Verify the app is deployed
 ```
-helm ls --all default-casewebportal
+helm ls --all casewebportal-casewebportal
 
 # remove the app
-helm del --purge default-casewebportal
+helm del --purge casewebportal-casewebportal
 ```

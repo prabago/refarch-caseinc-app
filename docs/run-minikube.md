@@ -49,12 +49,25 @@ spec:
 
 And to expose the web app to the external world we build the following service:
 ```yaml
-
+apiVersion: v1
+kind: Service
+metadata:
+  name: case-service
+  labels:
+    run: case-service
+spec:
+  type: NodePort
+  ports:
+  - port: 6100
+    protocol: TCP
+  selector:
+    app: casewebportal
 ```
+
 ## Step 4: deploy
 To deploy the app the first time
 ```
-$ kubectl create -f webportal.yaml
+$ kubectl create -f webportal.yaml -f web-svc.yaml -f case-configmap.yaml
 ```
 
 To redeploy
