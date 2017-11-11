@@ -29,7 +29,6 @@ spec:
       - name: config
         configMap:
           name:  {{ template "fullname" . }}
-
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       dnsPolicy: ClusterFirst

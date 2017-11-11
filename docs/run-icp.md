@@ -1,26 +1,31 @@
 # Run 'Case Web Portal' on IBM Cloud Private
-We propose to package this nodejs webapp as a docker image, build a helm chart and then publish it to an ICP instance.
+We propose to package this nodejs webapp as a docker image, build a helm chart and then publish it to an IBM Cloud Private instance. To support higher availability we propose to have 3 replicas for the application, and expose it so it can be visible outside of the ICP cluster. The target deployment may look like the following diagram:
 
-Updated 10/21/2107
+![brown-icp](brown-on-icp.png)
+
+
+Updated 11/10/2107
+
 ## Table of contents
+The table of content represents the development step to follow:
 * [Prerequisites](#prerequisites)
 * [Build](#build)
 * [Deploy to ICP](#push-docker-image-to-icp-private-docker-repository)
 
 ## Prerequisites
-See this [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/icp-deploy.md#prerequisites) for ICP prerequisites.
+See this [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/icp-deploy.md#prerequisites) for common ICP prerequisites.
 
 We assume the cluster name is: **mycluster.icp** and a namespace was created with the name **brown**.
 
 ## Build
-As seen in the section [Deploy the CaseInc Portal App in Bluemix Kubernetes Service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service), this project includes a docker file to build a docker image. You can build the image to your local repository using the command:
+As seen in the section [Deploy the CaseInc Portal App in Bluemix Kubernetes Service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service), this project includes a docker file to build a docker image. You can build the image to your local repository using the commands:
 ```
 # first build the App
 $ npm run build
 $ docker build -t case/webportal .
 $ docker images
 ```
-Then tag your local image with the name of the remote ICP server where the docker registry resides. (`mycluster.icp:8500` is the remote server)
+Then tag your local image with the name of the remote ICP master server where the docker registry resides. (`mycluster.icp:8500` is the remote server)
 ```
 $ docker tag case/webportal mycluster.icp:8500/brown/casewebportal:v0.0.1
 $ docker images
@@ -29,7 +34,9 @@ An image with the scope namespace is only accessible from within the namespace t
 
 ## Push docker image to ICP private docker repository
 
-If you have copied the ICP master host certificate / public key to the /etc/docker/certs.d/<hostname>:<portnumber> folder on you local computer, you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository)) Use a user known by ICP.
+If you have copied the ICP master host certificate / public key to the `/etc/docker/certs.d/hostname:portnumber` folder on your local computer, you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository))
+
+To login ensure to use a userid known by ICP.
 ```
 docker login mycluster.icp:8500
 User: admin
@@ -39,35 +46,24 @@ Push the image
 ```
 docker push mycluster.icp:8500/brown/casewebportal:v0.0.1
 ```
-More informations could be found [here](https://www.ibm.com/developerworks/community/blogs/fe25b4ef-ea6a-4d86-a629-6f87ccf4649e/entry/Working_with_the_local_docker_registry_from_Spectrum_Conductor_for_Containers?lang=en)
+For more information about working with the docker registry that is on the ICP master node read  [this note](https://www.ibm.com/developerworks/community/blogs/fe25b4ef-ea6a-4d86-a629-6f87ccf4649e/entry/Working_with_the_local_docker_registry_from_Spectrum_Conductor_for_Containers?lang=en)
 
 ## Build the helm package
-Helm is a package manager to deploy application and service to Kubernetes cluster. Package definitions are charts which are yaml files to be shareable between teams.
+Helm is a package manager to deploy application and service to Kubernetes cluster. Package definitions are charts, which are yaml files, to be shareable between teams.
 
-The first time you need to build a chart for the web app.  Select a chart name (casewebportal) and then use the command:
+The first time you need to build a chart for the web app, select a chart name (e.g. casewebportal) and then use the command:
 ```
-cd chart
-helm init casewebportal
+$ helm init casewebportal
 ```
 
 This creates yaml files and simple set of folders. Those files play a role to define the configuration and package for kubernetes. Under the templates folder the yaml files use parameters coming from helm, the values.yaml and chart.yaml.
 
-The deployment.yaml defines the kubernetes deployment
-
-* The template files may need to be modified to tune for your deployment* For example the following was added for out case.
-```
-dnsPolicy: ClusterFirst
-securityContext: {}
-imagePullSecrets:
-  - name: admin.registrykey
-  - name: default-token-45n44
-```
-
 ### Chart.yaml
-Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the chart.yaml are used in the templates.
+This is a global parameter file. Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the chart.yaml are used in the templates.
 
-### Add configMap templates
-The config.json is a file that can be used when deploying on bluemix or locally, but when running on container within kubernetes it is good practice to externalize application configuration in config map. To do so we need to create a new template **templates/configmap.yaml**. This file uses the same structure as the config.json file but externalizes to get the parameter values from the values.yaml so developer can changes only one file to control the configuration.
+### Add configMap template
+The webapp is using external configuration file: `config.json` to get parameters for external end point configuration or even internal flags. For example the Watson conversation broker end points are defined in this file. While using cloud foundry or pure local nodejs deployment this file is read from the filesystem by the server.js. But with kubernets pods the best practice is to export this configuration into `ConfigMap`.
+To do so we need to create a new template: `templates/configmap.yaml`. This file uses the same structure as the `config.json` file:
 
 ```yaml
 apiVersion: v1
@@ -90,6 +86,9 @@ data:
         "conversationBroker" :{
           "url":"{{ .Values.config.conversationBroker.url }}"
         },
+        "advisorBroker": {}
+          "url": "{{.Values.config.advisorBroker.url}}"
+        },
         "mode" : "{{ .Values.config.mode }}",
         "environment" : "{{ .Values.config.environment }}",
         "port": "{{ .Values.config.port }}",
@@ -97,23 +96,91 @@ data:
     }
 
 ```
+As you can see the real values are set in the `values.yaml` file. This is an implementation decision to externalize all values in this file, we could have set the value directly in the template as they are not used anywhere else.
 
 ### Modify deployment.yaml
-The configuration file can be overloaded by using the create content from the k8s config map. To do so we need to define a Volume to mount to the config.json file in the deployment.yaml as the following:
-```yaml
-volumeMounts:
-- name: config
-  mountPath: /caseportal/server/config.json
-  subPath: config.json
-```
-the path */caseportal* comes from the dockerfile, working directory declaration. The volume name (config) is arbitrary but needs to match a volume declared in the deployment.yaml. For example the volume is declared as **config** and use a configMap named using the template name of the helm package. See the paragraph above for the configmap.
+To 'ingect' the configuration from the `configMap` to the server nodejs app, the trick is to specify the the `config.json` file is coming from a logical volume:
 
-```yaml      
-volumes:
+In the deployment.yaml we add a volumeMount point to the container specification:
+```yaml
+spec:
+  containers:
+  - name: {{ .Chart.Name }}
+    image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+    imagePullPolicy: {{ .Values.image.pullPolicy }}
+    ports:
+    - containerPort: {{ .Values.service.internalPort }}
+    volumeMounts:
+    - name: config
+      mountPath: /caseportal/server/config.json
+      subPath: config.json
+```
+the path */caseportal* comes from the dockerfile, working directory declaration:
+```docker
+COPY . /caseportal
+WORKDIR /caseportal
+```
+so the mountPath will overwrite the config.json.
+
+The volume name (config) is arbitrary but needs to match a volume declared later in the deployment.yaml.
+
+```yaml
+
+   volumes:
       - name: config
         configMap:
           name:  {{ template "fullname" . }}
 ```
+One volume, named `config` uses the configMap named using the template name of the helm package and match the configMap we defined above.
+
+### Service and ingress
+To expose the application to the other components deployed into the cluster we need to declare a service. `Services` group a set of pods and provide network connection to these pods for other services in the cluster without exposing the actual private IP address of each pod. As Pods are ephemeral in nature, resources like IP addresses allocated to it cannot be static. You can use Kubernetes services to make an app available to other pods inside the cluster or to expose an app to the internet or private network. This a decoupling capability.  
+Each Service also gets an IP address (known as ClusterIP), which is routable only inside the cluster. A Service does the load balancing while selecting the Pods for forwarding the data/traffic. It uses the label to get the pods (see the declaration `spec.selector.app` below).
+
+The templates/service.yaml was create by the command `helm create caseportal`.
+```yaml
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.externalPort }}
+    targetPort: {{ .Values.service.internalPort }}
+    protocol: TCP
+    name: {{ .Values.service.name }}
+  selector:
+    app: {{ template "fullname" . }}
+```
+The `port` is the port number the service will be seen, while target port is the one of the webapp running in the pod. In `values.yaml` file the ports are set as
+```yaml
+service:
+  name: casewebportal
+  type: ClusterIP
+  externalPort: 6100
+  internalPort: 6100
+```
+The type `ClusterIP` for the service expose it on a cluster internal IP network. It is reachable only from within the cluster. The routing is managed by the kube-proxy component in each worker nodes using Iptables. The network may look like the schema below:
+![](k8s-vlan.png)
+ClusterIP addresses are set by the master node when the services are created.
+
+An Ingress was introduce in k8s v1.1 and provide load balancing, SSL and name-based virtual hosting. It is a collection of rules that allow inbound connections to reach the cluster services using HTTP protocol. It is a OSI layer 7 service.
+There is one important component to make implement the service contract of ingress: the ingress controller. In ICP it is a `nginx ingress` controller running in the proxy node that will implement the load balancing as illustrated in first figure above (#brown-icp)
+
+The templates/ingress.yaml file created defines a rule to route traffic
+```
+spec:
+  rules:
+    {{- range $host := .Values.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+    {{- end -}}
+```
+This ingress configuration will be POSTed to the API server running in k8s master node. Each rule matches against all incoming requests arriving to the master node. the `backend` is a service:port combination as described in the service
+
+When running the commands
 
 ### values.yaml
 Specify in this file the docker image name and tag
@@ -133,7 +200,7 @@ $ helm lint casewebportal
 # if you do not have issue ...
 $ helm package casewebportal
 ```
-These commands should create a zip file with the content of the casewebportal folder. You will use the zip file if you want to get the package visible inside the Catalog.
+These commands should create a zip file with the content of the `casewebportal` folder. You will use the zip file if you want to get the package visible inside the Catalog.
 
 ## Deploy the helm package
 There are multiple ways to upload the app to ICP using helm. We can use a private repository, which is a HTTP server, to upload the package file and then use the repository synchronization in ICP to get the chart visible in Application Center, or we can use the `helm install` command:
@@ -141,11 +208,11 @@ There are multiple ways to upload the app to ICP using helm. We can use a privat
 ### Use helm commmand
 * Use helm install command to install a chart archive directly to kubernetes cluster
 ```
-$ helm install casewebportal --name casewebportal --namespace brown
+$ helm install casewebportal --name casewebportal --namespace browncompute
 
 NAME:   casewebportal
 LAST DEPLOYED: Wed Oct 18 16:08:24 2017
-NAMESPACE: default
+NAMESPACE: browncompute
 STATUS: DEPLOYED
 
 RESOURCES:
@@ -191,7 +258,7 @@ helm upgrade casewebportal	 ./casewebportal
 
 ### Verify the app is deployed
 ```
-helm ls --all casewebportal-casewebportal
+helm ls --all casewebportal
 
 # remove the app
 helm del --purge casewebportal-casewebportal

@@ -18,6 +18,9 @@ data:
         "conversationBroker" :{
           "url":"{{ .Values.config.conversationBroker.url }}"
         },
+        "advisorBroker": {
+          "url": "{{ .Values.config.advisorBroker.url }}"
+        },
         "mode" : "{{ .Values.config.mode }}",
         "environment" : "{{ .Values.config.environment }}",
         "port": "{{ .Values.config.port }}",
