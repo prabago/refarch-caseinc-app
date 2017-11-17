@@ -5,15 +5,15 @@ Do you want to understand how to build, a 'production' like nodejs app with Angu
 *This project is part of the 'IBM Integration Reference Architecture' suite, available at [https://github.com/ibm-cloud-architecture/refarch-integration](https://github.com/ibm-cloud-architecture/refarch-integration) and implements the 'cloud native' web application developed. It should be considered as an internal portal application for CASE Inc internal staff.*
 
 ## Table of Contents
-* [Introduction](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#introduction)
-* [Pre Requisites](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#pre-requisites)
-* [Build](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#build)
-* [Run](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run)
-   * [Locally](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-the-application-locally)
-   * [Bluemix as cloud foundry](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#run-on-bluemix-as-cloud-foundry)
-    * [Bluemix container service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service)
-    * [IBM Cloud Private](https://github.com/ibm-cloud-architecture/refarch-caseinc-app/blob/master/docs/run-icp.md)
-* [Code explanation](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#code-explanation)
+* [Introduction](#introduction)
+* [Pre Requisites](#pre-requisites)
+* [Build](#build)
+* [Run](#run)
+   * [Locally](#run-the-application-locally)
+   * [Bluemix as cloud foundry](#run-on-bluemix-as-cloud-foundry)
+    * [Bluemix container service](#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service)
+    * [IBM Cloud Private](./docs/icp/README.md)
+* [Code explanation](#code-explanation)
 * [Security](./docs/login.md)
 
 # Introduction
@@ -31,7 +31,7 @@ The current top level view of the home page of this application looks like:
 
 ![home page](docs/homepage.png)  
 
-The application is up and running at the following address: http://caseincapp.mybluemix.net/
+For public cloud deployment the application is up and running at the following address: http://caseincapp.mybluemix.net/.
 
 # Pre-requisites
 The common pre-requisites for the integration solution are defined [here](https://github.com/ibm-cloud-architecture/refarch-integration#prerequisites), so be sure to get them done.
@@ -61,7 +61,7 @@ $ ng build
 or
 $ npm run build
 ```
-When involving a continuous integration using Jenkins the gradlew is used
+When involving a continuous integration using Jenkins the `gradlew` tool is used
 ```
 ./gradlew build
 ```

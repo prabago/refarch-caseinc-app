@@ -1,10 +1,13 @@
 # Run 'Case Web Portal' on IBM Cloud Private
+
+Not all cloud native applications need to run on public cloud. In this note we address the deployment to IBM Cloud Private and how to transform the app started from a cloud foundry template to be less dependent to CF and containerizable.
+
 We propose to package this nodejs webapp as a docker image, build a helm chart and then publish it to an IBM Cloud Private instance. To support higher availability we propose to have 3 replicas for the application, and expose it so it can be visible outside of the ICP cluster. The target deployment may look like the following diagram:
 
 ![brown-icp](brown-on-icp.png)
 
 
-Updated 11/10/2107
+Updated 11/15/2107
 
 ## Table of contents
 The table of content represents the development step to follow:
@@ -137,7 +140,7 @@ One volume, named `config` uses the configMap named using the template name of t
 To expose the application to the other components deployed into the cluster we need to declare a service. `Services` group a set of pods and provide network connection to these pods for other services in the cluster without exposing the actual private IP address of each pod. As Pods are ephemeral in nature, resources like IP addresses allocated to it cannot be static. You can use Kubernetes services to make an app available to other pods inside the cluster or to expose an app to the internet or private network. This a decoupling capability.  
 Each Service also gets an IP address (known as ClusterIP), which is routable only inside the cluster. A Service does the load balancing while selecting the Pods for forwarding the data/traffic. It uses the label to get the pods (see the declaration `spec.selector.app` below).
 
-The templates/service.yaml was create by the command `helm create caseportal`.
+The templates/service.yaml was create by the command `helm create casewebportal`.
 ```yaml
 spec:
   type: {{ .Values.service.type }}
@@ -157,7 +160,7 @@ service:
   externalPort: 6100
   internalPort: 6100
 ```
-The type `ClusterIP` for the service expose it on a cluster internal IP network. It is reachable only from within the cluster. The routing is managed by the kube-proxy component in each worker nodes using Iptables. The network may look like the schema below:
+The type `ClusterIP` for the service exposes it on a cluster internal IP network. It is reachable only from within the cluster. The routing is managed by the kube-proxy component in each worker nodes using Iptables. The network may look like the schema below:  
 ![](k8s-vlan.png)
 ClusterIP addresses are set by the master node when the services are created.
 
@@ -178,9 +181,8 @@ spec:
               servicePort: {{ $servicePort }}
     {{- end -}}
 ```
-This ingress configuration will be POSTed to the API server running in k8s master node. Each rule matches against all incoming requests arriving to the master node. the `backend` is a service:port combination as described in the service
+This ingress configuration will be POSTed to the API server running in k8s master node. Each rule matches against all incoming requests arriving to the master node. the `backend` is a service:port combination as described in the service.
 
-When running the commands
 
 ### values.yaml
 Specify in this file the docker image name and tag

@@ -1,5 +1,5 @@
 # Login implementation
-This article addresses in detail how login is supported in the Case Inc Portal by using different practices for service encapsulation, Oauth, API authorization, on-premise LDAP integration....
+This article addresses in detail how login is supported in the Case Inc Portal by using different practices for service encapsulation, Oauth, API authorization, on-premise LDAP integration, and the use of passport.js expressjs middleware.
 
 ## Table of contents
 * [Requirements to support](#requirements)
