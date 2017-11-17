@@ -3,11 +3,14 @@
   <div class="col-md-7">
     <h4><i>Welcome to the Case Inc Portal Application!</i></h4>
     <h4>News</h4>
+    <p>This application is illustrating the different approaches for Hybrid integration with public and private cloud as described in the public github repository <a href="https://github.com/ibm-cloud-architecture/refarch-integration">hybrid integration reference architecture</a> and illustrated in the following figure:
+    </p>
+    <img src="assets/images/bc-icp-cfg4.png" width="500px"/>
   </div>
   <div class="col-md-5">
     <h2>Login</h2>
     <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
-          <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !email.valid }">
+          <div class="form-group" [ngClass]="{ 'has-error': f.submitted }">
               <label for="email">email</label>
               <input type="text" class="form-control" name="email" [(ngModel)]="user.email" #email="ngModel" required />
               <div *ngIf="f.submitted && !email.valid" class="help-block">Email address is required</div>

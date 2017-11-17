@@ -30,8 +30,10 @@ export class AdvisorComponent {
         this.context=data.context;
         let s:Sentence = new Sentence();
         s.direction="from-watson";
-        s.text=data.output.text[0];
-        this.currentDialog.push(s)
+        s.text=data.text;
+        s.options=data.context.predefinedResponses;
+        this.currentDialog.push(s);
+        this.queryString="";
       },
       error => {
         return "Error occurs in conversation processing"
@@ -47,6 +49,15 @@ export class AdvisorComponent {
 
     this.callConversationBFF(this.queryString);
     this.queryString="";
+  }
+
+  advisorResponse(resp) {
+    let obj:Sentence = new Sentence();
+    obj.direction="to-watson";
+    this.queryString=resp;
+    obj.text=resp;
+    this.currentDialog.push(obj);
+    this.callConversationBFF(resp);
   }
 
   keyMessage(event){

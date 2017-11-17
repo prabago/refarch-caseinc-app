@@ -5,9 +5,9 @@
 </div>
 <div class='row'>
   <div class='col-xs-4'>
-    <p>Welcome to CASE Advisor!. This application is designed to help you determine the fit and applicability of a particular project to the Hybrid & Private Solution typeand to ensure the quality and compliance with best practices of the project outcome. Here are some query we can help you with:</p>
+    <p>Welcome to CASE Advisor!. This application is designed to help you determine the fit and applicability of a particular project to the Hybrid & Private Solution type and to ensure the quality and compliance with best practices of the project outcome. Here are some query we can help you with:</p>
     <ul>
-      <li>How to migrate exiting application to IBM cloud</li>
+      <li>How to migrate exiting application to IBM cloud?</li>
     </ul>
   <br/>
 </div>
@@ -23,7 +23,14 @@
                       <img src='assets/images/watson-globe.png' style='width:50px'>
                     </div>
                   </div>
-                  <div class="{{p.direction+'-text'}}" [innerHTML]="p.text">
+                  <div class="{{p.direction+'-text'}}">
+                    <div [innerHTML]="p.text"></div>
+                    <div *ngIf="p.options">
+                      <div *ngFor="let c of p.options">
+                          <br/>
+                        <button type="button" (click)="advisorResponse(c)" class="btn btn-primary">{{c}}</button>
+                      </div>
+                    </div>
                   </div>
                 </div>
             </div>
@@ -35,7 +42,7 @@
                        type="text"
                        size="60"
                        [(ngModel)]="queryString"
-                       placeholder="Send a message to Support Bot!"
+                       placeholder="Send a message to advisor!"
                        name="queryString"
                        autocomplete="off"/>
                 <button class="btn btn-primary" (click)="submit()" type="button">Send</button>
