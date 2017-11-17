@@ -16,6 +16,8 @@ and route to the return url.
 export class LoginComponent implements OnInit {
   user: User = new User();
   returnUrl: string;
+  errorMessage: string;
+  loggingIn: boolean;
   constructor(
       private route: ActivatedRoute,
       private router: Router,
@@ -31,14 +33,19 @@ export class LoginComponent implements OnInit {
   }
 
   login(){
+    this.errorMessage = '' // clear error on begin login
+    this.loggingIn = true;
     this.authenticationService.login(this.user)
           .subscribe(
               data => {
+                  this.loggingIn = false;
                   this.user=data;
                   sessionStorage.setItem('currentUser', JSON.stringify(this.user));
                   this.router.navigate([this.returnUrl]);
               },
               error => {
+                  this.loggingIn = false;
+                  this.errorMessage = `${error.status}: ${error.statusText}`
                   this.alertService.error(error);
                   this.authenticationService.logout();
                   this.router.navigate(['/']);

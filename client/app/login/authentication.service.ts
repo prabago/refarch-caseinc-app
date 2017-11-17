@@ -35,7 +35,9 @@ export class AuthenticationService {
                     return user;
                 }
             })
-            .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+            .catch((error:any) => {
+              return Observable.throw(error || 'Server error')
+            });
     } // login
     logout() {
         // remove user from local storage to log user out

@@ -70,7 +70,7 @@ module.exports = function(passport,config) {
           console.log('Login body:', JSON.stringify(body));
           if (body.httpCode == 500) {
             console.log("Server error");
-            done(error)
+            return done(error)
           }
           return done(null, body);
         })
