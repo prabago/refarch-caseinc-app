@@ -12,11 +12,11 @@ Updated 11/15/2107. [Back to home page](../../README.md)
 ## Table of contents
 The table of content represents the development steps to follow:
 * [Prerequisites](#prerequisites)
-* [Build and packaging](#build_and_dockerize)
-* [Configure the helm package](#helm_packaging)
-* [Deploy to ICP](#deploy_helm_package)
-* [Validate deployment](#validate_the_deployment)
-* [What next](#what_next)
+* [Build and packaging](#build-and-dockerize)
+* [Configure the helm package](#helm-packaging)
+* [Deploy to ICP](#deploy-helm-package)
+* [Validate deployment](#validate-the-deployment)
+* [What next](#what-next)
 * [Troubleshoot](#troubleshoot)
 
 ## Prerequisites
@@ -282,7 +282,7 @@ helm del --purge casewebportal-casewebportal
 ```
 
 ## Troubleshoot
-For general ICP troubleshooting see [this note](/troubleshooting.md)
+For general ICP troubleshooting see [this note](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/troubleshooting.md)
 
 For this application here are some common issues:
 * portal.brown.case is not known: modify your local /etc/hosts file to map the name to the IP address of the cluster proxy server. Or use a new DNS entry with the same mapping.
