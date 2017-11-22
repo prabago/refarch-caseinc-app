@@ -33,9 +33,9 @@ config:
     url: /csplab/sb/iib-inventory-api
     clientid: 59a3a4cb-db42-40ff-bf22-b8c3b5e9eedb
   conversationBroker:
-    url: https://refarch-wcs-broker.mybluemix.net/api/conversation
+    url: https://wcsbroker.cyan.case/api/conversation
   advisorBroker:
-    url: https://refarch-wcs-broker.mybluemix.net/api/advisor
+    url: https://wcsbroker.cyan.case/api/advisor
   mode: cyan
   environment: private
   port: 6100

@@ -25,7 +25,7 @@ module.exports = {
     request({
       method: 'POST',
       url: config.getAdvisorBrokerUrl(),
-        timeout: 10000,
+      timeout: 10000,
       json: true,
       body: req.body
     }, function (error, response, body) {
