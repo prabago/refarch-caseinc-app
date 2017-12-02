@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 replicaCount: 1
 image:
-  repository: vh-icp-21-master.icp:8500/browncompute/casewebportal
+  repository: greencluster.icp:8500/browncompute/caseportal
   tag: v0.0.3
   pullPolicy: Always
 service:
@@ -44,7 +44,7 @@ config:
 resources:
   limits:
     cpu: 100m
-    memory: 128Mi
+    memory: 2048Mi
   requests:
     cpu: 100m
-    memory: 128Mi
+    memory: 512Mi

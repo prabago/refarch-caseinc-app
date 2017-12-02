@@ -29,7 +29,7 @@ var buildOptions=function(token,met,aPath,config){
   return {
     url: config.getGatewayUrl()+aPath,
   //  path:apath,
-    method: met,
+    method: get,
     rejectUnauthorized: true,
     //ca: caCerts,
     headers: {

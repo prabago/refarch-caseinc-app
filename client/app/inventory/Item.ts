@@ -5,5 +5,5 @@ export class Item {
   img: string;
   imgAlt:string;
   price: number;
-  quantity: number;
+  producttype: string;
 }

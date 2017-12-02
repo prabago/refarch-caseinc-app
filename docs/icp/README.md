@@ -20,21 +20,21 @@ The table of content represents the development steps to follow:
 * [Troubleshoot](#troubleshoot)
 
 ## Prerequisites
-See this [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/icp-deploy.md#prerequisites) for common ICP prerequisites.
+See this [list](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp/README.md#prerequisites) for common ICP prerequisites.
 
-We assume the cluster name is: **mycluster.icp** and a namespace was created with the name **browncompute**.
+We assume the cluster name is: **greencluster.icp** and a namespace was created with the name **browncompute**.
 
 ## Build and Dockerize
 As seen in the section [Deploy the CaseInc Portal App in IBM Cloud Kubernetes Service](https://github.com/ibm-cloud-architecture/refarch-caseinc-app#deploy-the-caseinc-portal-app-in-bluemix-kubernetes-service), this project includes a docker file to build a docker image. You can build the image to your local repository using the commands:
 ```
 # first build the App
 $ npm run build
-$ docker build -t case/webportal .
+$ docker build -t ibmcase/portal .
 $ docker images
 ```
 Then tag your local image with the name of the remote ICP master server where the docker registry resides. (`mycluster.icp:8500` is the remote server)
 ```
-$ docker tag case/webportal mycluster.icp:8500/browncompute/casewebportal:v0.0.3
+$ docker tag ibmcase/portal greencluster.icp:8500/browncompute/caseportal:v0.0.3
 $ docker images
 ```
 An image with the scope namespace is only accessible from within the namespace that it was pushed to.
@@ -44,13 +44,13 @@ An image with the scope namespace is only accessible from within the namespace t
 If you have copied the ICP master host certificate / public key to the `/etc/docker/certs.d/hostname:portnumber` folder on your local computer, you should be able to login to remote docker engine. (If not see this section: [Access ICP docker](https://github.com/ibm-cloud-architecture/refarch-integration/blob/master/docs/icp-deploy.md#access-to-icp-private-repository))
 Be sure that there is a name resolution available via your dns or your local `/etc/hosts`. To login use a userid known by ICP, could be admin user.
 ```
-docker login mycluster.icp:8500
+docker login greencluster.icp:8500
 User: admin
 Password:
 ```
 Push the image
 ```
-docker push mycluster.icp:8500/brown/casewebportal:v0.0.3
+docker push greencluster.icp:8500/brown/caseportal:v0.0.3
 ```
 For more information about working with the docker registry that is on the ICP master node read  [this note](https://www.ibm.com/developerworks/community/blogs/fe25b4ef-ea6a-4d86-a629-6f87ccf4649e/entry/Working_with_the_local_docker_registry_from_Spectrum_Conductor_for_Containers?lang=en)
 
@@ -68,7 +68,7 @@ This creates yaml files and simple set of folders. Those files play a role to de
 This is a global parameter file. Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the chart.yaml are used in the templates.
 
 ### Add configMap template
-The webapp is using external configuration file: `config.json` to get parameters for external end point configuration or even internal flags. For example the Watson conversation broker end points are defined in this file. While using cloud foundry or pure local nodejs deployment this file is read from the filesystem by the server.js. But with kubernets pods the best practice is to export this configuration into `ConfigMap`.
+The webapp is using external configuration file: `config.json` to get parameters for external end point configuration or even internal flags. For example the Watson conversation broker end points are defined in this file. While using cloud foundry or pure local nodejs deployment this file is read from the filesystem by the server.js. But with kubernetes pods the best practice is to export this configuration into `ConfigMap`.
 To do so we need to create a new template: `templates/configmap.yaml`. This file uses the same structure as the `config.json` file:
 
 ```yaml
@@ -192,7 +192,7 @@ This ingress configuration will be POSTed to the API server running in k8s maste
 Specify in this file the docker image name and tag
 ```yaml
 image:
-  repository: mycluster.icp:8500/browncompute/casewebportal
+  repository: greencluster.icp:8500/browncompute/caseportal
   tag: v0.0.3
   pullPolicy: Always
 ```
