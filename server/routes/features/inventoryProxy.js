@@ -12,6 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *  * Jerome Boyer IBM boyerje@us.ibm.com 
  */
 var https=require('https');
 
@@ -29,7 +30,7 @@ var buildOptions=function(token,met,aPath,config){
   return {
     url: config.getGatewayUrl()+aPath,
   //  path:apath,
-    method: get,
+    method: met,
     rejectUnauthorized: true,
     //ca: caCerts,
     headers: {

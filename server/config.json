@@ -14,8 +14,11 @@
     "advisorBroker":{
         "url":"https://refarch-wcs-broker.mybluemix.net/api/advisor"
     },
+    "customerAPI":{
+        "url":"http://customer.green.case/caseserv/api"
+    },
     "mode" : "cyan",
     "environment" : "private",
     "port" : 6100,
-    "version": "v0.0.7"
+    "version": "v0.1.1"
 }

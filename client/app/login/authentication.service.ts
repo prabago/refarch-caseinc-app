@@ -32,8 +32,8 @@ export class AuthenticationService {
                 if (tokenResponse && tokenResponse.access_token) {
                     // store user details and token in local storage to keep user logged in between page refreshes
                     user.token=tokenResponse.access_token;
-                    return user;
                 }
+                return user;
             })
             .catch((error:any) => {
               return Observable.throw(error || 'Server error')

@@ -25,6 +25,7 @@ const router = express.Router();
 var fs = require('fs');
 var path = require('path');
 const inventory    = require('./features/inventoryProxy');
+const customer    = require('./features/customerProxy');
 const conversation = require('./features/conversation');
 const advisor = require('./features/advisor');
 
@@ -51,6 +52,7 @@ module.exports = function(app,config){
       advisor.advise(config,req,res)
     });
   }
+  // those API are used in the UI they are not the same as backend APIs
   app.get('/api/i/items', isLoggedIn, (req,res) => {
     inventory.getItems(config,req,res);
   })
@@ -63,7 +65,13 @@ module.exports = function(app,config){
   app.post('/api/i/items', isLoggedIn, (req,res) => {
     inventory.newItem(config,req,res);
   })
-}
+  app.get('/api/cust/customers', (req,res) => {
+    customer.getCustomers(config,req,res);
+  })
+  app.get('/api/cust/customers/:id', (req,res) => {
+    customer.getCustomer(config,req,res);
+  })
+} // exports
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()){
