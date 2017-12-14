@@ -13,7 +13,7 @@ export class CustomerDetailComponent {
   // specify to the parent we are done with editing -> saving
   @Output() onComplete = new EventEmitter<any>();
   message : string ="";
-  account : Account;
+  account : boolean= false;
 
   // delegate the call to BFF via local service
   constructor(private customerService : CustomersService){
@@ -51,7 +51,7 @@ export class CustomerDetailComponent {
     }
   }
 
-  loadAccount(): void {
-
+  viewAccount(): void {
+    this.account=!this.account;
   }
 }

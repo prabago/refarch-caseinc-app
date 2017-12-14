@@ -21,14 +21,16 @@ const request = require('request').defaults({strictSSL: false});
 
 var buildOptions=function(met,aPath,config){
   return {
-    url: config.getCustomerAPI()+aPath,
+    url: config.getCustomerAPIURL()+aPath,
   //  path:apath,
+
     method: met,
     rejectUnauthorized: true,
     //ca: caCerts,
     headers: {
       accept: 'application/json',
       'Content-Type': 'application/json',
+      Host: config.getCustomerAPIHost(),
     }
   }
 }
@@ -52,6 +54,11 @@ module.exports = {
   // Load all customers.
   getCustomers : function(config,req,res){
     var opts = buildOptions('GET','/customers',config);
+    processRequest(res,opts);
+  },
+  getCustomer : function(config,req,res){
+    var opts = buildOptions('GET','/customers/'+req.params.id,config);
+    opts.headers['Content-Type']='multipart/form-data';
     processRequest(res,opts);
   }
 } // export

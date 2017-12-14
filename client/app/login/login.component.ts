@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.user)
           .subscribe(
               data => {
-                  this.loggingIn = false;
+                  this.loggingIn = true;
                   this.user=data;
                   sessionStorage.setItem('currentUser', JSON.stringify(this.user));
                   this.router.navigate([this.returnUrl]);

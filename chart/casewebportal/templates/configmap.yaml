@@ -21,6 +21,10 @@ data:
         "advisorBroker": {
           "url": "{{ .Values.config.advisorBroker.url }}"
         },
+        "customerAPI":{
+              "url":"{{ .Values.config.customerAPI.url }}",
+              "host":"{{ .Values.config.customerAPI.host }}"
+        },
         "mode" : "{{ .Values.config.mode }}",
         "environment" : "{{ .Values.config.environment }}",
         "port": "{{ .Values.config.port }}",

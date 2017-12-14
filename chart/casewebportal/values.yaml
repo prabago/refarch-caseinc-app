@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: greencluster.icp:8500/browncompute/caseportal
-  tag: v0.0.3
+  tag: v0.0.4
   pullPolicy: Always
 service:
   name: webportalsvc
@@ -36,6 +36,9 @@ config:
     url: https://wcsbroker.cyan.case/api/conversation
   advisorBroker:
     url: https://wcsbroker.cyan.case/api/advisor
+  customerAPI:
+    url: http://172.16.40.131/caseserv/api
+    host: customer.green.case
   mode: cyan
   environment: private
   port: 6100

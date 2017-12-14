@@ -15,7 +15,8 @@
         "url":"https://refarch-wcs-broker.mybluemix.net/api/advisor"
     },
     "customerAPI":{
-        "url":"http://customer.green.case/caseserv/api"
+        "url":"http://172.16.40.131/caseserv/api",
+        "host":"customer.green.case"
     },
     "mode" : "cyan",
     "environment" : "private",

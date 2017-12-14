@@ -51,6 +51,7 @@ export class CustomersComponent implements OnInit {
 
   add() : void {
     this.selectedCustomer = new Customer();
+    this.selectedCustomer.name = "NewCustomer";
     this.submitError = "";
     this.newCustomer=true;
   }

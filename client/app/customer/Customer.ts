@@ -7,9 +7,21 @@ export class Customer {
   emailAddress: string;
   estimatedIncome: number;
   age: number;
+  profession: string;
+  childre: number;
   usage:number;
   email: string;
-  ratePlan: number;
+  maritalStatus:string;
+  ratePlan: string;
+  carOwner: number;
   type: string;
   status: string;
+  zipcode:string;
+  accountNumber:string;
+  balance:number;
+  longDistance:number;
+  international:number;
+  local:number;
+  dropped:number;
+  paymentMethod:string;
 }

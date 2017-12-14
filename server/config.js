@@ -29,7 +29,10 @@ module.exports = {
   getAdvisorBrokerUrl : function(){
     return config.advisorBroker.url;
   },
-  getCustomerAPI : function(){
+  getCustomerAPIURL : function(){
     return config.customerAPI.url;
+  },
+  getCustomerAPIHost : function(){
+    return config.customerAPI.host;
   }
 }
