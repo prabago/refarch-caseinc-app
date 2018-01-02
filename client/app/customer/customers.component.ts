@@ -56,6 +56,30 @@ export class CustomersComponent implements OnInit {
     this.newCustomer=true;
   }
 
+  remove(i): void {
+    this.index=i;
+    this.custService.deleteCustomer(this.customers[i].id).subscribe(
+        data => {
+          var updatedCustomers = this.customers.slice();
+          updatedCustomers.splice(this.index, 1);
+          this.customers=updatedCustomers;
+          this.message="Remove customer successful";
+          this.selectedCustomer=null;
+        },
+        error =>{
+          console.error('Error in removing item...', error)
+          alert(`${error.status}: ${error.statusText}`);
+          this.message="Error in removing item,... the error is reported to administrator.";
+          this.selectedCustomer=null;
+          if(error.status == 401){
+            this.router.navigate(['log'], { queryParams: { returnUrl: '/inventory' } });
+          }
+        }
+    );
+
+  }
+
+
   customerUpdateComplete(response: any){
     console.log('Customer Save Success:', response.success, response.customer)
     if(response.success){

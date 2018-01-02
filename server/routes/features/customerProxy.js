@@ -60,5 +60,20 @@ module.exports = {
     var opts = buildOptions('GET','/customers/'+req.params.id,config);
     opts.headers['Content-Type']='multipart/form-data';
     processRequest(res,opts);
-  }
+  },
+  newCustomer : function(config,req,res){
+    var opts = buildOptions('POST','/customers',config);
+    opts.body=      JSON.stringify(req.body.customer);
+    processRequest(res,opts);
+  }, // new item
+  saveCustomer: function(config,req,res){
+    var opts = buildOptions('PUT','/customers/'+req.params.id,config);
+    opts.body=      JSON.stringify(req.body.item);
+    processRequest(res,opts);
+  }, // update item
+  deleteCustomer : function(config,req,res){
+    var opts = buildOptions('DELETE','/customers/'+req.params.id,config);
+    opts.headers['Content-Type']='multipart/form-data';
+    processRequest(res,opts);
+  } // delete item
 } // export

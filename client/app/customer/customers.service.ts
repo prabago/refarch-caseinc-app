@@ -27,5 +27,10 @@ export class CustomersService {
       return this.http.put(this.custUrl+'/customers',{customer:c}).map((res:Response) => res.json());
   }
 
+  deleteCustomer(idx) : Observable<any> {
+    return this.http.delete(this.custUrl+'/customers/'+idx)
+    .map((res:Response) =>
+       res.json());
+  }
 
 }

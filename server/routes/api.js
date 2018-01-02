@@ -65,11 +65,20 @@ module.exports = function(app,config){
   app.post('/api/i/items', isLoggedIn, (req,res) => {
     inventory.newItem(config,req,res);
   })
-  app.get('/api/cust/customers', (req,res) => {
+  app.get('/api/cust/customers', isLoggedIn,(req,res) => {
     customer.getCustomers(config,req,res);
   })
-  app.get('/api/cust/customers/:id', (req,res) => {
+  app.post('/api/cust/customers',isLoggedIn, (req,res) => {
+    customer.newCustomer(config,req,res);
+  })
+  app.get('/api/cust/customers/:id',isLoggedIn, (req,res) => {
     customer.getCustomer(config,req,res);
+  })
+  app.put('/api/cust/customers', isLoggedIn,(req,res) => {
+    customer.saveCustomer(config,req,res);
+  })
+  app.delete('/api/cust/customers/:id', isLoggedIn, (req,res) => {
+    customer.deleteCustomer(config,req,res);
   })
 } // exports
 
