@@ -60,6 +60,7 @@ module.exports = function(app,config){
     inventory.deleteItem(config,req,res);
   })
   app.put('/api/i/items', isLoggedIn, (req,res) => {
+
     inventory.saveItem(config,req,res);
   })
   app.post('/api/i/items', isLoggedIn, (req,res) => {
