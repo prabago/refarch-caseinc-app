@@ -20,6 +20,7 @@ We will cover all of these.
 * [Code explanation](#code-explanation)
 * [Security](./docs/login.md)
 * [devops](./docs/devops/README.md)
+* [Compendium](#compendium)
 
 # Introduction
 This application illustrates how to plug and play different Angular 4 components with different back endsf IBM Cloud reference architecture, and specifically addresses the inventory management feature to demonstrate hybrid integration as presented in the [hybrid integration reference architecture center web site](https://www.ibm.com/devops/method/content/architecture/hybridArchitecture).   
@@ -66,7 +67,7 @@ $ ng build
 or
 $ npm run build
 ```
-When involving a continuous integration using Jenkins the jenkins file execute the script in the good order:
+When involving a continuous integration using Jenkins the jenkins file executes the script in the good order:
 ```
 
 ```
@@ -176,7 +177,7 @@ Optionally you may want to run it locally: instead of using the `npm run dev` co
 docker run -d -p 6100:6100 -t case/webportal
 ````
 
-* push the image to IBM Cloud private registry:
+* push the image to IBM Cloud registry:
 Once built, the image is uploaded to the IBM Cloud private container registry `registry.ng.bluemix.net/<namespace>/<imagename>`.
 
 To get the list of namespace defined into your account use:
@@ -313,3 +314,6 @@ The portal application includes a simple chat bot integration to ask IT support 
     "mode" : "cyan"
 ```
 For the conversation demo script please refers to this [node](https://github.com/ibm-cloud-architecture/refarch-cognitive-conversation-broker/blob/master/doc/demoflow.md)
+
+## Compendium
+* [Angular 4 tutorial from the angular site](https://angular.io/tutorial) this tutorial is updated with new release and covers the most important features used in our angular app.

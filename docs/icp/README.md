@@ -68,7 +68,7 @@ This creates yaml files and simple set of folders. Those files play a role to de
 This is a global parameter file. Set the version and name attributes, as they will be used in deployment.yaml. Each time you deploy a new version of your app you can just change the version number. The values in the chart.yaml are used in the templates.
 
 ### Add configMap template
-The webapp is using external configuration file: `config.json` to get parameters for external end point configuration or even internal flags. For example the Watson conversation broker end points are defined in this file. While using cloud foundry or pure local nodejs deployment this file is read from the filesystem by the server.js. But with kubernetes pods the best practice is to export this configuration into `ConfigMap`.
+The webapp is using external configuration file: `config.json` to get parameters for external end point configuration or for internal flags. For example the Watson conversation broker end points are defined in this file. While using cloud foundry or pure local nodejs deployment this file is read from the filesystem by the server.js. But with kubernetes pods the best practice is to export this configuration into `ConfigMap`.
 To do so we need to create a new template: `templates/configmap.yaml`. This file uses the same structure as the `config.json` file:
 
 ```yaml
@@ -105,7 +105,7 @@ data:
 As you can see the real values are set in the `values.yaml` file. This is an implementation decision to externalize all values in this file, we could have set the value directly in the template as they are not used anywhere else.
 
 ### Modify deployment.yaml
-To 'ingect' the configuration from the `configMap` to the server nodejs app, the trick is to specify the the `config.json` file is coming from a logical volume:
+To 'inject' the configuration from the `configMap` to the server nodejs app, the trick is to specify the the `config.json` file is coming from a logical volume:
 
 In the deployment.yaml we add a volumeMount point to the container specification:
 ```yaml
