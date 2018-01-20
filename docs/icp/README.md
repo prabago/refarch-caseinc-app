@@ -57,7 +57,7 @@ For more information about working with the docker registry that is on the ICP m
 ## Configure Helm Chart
 Helm is a package manager to deploy application and service to Kubernetes cluster. Package definitions are charts, which are yaml files, to be shareable between teams.
 
-The first time you need to build a chart for the web app, select a chart name (e.g. casewebportal) and then use the command:
+The first time you need to build a chart for any web app, select a chart name (e.g. casewebportal) and then use the command like below. YOU DO NOT NEED to do that now as we already built this chart for this project.
 ```
 $ helm init casewebportal
 ```
@@ -138,6 +138,18 @@ The volume name (config) is arbitrary but needs to match a volume declared later
           name:  {{ template "fullname" . }}
 ```
 One volume, named `config` uses the configMap named using the template name of the helm package and match the configMap we defined above.
+
+### Security via secret
+When the master creates instance of docker containers and runs them as pods, the pod needs to load the image from the private repository, and be authorized to do so. In the deployment.yaml we added the following:
+```
+imagePullSecrets:
+  - name: admin.registrykey
+```
+
+So if you did not have create a secret before do the following:
+```
+kubectl create secret docker-registry admin.registrykey --docker-username=admin --docker-password=admin --docker-email=agoodemail@address.com
+```
 
 ### Service and ingress
 To expose the application to the other components deployed into the cluster we need to declare a service. `Services` group a set of pods and provide network connection to these pods for other services in the cluster without exposing the actual private IP address of each pod. As Pods are ephemeral in nature, resources like IP addresses allocated to it cannot be static. You can use Kubernetes services to make an app available to other pods inside the cluster or to expose an app to the internet or private network. This a decoupling capability.  

@@ -159,7 +159,7 @@ EXPOSE 6001
 CMD node server/server.js
 ```
 
-* You first need to be sure the Angular UI Typescript files are compiled. We have developed a simple gradle file for that:
+* You first need to be sure the Angular UI Typescript files are compiled. We have developed a simple gradle file for that. Execute the following command to compile the UI
 ```
 ./gradlew build
 ```

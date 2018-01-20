@@ -22,7 +22,6 @@ spec:
         - name: config
           mountPath: /caseportal/server/config.json
           subPath: config.json
-
         resources:
 {{ toYaml .Values.resources | indent 10 }}
       volumes:
